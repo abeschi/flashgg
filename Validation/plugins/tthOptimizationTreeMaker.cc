@@ -396,10 +396,10 @@ void tthOptimizationTreeMaker::analyze( const edm::Event &iEvent, const edm::Eve
         iEvent.getByToken( genParticleToken_, genParticles );
     }
     
-    //for( unsigned int i = 0 ; i < genParticles->size(); i++ ) {
-    //    Ptr<reco::GenParticle> gen = genParticles->ptrAt(i);
-    //    cout << " pdgId = "<< gen->pdgId()<< " prompt final state = "<< gen->isPromptFinalState() << "  status = " << gen->status() << "   isPrompt = " << gen->statusFlags().isPrompt() <<endl;
-    //}    
+    for( unsigned int i = 0 ; i < genParticles->size(); i++ ) {
+        Ptr<reco::GenParticle> gen = genParticles->ptrAt(i);
+        cout << " pdgId = "<< gen->pdgId()<< " prompt final state = "<< gen->isPromptFinalState() << "  status = " << gen->status() << "   isPrompt = " << gen->statusFlags().isPrompt() <<endl;
+    }    
     
     // -- initialize tree
     initEventStructure();
