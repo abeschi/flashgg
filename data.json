@@ -1,0 +1,7 @@
+{
+    "processes" : {
+        "tth_125"  : [ [ "/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_v2/ferrif-RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1-2a45e67daf15c7abeea509b3e1c7829c/USER",
+		       { "args" :["outputFile=output_ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8.root"] } ] ]
+     },	
+        "cmdLine" : "campaign=RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2_Workspaces"
+}
