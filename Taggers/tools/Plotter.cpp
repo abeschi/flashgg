@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
 		mu_phi_histo[i] = new TH1F(("mu_phi_histo"+  std::to_string(i)).c_str(), "; Mu #varphi; Counts", 100, -3.15, 3.15 );
 	}
 
-
+	int cc = 0;
 	for(int n=0; n<8; n++)
 	{
 		int nentries;
@@ -543,9 +543,12 @@ int main(int argc, char *argv[])
 			serviceTree -> GetEntry(i);
 			int nleptons = 0;
 
+			if(dipho_mass<100 || dipho_mass>180) continue;
 			if(n==4 && (dipho_mass>115 && dipho_mass<135)) continue;
 			if(n==4)
 				weight = 1./lumiFactor;
+			if(n==4)
+				cc++;
 
 			dipho_mass_histo[n] -> Fill(dipho_mass, weight*lumiFactor);
 
@@ -745,6 +748,7 @@ int main(int argc, char *argv[])
 
 	cout << "ciao" << endl;
 
+	cout << cc << endl;
 
 
 
