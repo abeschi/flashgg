@@ -231,8 +231,8 @@ int main(int argc, char *argv[])
 	gStyle -> SetOptFit(0);
 	gStyle -> SetOptStat(0);
 
-	TString HadrFold = "/afs/cern.ch/work/a/abeschi/ttHHadr/";
-	TString LeptFold = "/afs/cern.ch/work/a/abeschi/ttHLept/";
+	TString HadrFold = "/afs/cern.ch/work/a/abeschi/ttHtest/";
+	TString LeptFold = "/afs/cern.ch/work/a/abeschi/ttHLeptNew/";
 
 	TChain* ttH;
 	TChain* ggH;
@@ -248,13 +248,13 @@ int main(int argc, char *argv[])
 
 	if(isLept)
 	{	cout << "Processing leptonic tag" << endl;
-		ttH = new TChain("TTHLeptonicDumper/trees/tth_13TeV_all");
+		ttH = new TChain("TTHLeptonicDumper/trees/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_13TeV_all");
 		ttH -> Add(LeptFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
-		ggH = new TChain("TTHLeptonicDumper/trees/ggh_13TeV_all");
+		ggH = new TChain("TTHLeptonicDumper/trees/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
 		ggH -> Add(LeptFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root");		
-		vbf = new TChain("TTHLeptonicDumper/trees/vbf_13TeV_all");
+		vbf = new TChain("TTHLeptonicDumper/trees/VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
 		vbf -> Add(LeptFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
-		vh = new TChain("TTHLeptonicDumper/trees/vh_13TeV_all");
+		vh = new TChain("TTHLeptonicDumper/trees/VHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
 		vh -> Add(LeptFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		data = new TChain("TTHLeptonicDumper/trees/data_13TeV_all");
 		data -> Add(LeptFold + "output_DoubleEG_Run2016H-PromptReco-v2_*.root");		
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 		diphotons -> Add(LeptFold + "output_DiPhotonJetsBox_MGG*.root");
 		gjet = new TChain("TTHLeptonicDumper/trees/gjet_13TeV_all");
 		gjet -> Add(LeptFold + "output_GJet_Pt*.root");		
-		qcd = new TChain("TTHLeptonicDumper/trees/qcd_13TeV_all");
+		qcd = new TChain("TTHLeptonicDumper/trees/QCD_Pt*");
 		qcd -> Add(LeptFold + "output_QCD_Pt*.root");
 
 /*		ttH -> Print();
@@ -287,21 +287,21 @@ int main(int argc, char *argv[])
 
 	else
 	{	cout << "Processing hadronic tag" << endl;
-		ttH = new TChain("TTHHadronicDumper/trees/tth_13TeV_all");
+		ttH = new TChain("TTHHadronicDumper/trees/tree");
 		ttH -> Add(HadrFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
-		ggH = new TChain("TTHHadronicDumper/trees/ggh_13TeV_all");
+		ggH = new TChain("TTHHadronicDumper/trees/tree");
 		ggH -> Add(HadrFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root");		
-		vbf = new TChain("TTHHadronicDumper/trees/vbf_13TeV_all");
-		vbf -> Add(HadrFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
-		vh = new TChain("TTHHadronicDumper/trees/vh_13TeV_all");
+		vbf = new TChain("TTHHadronicDumper/trees/tree");
+		vbf -> Add(HadrFold + "VBFHToGG_M_125_13TeV_powheg_pythia8_*.root");
+		vh = new TChain("TTHHadronicDumper/trees/tree");		
 		vh -> Add(HadrFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8*.root");		
-		data = new TChain("TTHHadronicDumper/trees/data_13TeV_all");
+		data = new TChain("TTHHadronicDumper/trees/tree");
 		data -> Add(HadrFold + "output_DoubleEG_Run2016*.root");		
-		diphotons = new TChain("TTHHadronicDumper/trees/diphoton_13TeV_all");
+		diphotons = new TChain("TTHHadronicDumper/trees/tree");
 		diphotons -> Add(HadrFold + "output_DiPhotonJetsBox_MGG*.root");
-		gjet = new TChain("TTHHadronicDumper/trees/gjet_13TeV_all");
+		gjet = new TChain("TTHHadronicDumper/trees/tree");
 		gjet -> Add(HadrFold + "output_GJet_Pt*.root");		
-		qcd = new TChain("TTHHadronicDumper/trees/qcd_13TeV_all");
+		qcd = new TChain("TTHHadronicDumper/trees/tree");
 		qcd -> Add(HadrFold + "output_QCD_Pt*.root");	
 
 /*		ttH -> Print();

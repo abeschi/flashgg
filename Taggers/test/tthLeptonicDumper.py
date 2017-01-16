@@ -105,7 +105,7 @@ cfgTools.addCategories(process.TTHLeptonicDumper,
                      )
 
 
-process.TTHLeptonicDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
+process.TTHLeptonicDumper.nameTemplate = "tree"
 
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents" ,-1)    # max-number of events
