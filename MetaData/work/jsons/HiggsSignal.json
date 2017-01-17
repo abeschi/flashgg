@@ -2,7 +2,7 @@
    "processes" : {
 
      "ggh" : [
-                ["/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1-6e50739fbcc735daf803d8fb7f8228e6/USER", {"args" : ["outputFile=GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root"], "njobs":0}]
+                ["/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1-6e50739fbcc735daf803d8fb7f8228e6/USER", {"args" : ["outputFile=GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root"], "njobs":100}]
 		     ],
      
      "vbf" : [

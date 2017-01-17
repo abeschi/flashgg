@@ -67,7 +67,7 @@ float NormalizationFactor(TH1F* h)
 
 
 
-void MakePlot(TH1F** histos, TString title)
+void MakePlot(TH1F** histos, TString title, int Pos=0)
 {
 	histos[0] -> SetLineWidth(3);
 	histos[0] -> SetLineColor(kRed);
@@ -104,21 +104,45 @@ void MakePlot(TH1F** histos, TString title)
 
 
 
-	TLegend* leg = new TLegend(0.65, 0.70, 0.9, 0.85);
+	TLegend* leg = new TLegend(0.73, 0.73, 0.92, 0.9);
 	leg -> AddEntry(histos[0], "ttH", "l");
 	leg -> AddEntry(histos[1], "ggH", "l");
 	leg -> AddEntry(histos[2], "vbf", "l");
 	leg -> AddEntry(histos[3], "vh", "l");
 	leg -> AddEntry(histos[4], "Data sidebands", "p");
 
-	TLegend* leg2 = new TLegend(0.65, 0.70, 0.9, 0.85);
+	TLegend* leg2 = new TLegend(0.73, 0.70, 0.92, 0.9);
 	leg2 -> AddEntry(histos[4], "Data sidebands", "p");
 	leg2 -> AddEntry(histos[5], "Diphotons", "f");
 	leg2 -> AddEntry(histos[6], "Gamma + jets", "f");
 	leg2 -> AddEntry(histos[7], "QCD", "f");
 
 
+	if(Pos==1)
+	{
+		leg -> SetX1(0.23);
+		leg -> SetX2(0.4);
+		leg2 -> SetX1(0.23);
+		leg2 -> SetX2(0.4);
+		leg -> SetY1(0.63);
+		leg -> SetY2(0.8);
+		leg2 -> SetY1(0.58);
+		leg2 -> SetY2(0.77);
 
+	}
+
+	if(Pos==2)
+	{
+		leg -> SetX1(0.23);
+		leg -> SetX2(0.42);
+		leg2 -> SetX1(0.23);
+		leg2 -> SetX2(0.42);
+		leg -> SetY1(0.23);
+		leg -> SetY2(0.4);
+		leg2 -> SetY1(0.23);
+		leg2 -> SetY2(0.4);
+
+	}
 
 	TCanvas* c = new TCanvas();
 	c -> cd();
@@ -131,7 +155,7 @@ void MakePlot(TH1F** histos, TString title)
 	axis -> SetMarkerSize(0);
 	axis -> SetLineWidth(0);
 	axis -> GetYaxis() -> SetTitleOffset(1.5);
-	axis -> GetYaxis() -> SetRangeUser(0, 1.1*m);
+	axis -> GetYaxis() -> SetRangeUser(0, 1.2*m);
 
 	axis -> Draw("histo");
 	histos[0] -> DrawNormalized("histo SAME");
@@ -158,7 +182,7 @@ void MakePlot(TH1F** histos, TString title)
 	double max2 = histos[4]->GetBinContent(histos[4]->GetMaximumBin());
 	if(histos[7]->GetBinContent(histos[7]->GetMaximumBin()) > max2 )
 		max2 = histos[7]->GetBinContent(histos[7]->GetMaximumBin());
-	histos[7]-> GetYaxis() -> SetRangeUser(0, 1.1*max2);
+	histos[7]-> GetYaxis() -> SetRangeUser(0, 1.2*max2);
 	histos[7]-> GetYaxis() -> SetTitleSize(0.05);
 	histos[7]-> GetYaxis() -> SetTitleFont(42);
 	histos[7]-> GetYaxis() -> SetLabelSize(0.045);
@@ -231,8 +255,8 @@ int main(int argc, char *argv[])
 	gStyle -> SetOptFit(0);
 	gStyle -> SetOptStat(0);
 
-	TString HadrFold = "/afs/cern.ch/work/a/abeschi/ttHtest/";
-	TString LeptFold = "/afs/cern.ch/work/a/abeschi/ttHLeptNew/";
+	TString HadrFold = "/afs/cern.ch/work/a/abeschi/ttHHadr_v3/";
+	TString LeptFold = "/afs/cern.ch/work/a/abeschi/ttHLept_v3/";
 
 	TChain* ttH;
 	TChain* ggH;
@@ -248,21 +272,21 @@ int main(int argc, char *argv[])
 
 	if(isLept)
 	{	cout << "Processing leptonic tag" << endl;
-		ttH = new TChain("TTHLeptonicDumper/trees/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_13TeV_all");
+		ttH = new TChain("TTHLeptonicDumper/trees/tree");
 		ttH -> Add(LeptFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
-		ggH = new TChain("TTHLeptonicDumper/trees/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
-		ggH -> Add(LeptFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root");		
-		vbf = new TChain("TTHLeptonicDumper/trees/VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
+		ggH = new TChain("TTHLeptonicDumper/trees/tree");
+		ggH -> Add(LeptFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
+		vbf = new TChain("TTHLeptonicDumper/trees/tree");
 		vbf -> Add(LeptFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
-		vh = new TChain("TTHLeptonicDumper/trees/VHToGG_M125_13TeV_amcatnloFXFX_pythia8_13TeV_all");
+		vh = new TChain("TTHLeptonicDumper/trees/tree");
 		vh -> Add(LeptFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
-		data = new TChain("TTHLeptonicDumper/trees/data_13TeV_all");
+		data = new TChain("TTHLeptonicDumper/trees/tree");
 		data -> Add(LeptFold + "output_DoubleEG_Run2016H-PromptReco-v2_*.root");		
-		diphotons = new TChain("TTHLeptonicDumper/trees/diphoton_13TeV_all");
+		diphotons = new TChain("TTHLeptonicDumper/trees/tree");
 		diphotons -> Add(LeptFold + "output_DiPhotonJetsBox_MGG*.root");
-		gjet = new TChain("TTHLeptonicDumper/trees/gjet_13TeV_all");
+		gjet = new TChain("TTHLeptonicDumper/trees/tree");
 		gjet -> Add(LeptFold + "output_GJet_Pt*.root");		
-		qcd = new TChain("TTHLeptonicDumper/trees/QCD_Pt*");
+		qcd = new TChain("TTHLeptonicDumper/trees/tree");
 		qcd -> Add(LeptFold + "output_QCD_Pt*.root");
 
 /*		ttH -> Print();
@@ -290,9 +314,9 @@ int main(int argc, char *argv[])
 		ttH = new TChain("TTHHadronicDumper/trees/tree");
 		ttH -> Add(HadrFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
 		ggH = new TChain("TTHHadronicDumper/trees/tree");
-		ggH -> Add(HadrFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8.root");		
+		ggH -> Add(HadrFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		vbf = new TChain("TTHHadronicDumper/trees/tree");
-		vbf -> Add(HadrFold + "VBFHToGG_M_125_13TeV_powheg_pythia8_*.root");
+		vbf -> Add(HadrFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");
 		vh = new TChain("TTHHadronicDumper/trees/tree");		
 		vh -> Add(HadrFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8*.root");		
 		data = new TChain("TTHHadronicDumper/trees/tree");
@@ -348,11 +372,12 @@ int main(int argc, char *argv[])
 	float mu_eta[2] = {0, 0};
 	float mu_phi[2] = {0, 0};
 
-	int njet = 0;
-	int nbjet = 0;
+	float njet = 0;
+	float nbjet = 0;
 
 
-
+	int dataCounter = 0;
+	TString process = "";
 
 	TH1F* nvtx_histo[8];
 
@@ -391,42 +416,41 @@ int main(int argc, char *argv[])
 	{	
 		nvtx_histo[i] = new TH1F(("nvtx_histo"+ std::to_string(i)).c_str(), "; n_{vtx}; Counts", 60, -0.5, 59.5 );
 		
-		dipho_sumpt_histo[i] = new TH1F(("dipho_sumpt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{#gamma#gamma} (GeV); Counts", 200, 40, 240 );
+		dipho_sumpt_histo[i] = new TH1F(("dipho_sumpt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{#gamma#gamma} (GeV); Counts", 100, 40, 240 );
 		dipho_mass_histo[i] = new TH1F(("dipho_mass_histo"+ std::to_string(i)).c_str(), "; m_{#gamma#gamma} (GeV); Counts", 80, 100, 180 );
-		dipho_leadPt_histo[i] = new TH1F(("dipho_leadPt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{leading #gamma} (GeV); Counts", 200, 0, 200 );
-		dipho_leadEta_histo[i] = new TH1F(("dipho_leadEta_histo"+ std::to_string(i)).c_str(), "; #eta; Counts", 100, -2.5, 2.5 );
-		dipho_leadPhi_histo[i] = new TH1F(("dipho_leadPhi_histo"+ std::to_string(i)).c_str(), "; #varphi; Counts", 100, -3.15, 3.15 );
+		dipho_leadPt_histo[i] = new TH1F(("dipho_leadPt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{leading #gamma} (GeV); Counts", 100, 0, 200 );
+		dipho_leadEta_histo[i] = new TH1F(("dipho_leadEta_histo"+ std::to_string(i)).c_str(), "; #eta; Counts", 50, -2.5, 2.5 );
+		dipho_leadPhi_histo[i] = new TH1F(("dipho_leadPhi_histo"+ std::to_string(i)).c_str(), "; #varphi; Counts", 50, -3.15, 3.15 );
 		dipho_leadR9_histo[i] = new TH1F(("dipho_leadR9_histo"+ std::to_string(i)).c_str(), "; R_{9}; Counts", 50, 0.7, 1 );
-		dipho_subleadPt_histo[i] = new TH1F(("dipho_subleadPt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{subleading #gamma} (GeV); Counts", 150, 0, 150 );
-		dipho_subleadEta_histo[i] = new TH1F(("dipho_subleadEta_histo"+ std::to_string(i)).c_str(), "; #eta; Counts", 100, -2.5, 2.5 );
-		dipho_subleadPhi_histo[i] = new TH1F(("dipho_subleadPhi_histo"+ std::to_string(i)).c_str(), "; #varphi; Counts", 100, -3.15, 3.15 );
-		dipho_subleadR9_histo[i] = new TH1F(("dipho_subleadR9_histo"+ std::to_string(i)).c_str(), "; R_{9}; Counts", 100, 0.7, 1 );
-		dipho_leadIDMVA_histo[i] = new TH1F(("dipho_leadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 100, -1, 1 );
-		dipho_subleadIDMVA_histo[i] = new TH1F(("dipho_subleadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 100, -1, 1 );
-		dipho_mva_histo[i] = new TH1F(("dipho_mva_histo"+ std::to_string(i)).c_str(), "; Diphoton MVA; Counts", 100, -1, 1 );
+		dipho_subleadPt_histo[i] = new TH1F(("dipho_subleadPt_histo"+ std::to_string(i)).c_str(), "; P_{T}^{subleading #gamma} (GeV); Counts", 75, 0, 150 );
+		dipho_subleadEta_histo[i] = new TH1F(("dipho_subleadEta_histo"+ std::to_string(i)).c_str(), "; #eta; Counts", 50, -2.5, 2.5 );
+		dipho_subleadPhi_histo[i] = new TH1F(("dipho_subleadPhi_histo"+ std::to_string(i)).c_str(), "; #varphi; Counts", 50, -3.15, 3.15 );
+		dipho_subleadR9_histo[i] = new TH1F(("dipho_subleadR9_histo"+ std::to_string(i)).c_str(), "; R_{9}; Counts", 50, 0.7, 1 );
+		dipho_leadIDMVA_histo[i] = new TH1F(("dipho_leadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 50, -1, 1 );
+		dipho_subleadIDMVA_histo[i] = new TH1F(("dipho_subleadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 50, -1, 1 );
+		dipho_mva_histo[i] = new TH1F(("dipho_mva_histo"+ std::to_string(i)).c_str(), "; Diphoton MVA; Counts", 50, -1, 1 );
 
-		jet_pt_histo[i] = new TH1F(("jet_pt_histo"+ std::to_string(i)).c_str(), "; Jet p_{T} (GeV); Counts", 200, 0, 200 );
-		jet_eta_histo[i] = new TH1F(("jet_eta_histo"+ std::to_string(i)).c_str(), "; Jet #eta; Counts", 100, -2.5, 2.5 );
-		jet_phi_histo[i] = new TH1F(("jet_phi_histo"+ std::to_string(i)).c_str(), "; Jet #varphi; Counts", 100, -3.15, 3.15 );
-		jet_bdiscriminant_histo[i] = new TH1F(("jet_bdiscriminant_histo"+ std::to_string(i)).c_str(), "; Jet bdiscriminant; Counts", 100, -1, 1 );
-		leadingjet_pt_histo[i] = new TH1F(("leadingjet_pt_histo"+ std::to_string(i)).c_str(), "; Jet p_{T} (GeV); Counts", 200, 0, 200 );
-		leadingjet_eta_histo[i] = new TH1F(("leadingjet_eta_histo"+ std::to_string(i)).c_str(), "; Jet #eta; Counts", 100, -2.5, 2.5 );
-		leadingjet_phi_histo[i] = new TH1F(("leadingjet_phi_histo"+ std::to_string(i)).c_str(), "; Jet #varphi; Counts", 100, -3.15, 3.15 );
-		leadingjet_bdiscriminant_histo[i] = new TH1F(("leadingjet_bdiscriminant_histo"+ std::to_string(i)).c_str(), "; Jet bdiscriminant; Counts", 100, -1, 1 );
+		jet_pt_histo[i] = new TH1F(("jet_pt_histo"+ std::to_string(i)).c_str(), "; Jet p_{T} (GeV); Counts", 100, 0, 200 );
+		jet_eta_histo[i] = new TH1F(("jet_eta_histo"+ std::to_string(i)).c_str(), "; Jet #eta; Counts", 50, -2.5, 2.5 );
+		jet_phi_histo[i] = new TH1F(("jet_phi_histo"+ std::to_string(i)).c_str(), "; Jet #varphi; Counts", 50, -3.15, 3.15 );
+		jet_bdiscriminant_histo[i] = new TH1F(("jet_bdiscriminant_histo"+ std::to_string(i)).c_str(), "; Jet bdiscriminant; Counts", 50, 0, 1 );
+		leadingjet_pt_histo[i] = new TH1F(("leadingjet_pt_histo"+ std::to_string(i)).c_str(), "; Jet p_{T} (GeV); Counts", 100, 0, 200 );
+		leadingjet_eta_histo[i] = new TH1F(("leadingjet_eta_histo"+ std::to_string(i)).c_str(), "; Jet #eta; Counts", 50, -2.5, 2.5 );
+		leadingjet_phi_histo[i] = new TH1F(("leadingjet_phi_histo"+ std::to_string(i)).c_str(), "; Jet #varphi; Counts", 50, -3.15, 3.15 );
+		leadingjet_bdiscriminant_histo[i] = new TH1F(("leadingjet_bdiscriminant_histo"+ std::to_string(i)).c_str(), "; Jet bdiscriminant; Counts", 50, 0, 1 );
 
 		njet_histo[i] = new TH1F(("njet_histo"+ std::to_string(i)).c_str(), "; Number of jets; Counts", 16, -0.5, 15.5);
 		nbjet_histo[i] = new TH1F(("nbjet_histo"+ std::to_string(i)).c_str(), "; Number of b-jets; Counts", 6, -0.5, 5.5);
 		nleptons_histo[i] = new TH1F(("nleptons_histo"+ std::to_string(i)).c_str(), "; Number of leptons; Counts", 6, -0.5, 5.5);
 
-		ele_pt_histo[i] = new TH1F(("ele_pt_histo"+ std::to_string(i)).c_str(), "; Ele p_{T} (GeV); Counts", 200, 0, 200 );
-		ele_eta_histo[i] = new TH1F(("ele_eta_histo"+ std::to_string(i)).c_str(), "; Ele #eta; Counts", 100, -2.5, 2.5 );
-		ele_phi_histo[i] = new TH1F(("ele_phi_histo"+ std::to_string(i)).c_str(), "; Ele #varphi; Counts", 100, -3.15, 3.15 );
-		mu_pt_histo[i] = new TH1F(("mu_pt_histo"+ std::to_string(i)).c_str(), "; Mu p_{T} (GeV); Counts", 200, 0, 200 );
-		mu_eta_histo[i] = new TH1F(("mu_eta_histo"+ std::to_string(i)).c_str(), "; Mu #eta; Counts", 100, -2.5, 2.5 );
-		mu_phi_histo[i] = new TH1F(("mu_phi_histo"+  std::to_string(i)).c_str(), "; Mu #varphi; Counts", 100, -3.15, 3.15 );
+		ele_pt_histo[i] = new TH1F(("ele_pt_histo"+ std::to_string(i)).c_str(), "; Ele p_{T} (GeV); Counts", 100, 0, 200 );
+		ele_eta_histo[i] = new TH1F(("ele_eta_histo"+ std::to_string(i)).c_str(), "; Ele #eta; Counts", 50, -2.5, 2.5 );
+		ele_phi_histo[i] = new TH1F(("ele_phi_histo"+ std::to_string(i)).c_str(), "; Ele #varphi; Counts", 50, -3.15, 3.15 );
+		mu_pt_histo[i] = new TH1F(("mu_pt_histo"+ std::to_string(i)).c_str(), "; Mu p_{T} (GeV); Counts", 100, 0, 200 );
+		mu_eta_histo[i] = new TH1F(("mu_eta_histo"+ std::to_string(i)).c_str(), "; Mu #eta; Counts", 50, -2.5, 2.5 );
+		mu_phi_histo[i] = new TH1F(("mu_phi_histo"+  std::to_string(i)).c_str(), "; Mu #varphi; Counts", 50, -3.15, 3.15 );
 	}
 
-	int cc = 0;
 	for(int n=0; n<8; n++)
 	{
 		int nentries;
@@ -436,47 +460,55 @@ int main(int argc, char *argv[])
 			case(0):
 				nentries = ttH -> GetEntries();
 				serviceTree = (TChain*)ttH -> Clone();
+				process = "ttH";
 				break;
 
 
 			case(1):
 				nentries = ggH -> GetEntries();
 				serviceTree = (TChain*)ggH -> Clone();
+				process = "ggH";
 				break;
 
 
 			case(2):
 				nentries = vbf -> GetEntries();
 				serviceTree = (TChain*)vbf -> Clone();
+				process = "VBF";
 				break;
 
 
 			case(3):
 				nentries = vh -> GetEntries();
 				serviceTree = (TChain*)vh -> Clone();
+				process = "VH";
 				break;
 
 
 			case(4):
 				nentries = data -> GetEntries();
 				serviceTree = (TChain*)data -> Clone();
+				process = "Data";
 				break;
 
 
 			case(5):
 				nentries = diphotons -> GetEntries();
 				serviceTree = (TChain*)diphotons -> Clone();
+				process = "Diphotons";
 				break;
 
 			case(6):
 				nentries = gjet -> GetEntries();
 				serviceTree = (TChain*)gjet -> Clone();
+				process = "Gamma + jets";
 				break;
 
 
 			case(7):
 				nentries = qcd -> GetEntries();
 				serviceTree = (TChain*)qcd -> Clone();
+				process = "QCD";
 				break;
 
 
@@ -484,6 +516,7 @@ int main(int argc, char *argv[])
 				nentries = 0;
 		}
 
+		cout << "Process: " << process << ", number of event in the tree: " << nentries << endl;
 
 		serviceTree -> SetBranchAddress("nvtx", &nvtx);
 		serviceTree -> SetBranchAddress("weight", &weight);
@@ -546,9 +579,9 @@ int main(int argc, char *argv[])
 			if(dipho_mass<100 || dipho_mass>180) continue;
 			if(n==4 && (dipho_mass>115 && dipho_mass<135)) continue;
 			if(n==4)
-				weight = 1./lumiFactor;
-			if(n==4)
-				cc++;
+			{	weight = 1./lumiFactor;
+				dataCounter++;
+			}
 
 			dipho_mass_histo[n] -> Fill(dipho_mass, weight*lumiFactor);
 
@@ -579,10 +612,6 @@ int main(int argc, char *argv[])
 				leadingjet_eta_histo[n] -> Fill(jet_eta[0], weight*lumiFactor);
 				leadingjet_phi_histo[n] -> Fill(jet_phi[0], weight*lumiFactor);
 				leadingjet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[0], weight*lumiFactor);
-
-				njet++;
-				if(jet_bdiscriminant[0] > 0.8)
-					nbjet++;
 			}
 
 			if(jet_pt[1]>0)
@@ -591,10 +620,6 @@ int main(int argc, char *argv[])
 				jet_eta_histo[n] -> Fill(jet_eta[1], weight*lumiFactor);
 				jet_phi_histo[n] -> Fill(jet_phi[1], weight*lumiFactor);
 				jet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[1], weight*lumiFactor);
-
-				njet++;
-				if(jet_bdiscriminant[1] > 0.8)
-					nbjet++;
 			}
 
 			if(jet_pt[2]>0)
@@ -603,10 +628,6 @@ int main(int argc, char *argv[])
 				jet_eta_histo[n] -> Fill(jet_eta[2], weight*lumiFactor);
 				jet_phi_histo[n] -> Fill(jet_phi[2], weight*lumiFactor);
 				jet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[2], weight*lumiFactor);
-
-				njet++;
-				if(jet_bdiscriminant[2] > 0.8)
-					nbjet++;
 			}
 
 			if(jet_pt[3]>0)
@@ -615,10 +636,6 @@ int main(int argc, char *argv[])
 				jet_eta_histo[n] -> Fill(jet_eta[3], weight*lumiFactor);
 				jet_phi_histo[n] -> Fill(jet_phi[3], weight*lumiFactor);
 				jet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[3], weight*lumiFactor);
-
-				njet++;
-				if(jet_bdiscriminant[3] > 0.8)
-					nbjet++;
 			}
 
 
@@ -670,10 +687,6 @@ int main(int argc, char *argv[])
 					jet_eta_histo[n] -> Fill(jet_eta[4], weight*lumiFactor);
 					jet_phi_histo[n] -> Fill(jet_phi[4], weight*lumiFactor);
 					jet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[4], weight*lumiFactor);
-
-					njet++;
-					if(jet_bdiscriminant[4] > 0.8)
-						nbjet++;
 				}
 
 				if(jet_pt[5]>0)
@@ -682,10 +695,6 @@ int main(int argc, char *argv[])
 					jet_eta_histo[n] -> Fill(jet_eta[5], weight*lumiFactor);
 					jet_phi_histo[n] -> Fill(jet_phi[5], weight*lumiFactor);
 					jet_bdiscriminant_histo[n] -> Fill(jet_bdiscriminant[5], weight*lumiFactor);
-
-					njet++;
-					if(jet_bdiscriminant[5] > 0.8)
-						nbjet++;
 				}
 			}
 
@@ -703,22 +712,22 @@ int main(int argc, char *argv[])
 	MakePlot(dipho_mass_histo, "DiphotonMass");
 	MakePlot(dipho_leadPt_histo, "LeadingPhotonPt");
 	MakePlot(dipho_leadEta_histo, "LeadingPhotonEta");
-	MakePlot(dipho_leadPhi_histo, "LeadingPhotonPhi");
-	MakePlot(dipho_leadR9_histo, "LeadingPhotonR9");
+	MakePlot(dipho_leadPhi_histo, "LeadingPhotonPhi", 2);
+	MakePlot(dipho_leadR9_histo, "LeadingPhotonR9", 1);
 	MakePlot(dipho_subleadPt_histo, "SubleadingPhotonPt");
 	MakePlot(dipho_subleadEta_histo, "SubleadingPhotonEta");
-	MakePlot(dipho_subleadPhi_histo, "SubleadingPhotonPhi");
-	MakePlot(dipho_subleadR9_histo, "SubleadingPhotonR9");
-	MakePlot(dipho_leadIDMVA_histo, "LeadingPhotonIDMVA");
+	MakePlot(dipho_subleadPhi_histo, "SubleadingPhotonPhi", 2);
+	MakePlot(dipho_subleadR9_histo, "SubleadingPhotonR9", 1);
+	MakePlot(dipho_leadIDMVA_histo, "LeadingPhotonIDMVA", 1);
 	MakePlot(dipho_subleadIDMVA_histo, "SubleadingPhotonIDMVA");
 	MakePlot(dipho_mva_histo, "DiphotonMVA");
 	MakePlot(jet_pt_histo, "JetPt");
 	MakePlot(jet_eta_histo, "JetEta");
-	MakePlot(jet_phi_histo, "JetPhi");
+	MakePlot(jet_phi_histo, "JetPhi", 2);
 	MakePlot(jet_bdiscriminant_histo, "JetBdiscrimiant");
 	MakePlot(leadingjet_pt_histo, "LeadingJetPt");
 	MakePlot(leadingjet_eta_histo, "LeadingJetEta");
-	MakePlot(leadingjet_phi_histo, "LeadingJetPhi");
+	MakePlot(leadingjet_phi_histo, "LeadingJetPhi", 2);
 	MakePlot(leadingjet_bdiscriminant_histo, "LeadingJetBdiscrimiant");
 
 	if(isLept)
@@ -746,9 +755,7 @@ int main(int argc, char *argv[])
 		system("mv *.pdf ~/www/ttH/Hadronic");
 	}
 
-	cout << "ciao" << endl;
-
-	cout << cc << endl;
+	cout << "Total number of events in data sidebands: " << dataCounter << endl;
 
 
 
