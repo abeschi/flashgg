@@ -66,6 +66,7 @@ namespace flashgg {
         //    cout << "evt.id().event()= " << evt.id().event() << "\tevt.isRealData()= " << evt.isRealData() << "\tdimuonPointers.size()= " << dimuonPointers.size() << "\tpvPointers.size()= " << pvPointers.size() << endl;
 
         for( unsigned int i = 0 ; i < dimuonPointers.size() ; i++ ) {
+
             Ptr<flashgg::DiMuonCandidate> dimuon = dimuonPointers[i];
             //flashgg::DiMuonCandidate dimu = flashgg::DiMuonCandidate(*dimuon);
             for( unsigned int j = 0; j < photonPointers.size() ; j++ ) {
@@ -97,6 +98,7 @@ namespace flashgg {
                         && dimuon->mass() > 35. && mumugamma.mass() > 60. && mumugamma.mass() < 120. && ( dimuon->mass() + mumugamma.mass() ) < 180.
                         && min( DeltaR1, DeltaR2 ) < 0.8 && ( ( DeltaR1 > DeltaR2 && muon_lead->pt() > 21 ) || ( DeltaR2 > DeltaR1 && muon_sublead->pt() > 21. ) )
                   ) { passFSRZmmg2012 = 1; }
+
                 mumugamma.setIs2012FSRZMMG( passFSRZmmg2012 );
 
                 bool passHGammaStarGamma = 0;
@@ -108,6 +110,7 @@ namespace flashgg {
                         && PhotonET > 25. && PhotonET / mumugamma.mass() > 0.3  && min( DeltaR1, DeltaR2 ) > 1.0
                         && mumugamma.mass() > 110. && mumugamma.mass() < 150.
                   ) { passHGammaStarGamma = 1; }
+
                 mumugamma.setIsHGammaStarGamma( passHGammaStarGamma );
 
                 bool passHZgamma = 0;
@@ -118,6 +121,7 @@ namespace flashgg {
                         && PhotonET > 20. && PhotonET / mumugamma.mass() > 0.2  && min( DeltaR1, DeltaR2 ) > 1.0
                         && mumugamma.mass() > 110. && mumugamma.mass() < 150. && ( dimuon->mass() + mumugamma.mass() ) > 185.
                   ) { passHZgamma = 1; }
+
                 mumugamma.setIsHZgamma( passHZgamma );
                 //=====================
                 double PhotonTrkIsoHollow03 = photon_corr.trkSumPtHollowConeDR03();
@@ -134,7 +138,6 @@ namespace flashgg {
                 if( DeltaR_PhotonNearMu < 0.3 && PhotonTrkIsoHollow03 > 0.99 * MuNear_TrkPT ) { PhotonTrkIsoHollow03_MuCorr -= MuNear_TrkPT; }
                 if( DeltaR_PhotonFarMu < 0.3 && PhotonTrkIsoHollow03 > 0.99 * MuFar_TrkPT ) { PhotonTrkIsoHollow03_MuCorr -= MuFar_TrkPT; }
                 mumugamma.setPhotonTrkIsoHollow03MuCorr( PhotonTrkIsoHollow03_MuCorr );
-
 
                 // store the dimuon into the collection
                 MuMuGammaColl->push_back( mumugamma );

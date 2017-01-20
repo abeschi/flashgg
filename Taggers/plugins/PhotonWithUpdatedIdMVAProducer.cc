@@ -80,7 +80,7 @@ namespace flashgg {
 
 
     auto_ptr<std::vector<flashgg::Photon> > out_obj( new std::vector<flashgg::Photon>() );
-       if(evt.isRealData())
+       //if(evt.isRealData())
             //std::cout << "Processing DATA" << std::endl;
 
     for (unsigned int i=0; i<objects->size(); i++) {
@@ -128,7 +128,7 @@ namespace flashgg {
                 if (this->debug_) {
                     std::cout << new_obj->full5x5_r9() << std::endl;
                     std::cout << new_obj->r9() << std::endl;
-                }
+                } 
             }
         }
 
@@ -146,6 +146,7 @@ namespace flashgg {
         out_obj->push_back(*new_obj);
         //delete new_obj;
     }
+
     evt.put(out_obj);
   }
 }

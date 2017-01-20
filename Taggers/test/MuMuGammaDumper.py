@@ -9,7 +9,7 @@ from flashgg.MicroAOD.flashggJets_cfi import flashggBTag, maxJetCollections
 from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,cloneProcessingSnippet
 
 # maxEvents is the max number of events processed of each file, not globally
-inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleMuon/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016B-23Sep2016-v1/161117_084211/0000/myMicroAODOutputFile_1.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-BS2016_BSandPUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/161117_075326/0000/myMicroAODOutputFile_1.root"
 outputFile = "MuMuGamma.root" 
 
 ## I/O SETUP ##
@@ -30,7 +30,7 @@ customize.parse()
 
 process.load("flashgg.Taggers.flashggPhotonWithUpdatedIdMVAProducer_cfi")
 
-'''
+
 # load syst producer
 from flashgg.Systematics.SystematicsCustomize import *
 process.load("flashgg.Systematics.PhotonSystematics_cfi")
@@ -87,8 +87,6 @@ else:
     process.flashggPhotonSystematics.SystMethods2D = newvpset2D
 
 
-
-'''
 #re-run mumugamma producer
 process.load("flashgg.MicroAOD.flashggMuMuGamma_cfi")
 process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
@@ -105,20 +103,18 @@ import flashgg.Taggers.dumperConfigTools as cfgTools
 
 # Require trigger
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
-process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_DoubleMu7_v*",
-                                                                "HLT_DoubleMu6_v*",
-                                                                "HLT_Mu13_Mu8_v*"
+process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_DoubleMu*"
                                                                 ))
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 # ee bad supercluster filter on data
 process.load('RecoMET.METFilters.eeBadScFilter_cfi')
-process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERecHits") # Saved MicroAOD Collection (data only)
+#process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERecHits") # Saved MicroAOD Collection (data only)
 process.dataRequirements = cms.Sequence()
 if customize.processId == "Data" or customize.processId == "data":
     process.dataRequirements += process.hltHighLevel
-    process.dataRequirements += process.eeBadScFilter
+   # process.dataRequirements += process.eeBadScFilter
  
 
 
@@ -148,8 +144,7 @@ cfgTools.addCategory(process.mumugammaDumper,
 cfgTools.addCategories(process.mumugammaDumper,
                        ## categories definition
                        ## cuts are applied in cascade. Events getting to these categories have already failed the "Reject" selection
-                       [("EB","abs(MMG_Photon.superCluster.eta)<1.5",0), ##
-                        ("EE","abs(MMG_Photon.superCluster.eta)>1.5",0),##("EE","1",0), ## evereything elese is EB+EE
+                       [("all","1>0",0),
                         ],
                        ## variables to be dumped in trees/datasets. Same variables for all categories
                        ## if different variables wanted for different categories, can add categorie one by one with cfgTools.addCategory
@@ -185,18 +180,18 @@ cfgTools.addCategories(process.mumugammaDumper,
                        )
 
 
-process.mumugammaDumper.nameTemplate = "$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+process.mumugammaDumper.nameTemplate = "tree"
 
 
-customize.setDefault("maxEvents" ,-1)    # max-number of events
+customize.setDefault("maxEvents" , 100000)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
 
 process.p1 = cms.Path(
-    	#process.dataRequirements*
+    	process.dataRequirements*
     	process.flashggUpdatedIdMVAPhotons*
-	#process.flashggPhotonSystematics*
+	process.flashggPhotonSystematics*
     	process.flashggMuMuGamma*
     	process.mumugammaDumper
     	)
