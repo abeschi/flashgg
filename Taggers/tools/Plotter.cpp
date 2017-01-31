@@ -249,14 +249,16 @@ int main(int argc, char *argv[])
 {
 	writeExtraText = true;       // if extra text
 	extraText  = "Preliminary";  // default extra text is "Preliminary"
-	lumi_sqrtS = "36.46 fb^{-1} (13 TeV)";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+	lumi_sqrtS = "36.73 fb^{-1} (13 TeV)";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
 	setTDRStyle();
 	gStyle -> SetOptFit(0);
 	gStyle -> SetOptStat(0);
 
-	TString HadrFold = "/afs/cern.ch/work/a/abeschi/ttHHadr_v3/";
-	TString LeptFold = "/afs/cern.ch/work/a/abeschi/ttHLept_v3/";
+	TString HadrFoldMC = "/afs/cern.ch/work/a/abeschi/ttHHadr_v5/";
+	TString LeptFoldMC = "/afs/cern.ch/work/a/abeschi/ttHLept_v5/";
+	TString HadrFoldData = "/afs/cern.ch/work/a/abeschi/ttHHadr_v5/";
+	TString LeptFoldData = "/afs/cern.ch/work/a/abeschi/ttHLept_v5/";
 
 	TChain* ttH;
 	TChain* ggH;
@@ -273,21 +275,21 @@ int main(int argc, char *argv[])
 	if(isLept)
 	{	cout << "Processing leptonic tag" << endl;
 		ttH = new TChain("TTHLeptonicDumper/trees/tree");
-		ttH -> Add(LeptFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
+		ttH -> Add(LeptFoldMC + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
 		ggH = new TChain("TTHLeptonicDumper/trees/tree");
-		ggH -> Add(LeptFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
+		ggH -> Add(LeptFoldMC + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		vbf = new TChain("TTHLeptonicDumper/trees/tree");
-		vbf -> Add(LeptFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
+		vbf -> Add(LeptFoldMC + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		vh = new TChain("TTHLeptonicDumper/trees/tree");
-		vh -> Add(LeptFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
+		vh -> Add(LeptFoldMC + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		data = new TChain("TTHLeptonicDumper/trees/tree");
-		data -> Add(LeptFold + "output_DoubleEG_Run2016H-PromptReco-v2_*.root");		
+		data -> Add(LeptFoldData + "output_DoubleEG_Run2016H-PromptReco-v2_*.root");		
 		diphotons = new TChain("TTHLeptonicDumper/trees/tree");
-		diphotons -> Add(LeptFold + "output_DiPhotonJetsBox_MGG*.root");
+		diphotons -> Add(LeptFoldMC + "output_DiPhotonJetsBox_MGG*.root");
 		gjet = new TChain("TTHLeptonicDumper/trees/tree");
-		gjet -> Add(LeptFold + "output_GJet_Pt*.root");		
+		gjet -> Add(LeptFoldMC + "output_GJet_Pt*.root");		
 		qcd = new TChain("TTHLeptonicDumper/trees/tree");
-		qcd -> Add(LeptFold + "output_QCD_Pt*.root");
+		qcd -> Add(LeptFoldMC + "output_QCD_Pt*.root");
 
 /*		ttH -> Print();
 		ggH -> Print();
@@ -312,21 +314,21 @@ int main(int argc, char *argv[])
 	else
 	{	cout << "Processing hadronic tag" << endl;
 		ttH = new TChain("TTHHadronicDumper/trees/tree");
-		ttH -> Add(HadrFold + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
+		ttH -> Add(HadrFoldMC + "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_*.root");		
 		ggH = new TChain("TTHHadronicDumper/trees/tree");
-		ggH -> Add(HadrFold + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
+		ggH -> Add(HadrFoldMC + "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		vbf = new TChain("TTHHadronicDumper/trees/tree");
-		vbf -> Add(HadrFold + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");
+		vbf -> Add(HadrFoldMC + "VBFHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");
 		vh = new TChain("TTHHadronicDumper/trees/tree");		
-		vh -> Add(HadrFold + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8*.root");		
+		vh -> Add(HadrFoldMC + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8*.root");		
 		data = new TChain("TTHHadronicDumper/trees/tree");
-		data -> Add(HadrFold + "output_DoubleEG_Run2016*.root");		
+		data -> Add(HadrFoldData + "output_DoubleEG_Run2016*.root");		
 		diphotons = new TChain("TTHHadronicDumper/trees/tree");
-		diphotons -> Add(HadrFold + "output_DiPhotonJetsBox_MGG*.root");
+		diphotons -> Add(HadrFoldMC + "output_DiPhotonJetsBox_MGG*.root");
 		gjet = new TChain("TTHHadronicDumper/trees/tree");
-		gjet -> Add(HadrFold + "output_GJet_Pt*.root");		
+		gjet -> Add(HadrFoldMC + "output_GJet_Pt*.root");		
 		qcd = new TChain("TTHHadronicDumper/trees/tree");
-		qcd -> Add(HadrFold + "output_QCD_Pt*.root");	
+		qcd -> Add(HadrFoldMC + "output_QCD_Pt*.root");	
 
 /*		ttH -> Print();
 		ggH -> Print();
@@ -376,8 +378,9 @@ int main(int argc, char *argv[])
 	float nbjet = 0;
 
 
-	int dataCounter = 0;
-	TString process = "";
+	float Counter[8] = {0., 0., 0., 0., 0., 0., 0., 0.};
+	float Entries[8] = {0., 0., 0., 0., 0., 0., 0., 0.};
+	TString process[8] = {"ttH", "ggH", "VBF", "VH", "Data", "Diphoton", "Gamma + jets", "QCD" };
 
 	TH1F* nvtx_histo[8];
 
@@ -460,55 +463,47 @@ int main(int argc, char *argv[])
 			case(0):
 				nentries = ttH -> GetEntries();
 				serviceTree = (TChain*)ttH -> Clone();
-				process = "ttH";
 				break;
 
 
 			case(1):
 				nentries = ggH -> GetEntries();
 				serviceTree = (TChain*)ggH -> Clone();
-				process = "ggH";
 				break;
 
 
 			case(2):
 				nentries = vbf -> GetEntries();
 				serviceTree = (TChain*)vbf -> Clone();
-				process = "VBF";
 				break;
 
 
 			case(3):
 				nentries = vh -> GetEntries();
 				serviceTree = (TChain*)vh -> Clone();
-				process = "VH";
 				break;
 
 
 			case(4):
 				nentries = data -> GetEntries();
 				serviceTree = (TChain*)data -> Clone();
-				process = "Data";
 				break;
 
 
 			case(5):
 				nentries = diphotons -> GetEntries();
 				serviceTree = (TChain*)diphotons -> Clone();
-				process = "Diphotons";
 				break;
 
 			case(6):
 				nentries = gjet -> GetEntries();
 				serviceTree = (TChain*)gjet -> Clone();
-				process = "Gamma + jets";
 				break;
 
 
 			case(7):
 				nentries = qcd -> GetEntries();
 				serviceTree = (TChain*)qcd -> Clone();
-				process = "QCD";
 				break;
 
 
@@ -516,7 +511,7 @@ int main(int argc, char *argv[])
 				nentries = 0;
 		}
 
-		cout << "Process: " << process << ", number of event in the tree: " << nentries << endl;
+		cout << "Process: " << process[n] << ", number of event in the tree: " << nentries << endl;
 
 		serviceTree -> SetBranchAddress("nvtx", &nvtx);
 		serviceTree -> SetBranchAddress("weight", &weight);
@@ -570,6 +565,7 @@ int main(int argc, char *argv[])
 
 		}
 
+		Entries[n] = nentries;
 
 		for(int i=0; i<nentries; i++)
 		{	
@@ -579,14 +575,13 @@ int main(int argc, char *argv[])
 			if(dipho_mass<100 || dipho_mass>180) continue;
 			if(n==4 && (dipho_mass>115 && dipho_mass<135)) continue;
 			if(n==4)
-			{	weight = 1./lumiFactor;
-				dataCounter++;
-			}
+				weight = 1./lumiFactor;
 
 			dipho_mass_histo[n] -> Fill(dipho_mass, weight*lumiFactor);
 
 			if(n>4 && (dipho_mass>115 && dipho_mass<135)) continue;
 
+			Counter[n] += weight*lumiFactor;
 
 			nvtx_histo[n] -> Fill(nvtx, weight*lumiFactor);
 			dipho_sumpt_histo[n] -> Fill(dipho_sumpt, weight*lumiFactor);
@@ -755,11 +750,21 @@ int main(int argc, char *argv[])
 		system("mv *.pdf ~/www/ttH/Hadronic");
 	}
 
-	cout << "Total number of events in data sidebands: " << dataCounter << endl;
 
+	cout << endl << endl << " *******************************************" << endl << endl;
+	for(int i=0; i<8; i++)
+	{
+		cout << "Process: " << process[i] << " , number of events ";
+		if(i>=4)
+			cout << "in sidebands -> ";
+		else
+			cout << " -> ";
 
+		cout << Counter[i] << " ( " << Entries[i] << " unweighted)" << endl;
+	}
 
-
+	cout << endl << " Total events in backgorund MC: " << Counter[5] + Counter[6] + Counter[7] << endl;
+	cout << endl  << " *******************************************" << endl << endl;
 
 
 
