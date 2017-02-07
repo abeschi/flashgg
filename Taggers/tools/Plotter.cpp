@@ -255,10 +255,10 @@ int main(int argc, char *argv[])
 	gStyle -> SetOptFit(0);
 	gStyle -> SetOptStat(0);
 
-	TString HadrFoldMC = "/afs/cern.ch/work/a/abeschi/ttHHadr_v5/";
-	TString LeptFoldMC = "/afs/cern.ch/work/a/abeschi/ttHLept_v5/";
-	TString HadrFoldData = "/afs/cern.ch/work/a/abeschi/ttHHadr_v5/";
-	TString LeptFoldData = "/afs/cern.ch/work/a/abeschi/ttHLept_v5/";
+	TString HadrFoldMC = "/afs/cern.ch/work/a/abeschi/ttHHadr_v6/";
+	TString LeptFoldMC = "/afs/cern.ch/work/a/abeschi/ttHLept_v6/";
+	TString HadrFoldData = "/afs/cern.ch/work/a/abeschi/ttHHadr_v6/";
+	TString LeptFoldData = "/afs/cern.ch/work/a/abeschi/ttHLept_v6/";
 
 	TChain* ttH;
 	TChain* ggH;
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 		vh = new TChain("TTHLeptonicDumper/trees/tree");
 		vh -> Add(LeptFoldMC + "VHToGG_M125_13TeV_amcatnloFXFX_pythia8_*.root");		
 		data = new TChain("TTHLeptonicDumper/trees/tree");
-		data -> Add(LeptFoldData + "output_DoubleEG_Run2016H-PromptReco-v2_*.root");		
+		data -> Add(LeptFoldData + "output_DoubleEG_Run2016*.root");		
 		diphotons = new TChain("TTHLeptonicDumper/trees/tree");
 		diphotons -> Add(LeptFoldMC + "output_DiPhotonJetsBox_MGG*.root");
 		gjet = new TChain("TTHLeptonicDumper/trees/tree");
@@ -397,6 +397,8 @@ int main(int argc, char *argv[])
 	TH1F* dipho_leadIDMVA_histo[8];
 	TH1F* dipho_subleadIDMVA_histo[8];
 	TH1F* dipho_mva_histo[8];
+	TH1F* dipho_leadPtOverM_histo[8];
+	TH1F* dipho_subleadPtOverM_histo[8];
 	TH1F* jet_pt_histo[8];
 	TH1F* jet_eta_histo[8];
 	TH1F* jet_phi_histo[8];
@@ -432,7 +434,8 @@ int main(int argc, char *argv[])
 		dipho_leadIDMVA_histo[i] = new TH1F(("dipho_leadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 50, -1, 1 );
 		dipho_subleadIDMVA_histo[i] = new TH1F(("dipho_subleadIDMVA_histo"+ std::to_string(i)).c_str(), "; Photon IDMVA; Counts", 50, -1, 1 );
 		dipho_mva_histo[i] = new TH1F(("dipho_mva_histo"+ std::to_string(i)).c_str(), "; Diphoton MVA; Counts", 50, -1, 1 );
-
+		dipho_leadPtOverM_histo[i] = new TH1F(("dipho_leadPtOverM_histo"+ std::to_string(i)).c_str(), "; p_{T}^{lead #gamma}/m_{#gamma #gamma}; Counts", 50, 0.25, 2);
+		dipho_subleadPtOverM_histo[i] = new TH1F(("dipho_subleadPtOverM_histo"+ std::to_string(i)).c_str(), "; p_{T}^{lead #gamma}/m_{#gamma #gamma}; Counts", 50, 0.25, 2);
 		jet_pt_histo[i] = new TH1F(("jet_pt_histo"+ std::to_string(i)).c_str(), "; Jet p_{T} (GeV); Counts", 100, 0, 200 );
 		jet_eta_histo[i] = new TH1F(("jet_eta_histo"+ std::to_string(i)).c_str(), "; Jet #eta; Counts", 50, -2.5, 2.5 );
 		jet_phi_histo[i] = new TH1F(("jet_phi_histo"+ std::to_string(i)).c_str(), "; Jet #varphi; Counts", 50, -3.15, 3.15 );
@@ -596,6 +599,8 @@ int main(int argc, char *argv[])
 			dipho_leadIDMVA_histo[n] -> Fill(dipho_leadIDMVA, weight*lumiFactor);
 			dipho_subleadIDMVA_histo[n] -> Fill(dipho_subleadIDMVA, weight*lumiFactor);
 			dipho_mva_histo[n] -> Fill(dipho_mva, weight*lumiFactor);
+			dipho_leadPtOverM_histo[n] -> Fill(dipho_leadPt/dipho_mass, weight*lumiFactor);
+			dipho_subleadPtOverM_histo[n] -> Fill(dipho_subleadPt/dipho_mass, weight*lumiFactor);
 
 			if(jet_pt[0]>0)
 			{
@@ -715,6 +720,8 @@ int main(int argc, char *argv[])
 	MakePlot(dipho_subleadR9_histo, "SubleadingPhotonR9", 1);
 	MakePlot(dipho_leadIDMVA_histo, "LeadingPhotonIDMVA", 1);
 	MakePlot(dipho_subleadIDMVA_histo, "SubleadingPhotonIDMVA");
+	MakePlot(dipho_leadPtOverM_histo, "LeadingPhotonPtOverMass");
+	MakePlot(dipho_subleadPtOverM_histo, "SubleadingPhotonPtOverMass");
 	MakePlot(dipho_mva_histo, "DiphotonMVA");
 	MakePlot(jet_pt_histo, "JetPt");
 	MakePlot(jet_eta_histo, "JetEta");

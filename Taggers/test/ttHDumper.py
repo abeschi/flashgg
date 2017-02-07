@@ -66,6 +66,14 @@ process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_
 #                                                                "HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1"
                                                                 ))
 
+#release cuts
+process.flashggTTHHadronicTag.jetPtThreshold  = cms.double(20.)
+process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1)
+process.flashggTTHHadronicTag.jetsNumberThreshold = cms.double(2)
+process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.double(0.)
+process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.double(0.)
+
+
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 # ee bad supercluster filter on data

@@ -10,10 +10,10 @@ from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,clo
 
 # maxEvents is the max number of events processed of each file, not globally
 inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2/2_2_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_v2/RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/160707_152047/0000/myMicroAODOutputFile_1.root"
-outputFile = "TTHLeptonic.root" 
+outputFile = "TTHHadronic.root" 
 
 ## I/O SETUP ##
-process = cms.Process("TTHLeptonicDumper")
+process = cms.Process("TTHHadronicDumper")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
@@ -39,18 +39,6 @@ if customize.processId == 'Data' or customize.processId == 'data':
 else:
     print 'mc'
     customizePhotonSystematicsForMC(process)
-
-   ##syst (1D) 
-    vpset   = process.flashggDiPhotonSystematics.SystMethods
-    newvpset = cms.VPSet()
-    for pset in vpset:
-        pset.NSigmas = cms.vint32() # no up/down syst shifts
-        pset.ApplyCentralValue = cms.bool(False) # no central value
-        if ( pset.Label.value().count("MCSmear") or pset.Label.value().count("SigmaEOverESmearing")):
-            pset.ApplyCentralValue = cms.bool(True)
-            newvpset+= [pset]
-            process.flashggDiPhotonSystematics.SystMethods = newvpset  
-
     ##syst (2D) : smearings with EGMTool
     vpset2D   = process.flashggDiPhotonSystematics.SystMethods2D
     newvpset2D = cms.VPSet()
@@ -62,11 +50,6 @@ else:
     process.flashggDiPhotonSystematics.SystMethods2D = newvpset2D
 
 
-print 'syst 1D'
-printSystematicVPSet([process.flashggDiPhotonSystematics.SystMethods])
-print 'syst 2D'
-printSystematicVPSet([process.flashggDiPhotonSystematics.SystMethods2D])
-
 
 # flashgg tag sequence (for dipho MVA) and jet collections
 from flashgg.Systematics.SystematicsCustomize import *
@@ -75,6 +58,25 @@ from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
 process.flashggTagSequence.remove(process.flashggUpdatedIdMVADiPhotons) # Needs to be run before systematics
 massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggUpdatedIdMVADiPhotons"),cms.InputTag("flashggDiPhotonSystematics"))
 
+#invert photon id for the control sample
+process.flashggPreselectedDiPhotons.cut = cms.string(
+        "    (leadingPhoton.full5x5_r9>0.8||leadingPhoton.egChargedHadronIso<20||leadingPhoton.egChargedHadronIso/leadingPhoton.pt<0.3)"
+        " && (subLeadingPhoton.full5x5_r9>0.8||subLeadingPhoton.egChargedHadronIso<20||subLeadingPhoton.egChargedHadronIso/subLeadingPhoton.pt<0.3)"
+        " && (leadingPhoton.hadronicOverEm < 0.08 && subLeadingPhoton.hadronicOverEm < 0.08)"
+        " && (leadingPhoton.pt >30.0 && subLeadingPhoton.pt > 20.0)"
+        " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
+        " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
+        " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
+        " && ( (leadPhotonId > -0.9 && subLeadPhotonId < -0.9) || (leadPhotonId < -0.9 && subLeadPhotonId > -0.9) )" # invert ID on one of the photons
+        )
+
+#release cuts
+process.flashggTTHHadronicTag.jetPtThreshold  = cms.double(20.)
+process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1)
+process.flashggTTHHadronicTag.jetsNumberThreshold = cms.double(2)
+process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.double(0.)
+process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.double(0.)
+
 
 # Require standard diphoton trigger
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
@@ -82,16 +84,6 @@ process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_
 #                                                                "HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1",
 #                                                                "HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1"
                                                                 ))
-
-#release cuts
-process.flashggTTHLeptonicTag.jetPtThreshold  = cms.double(20.)
-process.flashggTTHLeptonicTag.MVAThreshold = cms.double(-1)
-process.flashggTTHLeptonicTag.jetsNumberThreshold = cms.double(1)
-process.flashggTTHLeptonicTag.bjetsNumberThreshold = cms.double(0.)
-process.flashggTTHLeptonicTag.bjetsLooseNumberThreshold =cms.double(0.)
-
-
-
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -109,21 +101,21 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 from flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
-process.TTHLeptonicDumper = createTagDumper("TTHLeptonicTag")
+process.TTHHadronicDumper = createTagDumper("TTHHadronicTag")
 #process.load("flashgg.Taggers.tthDumper_cfi")
 #process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
-process.TTHLeptonicDumper.dumpTrees = True
-process.TTHLeptonicDumper.dumpHistos = False
-process.TTHLeptonicDumper.dumpWorkspace = False
+process.TTHHadronicDumper.dumpTrees = True
+process.TTHHadronicDumper.dumpHistos = False
+process.TTHHadronicDumper.dumpWorkspace = False
 
 #from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
 #massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
 
 import flashgg.Taggers.ttHTagVariables as var
-all_variables = var.leptonic_variables + var.dipho_variables + var.truth_variables
+all_variables = var.hadronic_variables + var.dipho_variables + var.truth_variables
 
 
-cfgTools.addCategories(process.TTHLeptonicDumper,
+cfgTools.addCategories(process.TTHHadronicDumper,
                        ## categories definition  
 			[	("all","1",0)
 			],
@@ -132,7 +124,7 @@ cfgTools.addCategories(process.TTHLeptonicDumper,
                      )
 
 
-process.TTHLeptonicDumper.nameTemplate = "tree"
+process.TTHHadronicDumper.nameTemplate = "tree"
 
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents" ,-1)    # max-number of events
@@ -145,7 +137,7 @@ process.p1 = cms.Path(
     process.flashggUpdatedIdMVADiPhotons*
     process.flashggDiPhotonSystematics*
     process.flashggTagSequence*
-    process.TTHLeptonicDumper
+    process.TTHHadronicDumper
     )
 
 print process.p1

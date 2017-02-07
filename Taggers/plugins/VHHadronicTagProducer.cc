@@ -232,6 +232,9 @@ namespace flashgg {
 
             if( mvares->result < diphoMVAThreshold_ ) { continue; }
 
+            // apply cut on pt_gg/m_gg
+            if ( dipho->pt() / dipho->mass() < 1. ) {continue;} 
+
             std::vector<edm::Ptr<flashgg::Jet> > goodJets;
 
             unsigned int jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex();
