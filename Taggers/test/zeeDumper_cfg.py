@@ -28,12 +28,12 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring(      
         #data                    
-        #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleEG/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016E-23Sep2016-v1/161114_163114/0000/myMicroAODOutputFile_817.root"
+        "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleEG/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016E-23Sep2016-v1/161114_163114/0000/myMicroAODOutputFile_817.root"
         #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_1/2_5_1/SingleElectron/ReMiniAOD-03Feb2017-2_5_1-2_5_1-v0-Run2016D-03Feb2017-v1/170214_121515/0000/myMicroAODOutputFile_550.root"
         # mc
         #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_0-25ns_Moriond17/2_4_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-herwigpp_30M/RunIISummer16-2_4_0-25ns_Moriond17-2_4_0-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/161225_213425/0000/myMicroAODOutputFile_1.root"
         #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToEE_M-50_LTbinned_95To100_5f_LO_13TeV-madgraph_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170118_090503/0000/myMicroAODOutputFile_5.root"
-        "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYToEE_NNPDF30_13TeV-powheg-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-EGM0_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195541/0000/myMicroAODOutputFile_9.root"
+        #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYToEE_NNPDF30_13TeV-powheg-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-EGM0_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195541/0000/myMicroAODOutputFile_9.root"
         ))
 
 ## output file
@@ -314,7 +314,7 @@ process.p = cms.Path(process.hltHighLevel*
 #printSystematicInfo(process)
 
 ## set default options if needed
-customize.setDefault("maxEvents",1000)
+customize.setDefault("maxEvents",-1)
 customize.setDefault("targetLumi",1e+3)
 ## call the customization
 customize(process)
