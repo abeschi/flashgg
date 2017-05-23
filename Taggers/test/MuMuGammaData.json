@@ -2,29 +2,11 @@
    "processes" : {
 
      "data" : [
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016B-23Sep2016-v1-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016B-23Sep2016-v3-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016C-23Sep2016-v1-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016D-23Sep2016-v1-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016E-23Sep2016-v1-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016F-23Sep2016-v1-21316c8dfd6d3154948b8675bc75aa32/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016G-23Sep2016-v1-f7d0512397b61edd14aaa8a57054ce51/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016H-PromptReco-v2-8a3cf2682849517e7ba015da22f3bbc3/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
-
-                ["/DoubleMuon/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016H-PromptReco-v3-8a3cf2682849517e7ba015da22f3bbc3/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}]
-
+                ["/DoubleMuon/sethzenz-ReMiniAOD-03Feb2017-2_5_1-2_5_1-v0-Run2016G-03Feb2017-v1-e4f6c342deaaaede78caea1440f29673/USER", {"args" : ["outputFile=MuMuGammaData.root"], "njobs":100}],
 	      ]
 	},
 
-     "cmdLine" : "campaign=RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2 processType='Data' lumiMask=/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt"
-
+     "cmdLine" : "campaign=ReMiniAOD-03Feb2017-2_5_X processType='Data' lumiMask=/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt"
 }
 
 

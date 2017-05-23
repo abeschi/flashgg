@@ -9,7 +9,7 @@ from flashgg.MicroAOD.flashggJets_cfi import flashggBTag, maxJetCollections
 from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,cloneProcessingSnippet
 
 # maxEvents is the max number of events processed of each file, not globally
-inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-BS2016_BSandPUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/161117_075326/0000/myMicroAODOutputFile_1.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170212_190415/0000/myMicroAODOutputFile_293.root"
 outputFile = "MuMuGamma.root" 
 
 ## I/O SETUP ##
@@ -26,7 +26,6 @@ process.TFileService = cms.Service("TFileService",
 
 from flashgg.MetaData.JobConfig import customize
 customize.parse()
-
 
 process.load("flashgg.Taggers.flashggPhotonWithUpdatedIdMVAProducer_cfi")
 
@@ -183,7 +182,7 @@ cfgTools.addCategories(process.mumugammaDumper,
 process.mumugammaDumper.nameTemplate = "tree"
 
 
-customize.setDefault("maxEvents" , 100000)    # max-number of events
+customize.setDefault("maxEvents" , 100)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 

@@ -11,6 +11,7 @@
 #include "flashgg/DataFormats/interface/SinglePhotonView.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 
+
 #include "TFile.h"
 #include "TGraph.h"
 
@@ -43,7 +44,7 @@ namespace flashgg {
   {
     phoIdMVAweightfileEB_ = ps.getParameter<edm::FileInPath>( "photonIdMVAweightfile_EB" );
     phoIdMVAweightfileEE_ = ps.getParameter<edm::FileInPath>( "photonIdMVAweightfile_EE" );
-    phoTools_.setupMVA( phoIdMVAweightfileEB_.fullPath(), phoIdMVAweightfileEE_.fullPath() );
+    phoTools_.setupMVA( phoIdMVAweightfileEB_.fullPath(), phoIdMVAweightfileEE_.fullPath(), 0 );
 
     correctInputs_ = ps.existsAs<edm::FileInPath>("correctionFile") ? true: false;
     if (correctInputs_) {
@@ -63,7 +64,7 @@ namespace flashgg {
 
   void PhotonWithUpdatedIdMVAProducer::produce( edm::Event &evt, const edm::EventSetup & )
   {
-      std::cout << " ciao " <<std::endl;
+     // std::cout << " ciao " <<std::endl;
       
     edm::Handle<edm::View<flashgg::Photon> > objects;
     evt.getByToken( token_, objects );
@@ -79,14 +80,19 @@ namespace flashgg {
 
 
     auto_ptr<std::vector<flashgg::Photon> > out_obj( new std::vector<flashgg::Photon>() );
+       //if(evt.isRealData())
+            //std::cout << "Processing DATA" << std::endl;
 
-    for (const auto & obj : *objects) {
-        flashgg::Photon *new_obj = obj.clone();
-        //            new_obj->makePhotonsPersistent(); ???
+    for (unsigned int i=0; i<objects->size(); i++) {
+        //flashgg::Photon *new_obj = obj.clone();
+        edm::Ptr<flashgg::Photon> obj = objects->ptrAt(i);
+        flashgg::Photon *new_obj = obj->clone();
+        new_obj -> embedSuperCluster();
+
         double correctedEtaWidth = 0;
-        if (not evt.isRealData() and correctInputs_) { 
+         if (not evt.isRealData() and correctInputs_) { 
             if (new_obj->isEB()) {
-                std::cout << "Correction in EB" << std::endl;
+                //std::cout << "Correction in EB" << std::endl;
                 if (this->debug_) {
                     std::cout << new_obj->full5x5_r9() << std::endl;
                     std::cout << new_obj->r9() << std::endl;
@@ -95,7 +101,7 @@ namespace flashgg {
                 newShowerShapes.e3x3 = corrections_[0]->Eval(new_obj->full5x5_r9())*new_obj->superCluster()->rawEnergy();
                 new_obj->full5x5_setShowerShapeVariables(newShowerShapes);
                 correctedEtaWidth = corrections_[1]->Eval(new_obj->superCluster()->etaWidth());
-                new_obj->getSuperCluster()->setEtaWidth(correctedEtaWidth);
+                new_obj->getSuperCluster() -> setEtaWidth(correctedEtaWidth);
                 new_obj->setS4(corrections_[2]->Eval(new_obj->s4()));
                 
                 if (this->debug_) {
@@ -105,7 +111,8 @@ namespace flashgg {
             }
             
             if (new_obj->isEE()) {
-                std::cout << "Correction in EE" << std::endl;
+                //std::cout << "Correction in EE" << std::endl;
+
                 if (this->debug_) {
                     std::cout << new_obj->full5x5_r9() << std::endl;
                     std::cout << new_obj->r9() << std::endl;
@@ -113,19 +120,19 @@ namespace flashgg {
                 reco::Photon::ShowerShape newShowerShapes = new_obj->full5x5_showerShapeVariables();
                 newShowerShapes.e3x3 = corrections_[3]->Eval(new_obj->full5x5_r9())*new_obj->superCluster()->rawEnergy();
                 new_obj->full5x5_setShowerShapeVariables(newShowerShapes);
-                correctedEtaWidth = corrections_[4]->Eval(new_obj->superCluster()->etaWidth());
-                //std::cout<<new_obj->superCluster()->etaWidth() << "  " << correctedEtaWidth <<std::endl;
-                new_obj->getSuperCluster()->setEtaWidth(correctedEtaWidth);
+                correctedEtaWidth = corrections_[4] -> Eval(new_obj-> superCluster() -> etaWidth());
+                //std::cout<< new_obj-> superCluster() ->etaWidth() << "  " << correctedEtaWidth <<std::endl;
+                new_obj -> getSuperCluster() -> setEtaWidth(correctedEtaWidth); 
                 new_obj->setS4(corrections_[5]->Eval(new_obj->s4()));
-                
+
                 if (this->debug_) {
                     std::cout << new_obj->full5x5_r9() << std::endl;
                     std::cout << new_obj->r9() << std::endl;
-                }
+                } 
             }
         }
 
-        std::cout << "Recomputing photon ID MVA ..." <<std::endl;
+       // std::cout << "Recomputing photon ID MVA ..." <<std::endl;
 
         if (this->debug_) {
             std::cout << " Output Photon lead IDMVA: " << new_obj->phoIdMvaDWrtVtx(pvx)   << std::endl;
@@ -137,8 +144,9 @@ namespace flashgg {
         }
         
         out_obj->push_back(*new_obj);
-        delete new_obj;
+        //delete new_obj;
     }
+
     evt.put(out_obj);
   }
 }
