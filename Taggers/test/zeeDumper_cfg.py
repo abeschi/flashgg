@@ -315,7 +315,7 @@ process.p = cms.Path(process.hltHighLevel*
 #printSystematicInfo(process)
 
 ## set default options if needed
-customize.setDefault("maxEvents", 100)
+customize.setDefault("maxEvents", -1)
 customize.setDefault("targetLumi",1e+3)
 ## call the customization
 customize(process)
