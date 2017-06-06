@@ -22,6 +22,8 @@ namespace flashgg {
 
         const flashgg::DiMuonCandidate *MMG_DiMu() const;
         const flashgg::Photon *MMG_Photon() const;
+        flashgg::Photon *MMG_UpdatablePhoton() const;
+        void setPhoton(flashgg::Photon* newPhoton);
 
         edm::Ptr<flashgg::DiMuonCandidate> DiMuPtr() const { return dimuptr_; }
         void setDiMuPtr( edm::Ptr<flashgg::DiMuonCandidate> val ) { dimuptr_ = val; }

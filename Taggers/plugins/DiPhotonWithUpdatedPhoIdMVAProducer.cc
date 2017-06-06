@@ -11,7 +11,7 @@
 #include "RecoEgamma/EgammaTools/interface/EffectiveAreas.h"
 // #include "RecoEgamma/EgammaTools/plugins/EGExtraInfoModifierFromDB.cc"
 #include "CommonTools/CandAlgos/interface/ModifyObjectValueBase.h"
-#include "flashgg/Taggers/src/IsolationCorrection.C"
+#include "flashgg/Taggers/interface/IsolationCorrection.h"
 
 #include "TFile.h"
 #include "TGraph.h"

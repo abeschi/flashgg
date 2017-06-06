@@ -12,7 +12,7 @@
 #include "RecoEgamma/EgammaTools/interface/EffectiveAreas.h"
 // #include "RecoEgamma/EgammaTools/plugins/EGExtraInfoModifierFromDB.cc"
 #include "CommonTools/CandAlgos/interface/ModifyObjectValueBase.h"
-#include "flashgg/Taggers/src/IsolationCorrection.C"
+#include "flashgg/Taggers/interface/IsolationCorrection.h"
 
 #include "TFile.h"
 #include "TGraph.h"
@@ -75,6 +75,7 @@ namespace flashgg {
     {
         if (_doIsoCorrection) {
             _isoCorrector = make_unique<IsolationCorrection>(ps.getParameter<edm::FileInPath>("isoCorrectionFile").fullPath().c_str());
+            cout << " CIAO" << endl;
         }
 
         useNewPhoId_ = ps.getParameter<bool>( "useNewPhoId" );
@@ -211,7 +212,7 @@ namespace flashgg {
 
         for (const auto & obj : *objects) {
             flashgg::MuMuGammaCandidate *new_mmg = (MuMuGammaCandidate*)obj.clone();
-            flashgg::Photon *new_obj = new_mmg->MMG_Photon();
+            flashgg::Photon *new_obj = new_mmg->MMG_UpdatablePhoton();
             new_obj -> embedSuperCluster();
             // store reco energy for safety
             new_obj->addUserFloat("reco_E", new_obj->energy());
@@ -265,7 +266,7 @@ namespace flashgg {
             //Problems with vertex and photon!!!!
             float newleadmva = phoTools_.computeMVAWrtVtx( *new_obj, new_mmg->Vertex(), rhoFixedGrd, leadCorrectedEtaWidth, eA_leadPho, _phoIsoPtScalingCoeff, _phoIsoCutoff );
             new_obj->setPhoIdMvaWrtVtx( new_mmg->Vertex(), newleadmva);
-            flashgg::MuMuGammaCandidate new_new_mmg(new_mmg->MMG_DiMu(), new_obj , new_mmg->Vertex());
+            new_mmg -> setPhoton(new_obj);
             out_obj->push_back(*new_mmg);
             delete new_obj;
         }

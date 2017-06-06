@@ -60,6 +60,18 @@ const flashgg::Photon *MuMuGammaCandidate::MMG_Photon() const
     return dynamic_cast<const flashgg::Photon *>( daughter( 1 ) );
 }
 
+
+flashgg::Photon* MuMuGammaCandidate::MMG_UpdatablePhoton() const
+{
+    return( (flashgg::Photon*)daughter( 1 ) );
+}
+
+void MuMuGammaCandidate::setPhoton(flashgg::Photon* newPhoton)
+{
+    clearDaughters();
+    addDaughter(*dimuptr_);
+    addDaughter(*newPhoton);
+}
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil
