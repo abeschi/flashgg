@@ -296,10 +296,10 @@ if customize.processId == 'Data':
 else:
     process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring(
     #DoubleEG
-    #"HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelSeedMatch_Mass70_v*",
+    "HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelSeedMatch_Mass70_v*",
     #SingleEG
     #"HLT_Ele23_WPLoose_Gsf_v*" # 7_6_X
-    ##"HLT_Ele27_WPLoose_Gsf_v*",
+    "HLT_Ele27_WPLoose_Gsf_v*",
     ##"HLT_Ele27_eta2p1_WPLoose_Gsf_v*",
     ##"HLT_Ele22_eta2p1_WPLoose_Gsf_v*"
     ) )
