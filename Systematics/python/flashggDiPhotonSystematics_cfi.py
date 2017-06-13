@@ -809,7 +809,7 @@ MCScaleGain1EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          )
 
 flashggDiPhotonSystematics = cms.EDProducer('FlashggDiPhotonSystematicProducer',
-		src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
+		src = cms.InputTag("FlashggPhotonWithUpdatedIdMVAProducer"),
                 SystMethods2D = cms.VPSet(),
                 # the number of syst methods matches the number of nuisance parameters
                 # assumed for a given systematic uncertainty and is NOT required

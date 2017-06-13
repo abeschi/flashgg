@@ -3,6 +3,7 @@
 <use   name="DataFormats/Common"/>
 <use   name="flashgg/DataFormats"/>
 <use   name="flashgg/MicroAOD"/>
+<use   name="flashgg/Systematics"/>
 <use   name="DataFormats/VertexReco"/>
 <use   name="FWCore/Utilities"/>
 <use   name="FWCore/Common"/>

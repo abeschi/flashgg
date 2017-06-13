@@ -75,7 +75,6 @@ namespace flashgg {
     {
         if (_doIsoCorrection) {
             _isoCorrector = make_unique<IsolationCorrection>(ps.getParameter<edm::FileInPath>("isoCorrectionFile").fullPath().c_str());
-            cout << " CIAO" << endl;
         }
 
         useNewPhoId_ = ps.getParameter<bool>( "useNewPhoId" );
@@ -119,19 +118,21 @@ namespace flashgg {
 
         edm::ConsumesCollector sumes(consumesCollector());
         reRunRegression_ = ps.getParameter<bool>("reRunRegression");
+
         if( reRunRegression_ ) {
             reRunRegressionOnData_ = ps.getParameter<bool>("reRunRegressionOnData");
             // regress_ = new EGExtraInfoModifierFromDB(ps.getParameter<edm::ParameterSet>("regressionConfig"));
             regress_.reset(ModifyObjectValueFactory::get()->create( "EGExtraInfoModifierFromDB", ps.getParameter<edm::ParameterSet>("regressionConfig") )); 
             regress_->setConsumes(sumes);
         }
-
         produces<std::vector<flashgg::Photon> >();
     }
 
     void PhotonWithUpdatedIdMVAProducer::updatePhotonRegression(flashgg::Photon & ph)
     {
+            cout << "Problem" << endl;
             regress_->modifyObject(ph);
+            cout << "Problem2" << endl;
     }
 
     void PhotonWithUpdatedIdMVAProducer::storePhotonRegression(flashgg::Photon & ph, const std::string & label)
@@ -157,7 +158,6 @@ namespace flashgg {
         ph.addUserFloat("uncorr_etaWidth",ph.superCluster()->etaWidth());
         ph.addUserFloat("uncorr_s4",ph.s4());
         ph.addUserFloat("uncorr_sigmaIetaIeta",ph.full5x5_sigmaIetaIeta());
-
         newShowerShapes.e3x3 = corrections_[corr_index+0]->Eval(ph.full5x5_r9())*ph.superCluster()->rawEnergy();
         newShowerShapes.sigmaIetaIeta = corrections_[corr_index+3]->Eval(ph.full5x5_sigmaIetaIeta());
 
@@ -194,6 +194,7 @@ namespace flashgg {
 
     void PhotonWithUpdatedIdMVAProducer::produce( edm::Event &evt, const edm::EventSetup & es)
     {
+
         edm::Handle<edm::View<flashgg::MuMuGammaCandidate> > objects;
         evt.getByToken( token_, objects );
 
@@ -201,76 +202,89 @@ namespace flashgg {
         evt.getByToken( rhoToken_, rhoHandle );
         const double rhoFixedGrd = *( rhoHandle.product() );
 
-        if( reRunRegression_ ) {
-            if( reRunRegressionOnData_ || ! evt.isRealData() ) {
+         if( reRunRegression_ ) {
+            if( reRunRegressionOnData_ || !evt.isRealData() ) {
                 regress_->setEvent(evt);
                 regress_->setEventContent(es);
             }
         }
-        
-        auto_ptr<std::vector<flashgg::MuMuGammaCandidate> > out_obj( new std::vector<flashgg::MuMuGammaCandidate>() );
+      
+        auto_ptr<std::vector<flashgg::Photon> > out_obj( new std::vector<flashgg::Photon>() );
 
         for (const auto & obj : *objects) {
-            flashgg::MuMuGammaCandidate *new_mmg = (MuMuGammaCandidate*)obj.clone();
-            flashgg::Photon *new_obj = new_mmg->MMG_UpdatablePhoton();
-            new_obj -> embedSuperCluster();
+            //flashgg::MuMuGammaCandidate *new_mmg = (MuMuGammaCandidate*)obj.clone();
+            flashgg::Photon new_obj = obj.MMG_UpdatablePhoton();
+            new_obj.embedSuperCluster();
+
+            edm::Ptr<reco::Vertex> vtx = obj.Vertex();
+
             // store reco energy for safety
-            new_obj->addUserFloat("reco_E", new_obj->energy());
+            new_obj.addUserFloat("reco_E", new_obj.energy());
             // store reco regression
+
             float leadE = 0.;
+
             if( reRunRegression_ ) {
                 if( keepInitialEnergy_ ) {
-                    leadE = new_obj->energy();
+                    leadE = new_obj.energy();
                 }
-                storePhotonRegression(*new_obj, "reco");
-                if( reRunRegressionOnData_ || ! evt.isRealData() ) { updatePhotonRegression(*new_obj); }
-                storePhotonRegression(*new_obj, "beforeShShTransf");
+                storePhotonRegression(new_obj, "reco");
+                if( reRunRegressionOnData_ || ! evt.isRealData() ) { updatePhotonRegression(new_obj); }
+                storePhotonRegression(new_obj, "beforeShShTransf");
             }
-            
+          
             double leadCorrectedEtaWidth = 0.;
+
             if (not evt.isRealData() and correctInputs_) { 
-                leadCorrectedEtaWidth = correctPhoton(*new_obj);
+                leadCorrectedEtaWidth = correctPhoton(new_obj);
             }
+
             if (not evt.isRealData() and doNon5x5transformation_) { 
-                correctPhoton_non5x5(*new_obj);
+                correctPhoton_non5x5(new_obj);
             }
+
             if (not evt.isRealData() and  _doIsoCorrection ) {
-                float lead_iso = new_obj->pfPhoIso03();
-                float lead_eta = new_obj->superCluster()->eta();
+                float lead_iso = new_obj.pfPhoIso03();
+                float lead_eta = new_obj.superCluster()->eta();
+
                 if (this->debug_) {
                     std::cout << "Doing Iso correction to lead (sublead) photon with eta,rho,iso: " << lead_eta << ", " << rhoFixedGrd << ", " << lead_iso;
                 }
                 float extra_lead = _isoCorrector->getExtra(fabs(lead_eta),rhoFixedGrd);
-                new_obj->setpfPhoIso03(lead_iso+extra_lead);
+
+                new_obj.setpfPhoIso03(lead_iso+extra_lead);
+
                if (this->debug_) {
-                    std::cout << " Final iso value for lead (sublead) photon: " << new_obj->pfPhoIso03() << " (" 
-                              << new_obj->pfPhoIso03() << ")" << std::endl;
+                    std::cout << " Final iso value for lead (sublead) photon: " << new_obj.pfPhoIso03() << " (" 
+                              << new_obj.pfPhoIso03() << ")" << std::endl;
                 }
             }
-            double eA_leadPho = _effectiveAreas.getEffectiveArea( abs(new_obj->superCluster()->eta()) );
+
+            double eA_leadPho = _effectiveAreas.getEffectiveArea( abs(new_obj.superCluster()->eta()) );
             
-            float leadpfPhoIso03Corr = phoTools_.computeCorrectPhoIso(*new_obj, rhoFixedGrd,  eA_leadPho, _phoIsoPtScalingCoeff, _phoIsoCutoff);
-            new_obj->setpfPhoIso03Corr(leadpfPhoIso03Corr);
+            float leadpfPhoIso03Corr = phoTools_.computeCorrectPhoIso(new_obj, rhoFixedGrd,  eA_leadPho, _phoIsoPtScalingCoeff, _phoIsoCutoff);
+            new_obj.setpfPhoIso03Corr(leadpfPhoIso03Corr);
   
             if (this->debug_) {
-                std::cout << "Isolation notcorr (corr) for lead, sublead" << new_obj->pfPhoIso03() << "," << new_obj->pfPhoIso03() << "(" << new_obj->pfPhoIso03Corr() << "," << new_obj->pfPhoIso03Corr() << ")" << std::endl;
+                std::cout << "Isolation notcorr (corr) for lead, sublead" << new_obj.pfPhoIso03() << "," << new_obj.pfPhoIso03() << "(" << new_obj.pfPhoIso03Corr() << "," << new_obj.pfPhoIso03Corr() << ")" << std::endl;
             }
             if( reRunRegression_ ) {            
-                if( reRunRegressionOnData_ || ! evt.isRealData() ) { updatePhotonRegression(*new_obj); }
-                storePhotonRegression(*new_obj, "afterShShTransf");
+                if( reRunRegressionOnData_ || ! evt.isRealData() ) { updatePhotonRegression(new_obj); }
+                storePhotonRegression(new_obj, "afterShShTransf");
                 if( keepInitialEnergy_ ) {
-                    new_obj->setCorrectedEnergy(reco::Photon::P4type::regression2, leadE, new_obj->sigEOverE()*leadE, true);
+                    new_obj.setCorrectedEnergy(reco::Photon::P4type::regression2, leadE, new_obj.sigEOverE()*leadE, true);
                 }
             }
             
             //Problems with vertex and photon!!!!
-            float newleadmva = phoTools_.computeMVAWrtVtx( *new_obj, new_mmg->Vertex(), rhoFixedGrd, leadCorrectedEtaWidth, eA_leadPho, _phoIsoPtScalingCoeff, _phoIsoCutoff );
-            new_obj->setPhoIdMvaWrtVtx( new_mmg->Vertex(), newleadmva);
-            new_mmg -> setPhoton(new_obj);
-            out_obj->push_back(*new_mmg);
-            delete new_obj;
+            float newleadmva = phoTools_.computeMVAWrtVtx(new_obj, vtx, rhoFixedGrd, leadCorrectedEtaWidth, eA_leadPho, _phoIsoPtScalingCoeff, _phoIsoCutoff );
+            new_obj.setPhoIdMvaWrtVtx( vtx, newleadmva);
+
+            out_obj->push_back(new_obj);
+
         }
         evt.put(out_obj);
+
     }
 }
 

@@ -51,6 +51,7 @@ namespace flashgg {
         const std::vector<edm::Ptr<reco::Vertex>> &pvPointers = primaryVertices->ptrs();
         edm::Ptr<reco::Vertex> pvx = pvPointers[0]; //selected vertex 0
 
+
         Handle<View<flashgg::DiMuonCandidate> > dimuons;
         evt.getByToken( dimuToken_, dimuons );
         //const PtrVector<flashgg::DiMuonCandidate>& dimuonPointers = dimuons->ptrVector();
@@ -70,6 +71,10 @@ namespace flashgg {
             //flashgg::DiMuonCandidate dimu = flashgg::DiMuonCandidate(*dimuon);
             for( unsigned int j = 0; j < photonPointers.size() ; j++ ) {
                 Ptr<flashgg::Photon> photon = photonPointers[j];
+
+            cout << "Random number " << photon->userFloat("rnd_g_E") << endl;
+
+
                 // A number of things need to be done once the vertex is chosen
                 // recomputing photon 4-momenta accordingly
                 flashgg::Photon photon_corr = PhotonIdUtils::pho4MomCorrection( photon, pvx );
@@ -140,7 +145,9 @@ namespace flashgg {
                 MuMuGammaColl->push_back( mumugamma );
             }
         }
+        cout << "MuMuGammaProducer put" << endl;
         evt.put( MuMuGammaColl );
+        cout << "MuMuGammaProducer put" << endl;
 
     }
 }

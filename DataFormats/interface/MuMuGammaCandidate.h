@@ -17,12 +17,12 @@ namespace flashgg {
         MuMuGammaCandidate();
         MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate>, edm::Ptr<flashgg::Photon>, edm::Ptr<reco::Vertex> );
         //MuMuGammaCandidate( const flashgg::DiMuonCandidate &, const flashgg::Photon &, edm::Ptr<reco::Vertex>, edm::Ptr<flashgg::DiMuonCandidate>);
-        MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate>, const flashgg::Photon &, edm::Ptr<reco::Vertex> ); //mixed
+        MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate>, flashgg::Photon &, edm::Ptr<reco::Vertex> ); //mixed
         ~MuMuGammaCandidate();
 
         const flashgg::DiMuonCandidate *MMG_DiMu() const;
         const flashgg::Photon *MMG_Photon() const;
-        flashgg::Photon *MMG_UpdatablePhoton() const;
+        flashgg::Photon MMG_UpdatablePhoton() const;
         void setPhoton(flashgg::Photon* newPhoton);
 
         edm::Ptr<flashgg::DiMuonCandidate> DiMuPtr() const { return dimuptr_; }
@@ -50,6 +50,7 @@ namespace flashgg {
     private:
 
         edm::Ptr<flashgg::DiMuonCandidate> dimuptr_;
+        flashgg::Photon photon_;
         edm::Ptr<reco::Vertex> vertex_;
         bool Is2012FSRZMMG_;
         bool IsHGammaStarGamma_;

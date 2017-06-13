@@ -361,7 +361,7 @@ emptySigma = cms.PSet(
 scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Moriond17_74x_pho")
 scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
 
-MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MCScaleHighR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MCScaleHighR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)<1.5"),
@@ -370,7 +370,7 @@ MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-MCScaleLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MCScaleLowR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MCScaleLowR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<0.94&&abs(superCluster.eta)<1.5"),
@@ -379,7 +379,7 @@ MCScaleLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-MCScaleHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MCScaleHighR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MCScaleHighR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)>=1.5"),
@@ -388,7 +388,7 @@ MCScaleHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-MCScaleLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MCScaleLowR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MCScaleLowR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<0.94&&abs(superCluster.eta)>=1.5"),
@@ -397,7 +397,7 @@ MCScaleLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-MaterialCentralBarrel = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MaterialCentralBarrel = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MaterialCentralBarrel"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("abs(superCluster.eta)<1.0"),
@@ -406,7 +406,7 @@ MaterialCentralBarrel = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSc
           Debug = cms.untracked.bool(False)
           )
 
-MaterialOuterBarrel = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MaterialOuterBarrel = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MaterialOuterBarrel"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("abs(superCluster.eta)>=1.0&&abs(superCluster.eta)<1.5"),
@@ -415,7 +415,7 @@ MaterialOuterBarrel = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScal
           Debug = cms.untracked.bool(False)
           )
 
-MaterialForward = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+MaterialForward = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("MaterialForward"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("abs(superCluster.eta)>=1.5"),
@@ -424,7 +424,7 @@ MaterialForward = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-FNUFEB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+FNUFEB = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("FNUFEB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("abs(superCluster.eta)<1.5"),
@@ -433,7 +433,7 @@ FNUFEB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-FNUFEE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+FNUFEE = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("FNUFEE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("abs(superCluster.eta)>=1.5"),
@@ -442,7 +442,7 @@ FNUFEE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           Debug = cms.untracked.bool(False)
           )
 
-ShowerShapeHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+ShowerShapeHighR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("ShowerShapeHighR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)<1.5"),
@@ -451,7 +451,7 @@ ShowerShapeHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScal
           Debug = cms.untracked.bool(False)
           )
 
-ShowerShapeHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+ShowerShapeHighR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("ShowerShapeHighR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)>=1.5"),
@@ -460,7 +460,7 @@ ShowerShapeHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScal
           Debug = cms.untracked.bool(False)
           )
 
-ShowerShapeLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+ShowerShapeLowR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("ShowerShapeLowR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<=0.94&&abs(superCluster.eta)<1.5"),
@@ -469,7 +469,7 @@ ShowerShapeLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
           Debug = cms.untracked.bool(False)
           )
 
-ShowerShapeLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
+ShowerShapeLowR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonScale"),
           Label = cms.string("ShowerShapeLowR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<=0.94&&abs(superCluster.eta)>=1.5"),
@@ -479,7 +479,7 @@ ShowerShapeLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
           )
 
 
-MCSmearHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearConstant"),
+MCSmearHighR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonSmearConstant"),
           Label = cms.string("MCSmearHighR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)>=1.5"),
@@ -493,7 +493,7 @@ MCSmearHighR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearCon
           ApplyCentralValue = cms.bool(True)
           )
 
-MCSmearLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearConstant"),
+MCSmearLowR9EE = cms.PSet( MethodName = cms.string("FlashggPhotonSmearConstant"),
           Label = cms.string("MCSmearLowR9EE"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<0.94&&abs(superCluster.eta)>=1.5"),
@@ -507,7 +507,7 @@ MCSmearLowR9EE = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearCons
           ApplyCentralValue = cms.bool(True)
           )
 
-MCSmearHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearConstant"),
+MCSmearHighR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonSmearConstant"),
           Label = cms.string("MCSmearHighR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)<1.5"),
@@ -521,7 +521,7 @@ MCSmearHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearCon
           ApplyCentralValue = cms.bool(True)
           )
 
-MCSmearLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearConstant"),
+MCSmearLowR9EB = cms.PSet( MethodName = cms.string("FlashggPhotonSmearConstant"),
           Label = cms.string("MCSmearLowR9EB"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("full5x5_r9<=0.94&&abs(superCluster.eta)<1.5"),
@@ -535,7 +535,7 @@ MCSmearLowR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearCons
           ApplyCentralValue = cms.bool(True)
           )
 
-MvaShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonMvaTransform"),
+MvaShift = cms.PSet( MethodName = cms.string("FlashggPhotonMvaTransform"),
           Label = cms.string("MvaShift"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
@@ -545,7 +545,7 @@ MvaShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonMvaTransform"),
           ApplyCentralValue = cms.bool(False)
           )
 
-PreselSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
+PreselSF = cms.PSet( MethodName = cms.string("FlashggPhotonWeight"),
           Label = cms.string("PreselSF"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
@@ -554,7 +554,7 @@ PreselSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           ApplyCentralValue = cms.bool(True)
           )
 
-electronVetoSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
+electronVetoSF = cms.PSet( MethodName = cms.string("FlashggPhotonWeight"),
           Label = cms.string("electronVetoSF"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
@@ -563,7 +563,7 @@ electronVetoSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           ApplyCentralValue = cms.bool(True)
           )
 
-TriggerWeight = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
+TriggerWeight = cms.PSet( MethodName = cms.string("FlashggPhotonWeight"),
           Label = cms.string("TriggerWeight"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("pt<99999"),
@@ -573,7 +573,7 @@ TriggerWeight = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           ApplyCentralValue = cms.bool(True)
           )
 
-LooseMvaSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
+LooseMvaSF = cms.PSet( MethodName = cms.string("FlashggPhotonWeight"),
           Label = cms.string("LooseMvaSF"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
@@ -582,7 +582,7 @@ LooseMvaSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           ApplyCentralValue = cms.bool(True)
           )
 
-SigmaEOverEShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEOverEShift"),
+SigmaEOverEShift = cms.PSet( MethodName = cms.string("FlashggPhotonSigEOverEShift"),
           Label = cms.string("SigmaEOverEShift"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
@@ -591,7 +591,7 @@ SigmaEOverEShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEOve
           ApplyCentralValue = cms.bool(False)
           )
 
-SigmaEOverESmearing = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEoverESmearing"),
+SigmaEOverESmearing = cms.PSet( MethodName = cms.string("FlashggPhotonSigEoverESmearing"),
           Label = cms.string("SigmaEOverESmearing"),
           NSigmas = cms.vint32(),
           OverallRange = cms.string("1"),
@@ -600,7 +600,7 @@ SigmaEOverESmearing = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigE
           ApplyCentralValue = cms.bool(True)
           )
 
-SigmaEOverESmearing_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEoverESmearingEGMTool"),
+SigmaEOverESmearing_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonSigEoverESmearingEGMTool"),
           Label = cms.string("SigmaEOverESmearing"),
           CorrectionFile = scalesAndSmearingsPrefixForSigmaEOverE,
           NSigmas = cms.vint32(),
@@ -611,25 +611,7 @@ SigmaEOverESmearing_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhoton
           ApplyCentralValue = cms.bool(True)
           )
 
-FracRVWeight = cms.PSet( MethodName = cms.string("FlashggDiPhotonWeightFromFracRV"),
-          Label = cms.string("FracRVWeight"),
-          NSigmas = cms.vint32(-1,1),
-          OverallRange = cms.string("pt<99999"),
-          BinList = RVBins,
-          Debug = cms.untracked.bool(False),
-          ApplyCentralValue = cms.bool(True)
-          )
-
-FracRVNvtxWeight = cms.PSet( MethodName = cms.string("FlashggDiPhotonWeightFromFracRV"),
-          Label = cms.string("FracRVNvtxWeight"),
-          NSigmas = cms.vint32(-1,1),
-          OverallRange = cms.string("nVert<99999"),
-          BinList = RVBinsNvtx,
-          Debug = cms.untracked.bool(False),
-          ApplyCentralValue = cms.bool(True)
-          )
-
-MCSmearHighR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
+MCSmearHighR9EE_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
          Label = cms.string("MCSmearHighR9EE"),
          FirstParameterName = cms.string("Rho"),
          SecondParameterName = cms.string("Phi"),
@@ -647,7 +629,7 @@ MCSmearHighR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmea
          ApplyCentralValue = cms.bool(True)
          )
 
-MCSmearLowR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
+MCSmearLowR9EE_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
          Label = cms.string("MCSmearLowR9EE"),
          FirstParameterName = cms.string("Rho"),
          SecondParameterName = cms.string("Phi"),
@@ -665,7 +647,7 @@ MCSmearLowR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmear
          ApplyCentralValue = cms.bool(True)
          )
 
-MCSmearHighR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
+MCSmearHighR9EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
          Label = cms.string("MCSmearHighR9EB"),
          FirstParameterName = cms.string("Rho"),
          SecondParameterName = cms.string("Phi"),
@@ -683,7 +665,7 @@ MCSmearHighR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmea
          ApplyCentralValue = cms.bool(True)
          )
 
-MCSmearLowR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
+MCSmearLowR9EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonSmearStochasticEGMTool"),
          Label = cms.string("MCSmearLowR9EB"),
          FirstParameterName = cms.string("Rho"),
          SecondParameterName = cms.string("Phi"),
@@ -701,7 +683,7 @@ MCSmearLowR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSmear
          ApplyCentralValue = cms.bool(True)
          )
 
-MCScaleHighR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleHighR9EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleHighR9EB"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)<1.5"),
@@ -713,7 +695,7 @@ MCScaleHighR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScal
          Debug = cms.untracked.bool(False)
          )
 
-MCScaleLowR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleLowR9EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleLowR9EB"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("full5x5_r9<0.94&&abs(superCluster.eta)<1.5"),
@@ -725,7 +707,7 @@ MCScaleLowR9EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          Debug = cms.untracked.bool(False)
          )
 
-MCScaleHighR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleHighR9EE_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleHighR9EE"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("full5x5_r9>0.94&&abs(superCluster.eta)>=1.5"),
@@ -737,7 +719,7 @@ MCScaleHighR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScal
          Debug = cms.untracked.bool(False)
          )
 
-MCScaleLowR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleLowR9EE_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleLowR9EE"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("full5x5_r9<0.94&&abs(superCluster.eta)>=1.5"),
@@ -749,7 +731,7 @@ MCScaleLowR9EE_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          Debug = cms.untracked.bool(False)
          )
 
-MCScaleGain6EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleGain6EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleGain6EB"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("hasSwitchToGain6&&abs(superCluster.eta)<1.5"),
@@ -761,7 +743,7 @@ MCScaleGain6EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          Debug = cms.untracked.bool(False)
          )
 
-MCScaleGain1EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+MCScaleGain1EB_EGM = cms.PSet( MethodName = cms.string("FlashggPhotonScaleEGMTool"),
          Label = cms.string("MCScaleGain1EB"),
          NSigmas = cms.vint32(-1,1),
          OverallRange = cms.string("hasSwitchToGain1&&abs(superCluster.eta)<1.5"),
@@ -774,7 +756,7 @@ MCScaleGain1EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          )
 
 flashggPhotonSystematics = cms.EDProducer('FlashggPhotonSystematicProducer',
-		src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
+		src = cms.InputTag("flashggPhotonWithUpdatedIdMVAProducer"),
                 SystMethods2D = cms.VPSet(),
                 # the number of syst methods matches the number of nuisance parameters
                 # assumed for a given systematic uncertainty and is NOT required
@@ -806,7 +788,5 @@ flashggPhotonSystematics = cms.EDProducer('FlashggPhotonSystematicProducer',
                     LooseMvaSF,
                     SigmaEOverEShift,
                     SigmaEOverESmearing,
-                    FracRVWeight,
-                    FracRVNvtxWeight
-                )
+                    )
 )

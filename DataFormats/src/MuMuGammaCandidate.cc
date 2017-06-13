@@ -15,6 +15,7 @@ MuMuGammaCandidate::MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate> dimuo
     addDaughter( *photon );
     vertex_ = vertex;
     dimuptr_ = dimuon;
+
     // Adding momenta
     // Needs its own object - but why?
     // Copied from example
@@ -37,15 +38,18 @@ MuMuGammaCandidate::MuMuGammaCandidate( const flashgg::DiMuonCandidate &dimuon, 
 }
 */
 
-MuMuGammaCandidate::MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate> dimuon,  const flashgg::Photon &photon, edm::Ptr<reco::Vertex> vertex )
+MuMuGammaCandidate::MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate> dimuon, flashgg::Photon &photon, edm::Ptr<reco::Vertex> vertex )
 {
     addDaughter( *dimuon );
     addDaughter( photon );
     vertex_ = vertex;
     dimuptr_ = dimuon;
+    photon_ = photon;
 
+  
     AddFourMomenta addP4;
     addP4.set( *this );
+
 }
 
 
@@ -61,9 +65,10 @@ const flashgg::Photon *MuMuGammaCandidate::MMG_Photon() const
 }
 
 
-flashgg::Photon* MuMuGammaCandidate::MMG_UpdatablePhoton() const
+flashgg::Photon MuMuGammaCandidate::MMG_UpdatablePhoton() const
 {
-    return( (flashgg::Photon*)daughter( 1 ) );
+    cout << "Random number in MuMuGamma get Photon" << photon_.userFloat("rnd_g_E") << endl;
+    return photon_;
 }
 
 void MuMuGammaCandidate::setPhoton(flashgg::Photon* newPhoton)
@@ -72,6 +77,7 @@ void MuMuGammaCandidate::setPhoton(flashgg::Photon* newPhoton)
     addDaughter(*dimuptr_);
     addDaughter(*newPhoton);
 }
+
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil
