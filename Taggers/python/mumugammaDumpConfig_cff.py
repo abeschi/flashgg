@@ -5,7 +5,8 @@ from globalVariables_cff import globalVariables
 
 mumugammaDumpConfig = cms.PSet(
     className  = cms.untracked.string("CutBasedMuMuGammaDumper"),
-    src = cms.InputTag("flashggMuMuGamma"),
+    src = cms.InputTag("flashggMuMuGammaRandomizedPhotons2"),
+    #src = cms.InputTag(""),
     generatorInfo = cms.InputTag("generator"),
     processId = cms.string(""),
     maxCandPerEvent = cms.int32(1),

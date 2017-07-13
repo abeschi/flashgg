@@ -12,8 +12,8 @@ import os
 
 # maxEvents is the max number of events processed of each file, not globally
 #inputFiles = "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170212_190415/0000/myMicroAODOutputFile_14.root"
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_1/2_5_1/DoubleMuon/ReMiniAOD-03Feb2017-2_5_1-2_5_1-v0-Run2016G-03Feb2017-v1/170214_133316/0000/myMicroAODOutputFile_100.root"
-
+#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_1/2_5_1/DoubleMuon/ReMiniAOD-03Feb2017-2_5_1-2_5_1-v0-Run2016G-03Feb2017-v1/170214_133316/0000/myMicroAODOutputFile_100.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleMuon/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016G-23Sep2016-v1/161114_164741/0000/myMicroAODOutputFile_5.root"
 outputFile = "MuMuGamma.root" 
 
 ## I/O SETUP ##
@@ -80,8 +80,7 @@ process.flashggPhotonSystematics.SystMethods2D.extend([
 # add sigmaE/E correction and systematics
 process.flashggPhotonSystematics.SystMethods.extend( [process.SigmaEOverESmearing_EGM, process.SigmaEOverEShift] )
 
-customize.processId = 'Data'
-
+#customize.processId = 'Data'
 ## if data, apply only energy scale corrections, if MC apply only energy smearings
 if customize.processId == 'Data':
     print 'data' 
@@ -175,13 +174,6 @@ process.mumugammaDumper.quietRooFit = True
 # split tree, histogram and datasets by process
 process.mumugammaDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
-cfgTools.addCategory(process.mumugammaDumper,
-                     "Reject",
-                      " !Is2012FSRZMMG ",
-                       -1 ## if nSubcat is -1 do not store anythings
-                     )
-
-
 cfgTools.addCategories(process.mumugammaDumper,
                        ## categories definition
                        ## cuts are applied in cascade. Events getting to these categories have already failed the "Reject" selection
@@ -212,7 +204,9 @@ cfgTools.addCategories(process.mumugammaDumper,
                                   "photonPhi           :=MMG_Photon.phi",
                                   "photonR9            :=MMG_Photon.full5x5_r9",
                                   "photonS4            :=MMG_Photon.s4",
-                                  "photonEtaWidth      :=MMG_Photon.superCluster().etaWidth()"
+                                  "photonEtaWidth      :=MMG_Photon.superCluster().etaWidth()",
+                                  "photonSigmaIEtaIEta :=MMG_Photon.sigmaIetaIeta()",
+                                  "photonEtaEta        :=MMG_Photon.sigmaEtaEta()"
                                   ],
                        ## histograms to be plotted. 
                        ## the variables need to be defined first
@@ -224,18 +218,18 @@ cfgTools.addCategories(process.mumugammaDumper,
 process.mumugammaDumper.nameTemplate = "tree"
 
 
-customize.setDefault("maxEvents" , 10000)    # max-number of events
+customize.setDefault("maxEvents" , -1)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
 
 process.p1 = cms.Path(
-	process.flashggMuMuGammaRandomizedPhotons*
 	process.hltHighLevel*
     	process.dataRequirements*
+	process.flashggMuMuGammaRandomizedPhotons*
     	process.flashggPhotonWithUpdatedIdMVAProducer*
 	process.flashggPhotonSystematics*
-    	process.flashggMuMuGamma2*
+    	process.flashggMuMuGammaRandomizedPhotons2*
     	process.mumugammaDumper
     	)
 

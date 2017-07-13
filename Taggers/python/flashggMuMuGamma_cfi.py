@@ -2,7 +2,7 @@
 
 import FWCore.ParameterSet.Config as cms
 
-flashggMuMuGamma2 = cms.EDProducer('FlashggMuMuGammaRandomizedPhotonProducer',
+flashggMuMuGammaRandomizedPhotons2 = cms.EDProducer('FlashggMuMuGammaRandomizedPhotonProducer',
                                   DiMuonTag=cms.InputTag('flashggDiMuons'),
                                   PhotonTag=cms.InputTag('flashggPhotonSystematics'),
                                   VertexTag=cms.InputTag('offlineSlimmedPrimaryVertices'),
@@ -17,6 +17,6 @@ flashggMuMuGamma2 = cms.EDProducer('FlashggMuMuGammaRandomizedPhotonProducer',
 				  MaxMuMuGammaMass=cms.double(120.),
 				  MaxMuMuPlusMuMuGammaMass=cms.double(180.),
 				  MaxDeltaR=cms.double(0.8),
-				  MinClosestMuonPt=cms.double(21.),                                            
+				  MinClosestMuonPt=cms.double(21.),                                        
                                   minPhotonPT=cms.double(20.),
                                 )

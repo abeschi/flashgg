@@ -130,9 +130,7 @@ namespace flashgg {
 
     void PhotonWithUpdatedIdMVAProducer::updatePhotonRegression(flashgg::Photon & ph)
     {
-            cout << "Problem" << endl;
             regress_->modifyObject(ph);
-            cout << "Problem2" << endl;
     }
 
     void PhotonWithUpdatedIdMVAProducer::storePhotonRegression(flashgg::Photon & ph, const std::string & label)
@@ -281,10 +279,8 @@ namespace flashgg {
             new_obj.setPhoIdMvaWrtVtx( vtx, newleadmva);
 
             out_obj->push_back(new_obj);
-
         }
         evt.put(out_obj);
-
     }
 }
 

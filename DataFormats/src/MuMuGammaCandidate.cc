@@ -67,7 +67,6 @@ const flashgg::Photon *MuMuGammaCandidate::MMG_Photon() const
 
 flashgg::Photon MuMuGammaCandidate::MMG_UpdatablePhoton() const
 {
-    cout << "Random number in MuMuGamma get Photon" << photon_.userFloat("rnd_g_E") << endl;
     return photon_;
 }
 

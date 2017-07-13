@@ -80,15 +80,14 @@ namespace flashgg {
         evt.getByToken( photonToken_, photons );
 
         auto_ptr<vector<flashgg::MuMuGammaCandidate> > MuMuGammaColl( new vector<flashgg::MuMuGammaCandidate> );
- 
+
         for( unsigned int i = 0 ; i < dimuons->size() ; i++ )
         {
             edm::Ptr<flashgg::DiMuonCandidate> dimuon = dimuons->ptrAt(i);
- 
-            for( unsigned int j = 0; j < photons->size() ; j++ )
-            {
-                edm::Ptr<flashgg::Photon> photon = photons->ptrAt(j);
 
+            for( unsigned int j = 0; j < photons->size() ; j++ )
+            {   
+                edm::Ptr<flashgg::Photon> photon = photons->ptrAt(j);
                 // A number of things need to be done once the vertex is chosen
                 // recomputing photon 4-momenta accordingly
                 flashgg::Photon photon_corr = PhotonIdUtils::pho4MomCorrection( photon, pvx );
@@ -113,7 +112,6 @@ namespace flashgg {
                 flashgg::MuMuGammaCandidate* mumugamma = new flashgg::MuMuGammaCandidate(dimuon, photon_corr, pvx );
                  mumugamma->setVertex( pvx );
                 //====================
-
                 if( muon_lead->pt() < leadingMuonMinPt_ || muon_sublead->pt() < subleadingMuonMinPt_) continue;
 
                 if((muon_lead->pt() + muon_sublead->pt()) < MuonMinSumPt_) continue;
@@ -146,14 +144,12 @@ namespace flashgg {
                 if( DeltaR_PhotonFarMu < 0.3 && PhotonTrkIsoHollow03 > 0.99 * MuFar_TrkPT ) { PhotonTrkIsoHollow03_MuCorr -= MuFar_TrkPT; }
                 mumugamma->setPhotonTrkIsoHollow03MuCorr( PhotonTrkIsoHollow03_MuCorr );
 
-
- 
-                // store the dimuon into the collection
+               // store the dimuon into the collection
                 MuMuGammaColl->push_back( *mumugamma );
             }
         }
+         evt.put( MuMuGammaColl );
 
-        evt.put( MuMuGammaColl );   
      }
 }
 
