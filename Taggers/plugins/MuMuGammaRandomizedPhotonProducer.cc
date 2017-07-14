@@ -59,6 +59,7 @@ namespace flashgg {
         MinMuMuGammaMass_ = iConfig.getParameter<double>( "MinMuMuGammaMass" );
         MinDimuonMass_ = iConfig.getParameter<double>( "MinDimuonMass" );
         MaxMuMuGammaMass_ = iConfig.getParameter<double>( "MaxMuMuGammaMass" );
+        MaxMuMuPlusMuMuGammaMass_ = iConfig.getParameter<double>( "MaxMuMuPlusMuMuGammaMass" );
         MaxDeltaR_ = iConfig.getParameter<double>( "MaxDeltaR" );
         MinClosestMuonPt_ = iConfig.getParameter<double>( "MinClosestMuonPt" );
         produces<vector<flashgg::MuMuGammaCandidate> >();
@@ -110,16 +111,17 @@ namespace flashgg {
 
                //MuMuGammaCandidate mumugamma(dimu, photon_corr);
                 flashgg::MuMuGammaCandidate* mumugamma = new flashgg::MuMuGammaCandidate(dimuon, photon_corr, pvx );
-                 mumugamma->setVertex( pvx );
+                mumugamma->setVertex( pvx );
                 //====================
                 if( muon_lead->pt() < leadingMuonMinPt_ || muon_sublead->pt() < subleadingMuonMinPt_) continue;
 
                 if((muon_lead->pt() + muon_sublead->pt()) < MuonMinSumPt_) continue;
                 if(!dimuon->IsOSDiMuPair() || !dimuon->IfBothTightMu() || !dimuon->IfBothGlobalAndPF()) continue;
                 if(leadmuIso04.sumChargedHadronPt/muon_lead->pt()>leadingMuonIsoOverPt_  || subleadmuIso04.sumChargedHadronPt/muon_sublead->pt()>subleadingMuonIsoOverPt_) continue;
-                if(dimuon->mass() < MinDimuonMass_ || mumugamma->mass() < MinMuMuGammaMass_ || mumugamma->mass() > MaxMuMuGammaMass_ || ( dimuon->mass() + mumugamma->mass() ) > MaxMuMuGammaMass_ ) continue;
+                if(dimuon->mass() < MinDimuonMass_ || mumugamma->mass() < MinMuMuGammaMass_ || mumugamma->mass() > MaxMuMuGammaMass_ || ( dimuon->mass() + mumugamma->mass() ) > MaxMuMuPlusMuMuGammaMass_ ) continue;
                 if(min( DeltaR1, DeltaR2 ) > 0.8) continue;
 
+                cout << dimuon->mass() << endl;
                 bool closestMuonPt;
                 if(DeltaR1 > DeltaR2)
                     closestMuonPt = muon_lead->pt() > MinClosestMuonPt_;

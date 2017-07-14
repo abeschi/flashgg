@@ -11,9 +11,9 @@ from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,clo
 import os
 
 # maxEvents is the max number of events processed of each file, not globally
-#inputFiles = "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170212_190415/0000/myMicroAODOutputFile_14.root"
+inputFiles = "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170212_190415/0000/myMicroAODOutputFile_14.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_1/2_5_1/DoubleMuon/ReMiniAOD-03Feb2017-2_5_1-2_5_1-v0-Run2016G-03Feb2017-v1/170214_133316/0000/myMicroAODOutputFile_100.root"
-inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleMuon/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016G-23Sep2016-v1/161114_164741/0000/myMicroAODOutputFile_5.root"
+#inputFiles = "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleMuon/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016G-23Sep2016-v1/161114_164741/0000/myMicroAODOutputFile_5.root"
 outputFile = "MuMuGamma.root" 
 
 ## I/O SETUP ##
@@ -150,12 +150,18 @@ if customize.processId == 'Data':
     process.dataRequirements += process.eeBadScFilter
     process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring(
             #DoubleMu
-            "HLT_DoubleMu*"
+            "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v*",
+	    "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v*",
+	    "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*",
+	    "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v*"
             ) )
 else:
     process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring(
-             "HLT_DoubleMu*"
-     ) )
+            "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v*",
+	    "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v*",
+	    "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*",
+	    "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v*"
+    ) )
 
  
 
