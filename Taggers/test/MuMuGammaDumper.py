@@ -164,14 +164,15 @@ else:
     ) )
 
  
-
+#Apply photon preselections
+process.load("flashgg.Taggers.MuMuGammaPhotonPreselection")
 
 
 process.load("flashgg.Taggers.mumugammaDumper_cfi") ##  import mumugammaDumper 
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
 
-
+#process.mumugammaDumper.src = cms.InputTag("flashggMuMuGammaRandomizedPhotons")
 process.mumugammaDumper.dumpTrees = True
 process.mumugammaDumper.dumpWorkspace = False
 process.mumugammaDumper.quietRooFit = True
@@ -235,8 +236,9 @@ process.p1 = cms.Path(
 	process.flashggMuMuGammaRandomizedPhotons*
     	process.flashggPhotonWithUpdatedIdMVAProducer*
 	process.flashggPhotonSystematics*
+ 	process.flashggPreselectedPhotons*
     	process.flashggMuMuGammaRandomizedPhotons2*
-    	process.mumugammaDumper
+   	process.mumugammaDumper
     	)
 
 print process.p1

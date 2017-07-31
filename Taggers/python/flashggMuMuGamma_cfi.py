@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 
 flashggMuMuGammaRandomizedPhotons2 = cms.EDProducer('FlashggMuMuGammaRandomizedPhotonProducer',
                                   DiMuonTag=cms.InputTag('flashggDiMuons'),
-                                  PhotonTag=cms.InputTag('flashggPhotonSystematics'),
+                                  PhotonTag=cms.InputTag('flashggPreselectedPhotons'),
                                   VertexTag=cms.InputTag('offlineSlimmedPrimaryVertices'),
                                   ##Parameters
 				  leadingMuonMinPt=cms.double(10.5),
