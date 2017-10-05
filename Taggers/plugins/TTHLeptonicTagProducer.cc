@@ -13,6 +13,7 @@
 #include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/Electron.h"
 #include "flashgg/DataFormats/interface/Muon.h"
+#include "flashgg/DataFormats/interface/Met.h"
 #include "flashgg/DataFormats/interface/Photon.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 
@@ -52,6 +53,7 @@ namespace flashgg {
         std::vector<edm::InputTag> inputTagJets_;
         EDGetTokenT<View<Electron> > electronToken_;
         EDGetTokenT<View<flashgg::Muon> > muonToken_;
+        EDGetTokenT<View<flashgg::Met> > METToken_;
         EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_;
         EDGetTokenT<View<Photon> > photonToken_;
         EDGetTokenT<View<reco::Vertex> > vertexToken_;
@@ -112,6 +114,7 @@ namespace flashgg {
         inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         electronToken_( consumes<View<flashgg::Electron> >( iConfig.getParameter<InputTag>( "ElectronTag" ) ) ),
         muonToken_( consumes<View<flashgg::Muon> >( iConfig.getParameter<InputTag>( "MuonTag" ) ) ),
+        METToken_( consumes<View<flashgg::Met> >( iConfig.getParameter<InputTag>( "MetTag" ) ) ),
         mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ),
         vertexToken_( consumes<View<reco::Vertex> >( iConfig.getParameter<InputTag> ( "VertexTag" ) ) ),
         genParticleToken_( consumes<View<reco::GenParticle> >( iConfig.getParameter<InputTag> ( "GenParticleTag" ) ) ),
@@ -209,6 +212,9 @@ namespace flashgg {
 
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
+
+        Handle<View<flashgg::Met> > theMet_;
+        evt.getByToken( METToken_, theMet_ );
 
         Handle<View<reco::GenParticle> > genParticles;
 
@@ -571,13 +577,23 @@ namespace flashgg {
                     }
                 }
 
+
+
                 tthltags_obj.setJets( tagJets );
                 tthltags_obj.setBJets( tagBJets );
                 tthltags_obj.setMuons( tagMuons );
                 tthltags_obj.setElectrons( tagElectrons );
                 tthltags_obj.setDiPhotonIndex( diphoIndex );
                 tthltags_obj.setSystLabel( systLabel_ );
+
+              if( theMet_ -> size() != 1 )
+                    std::cout << "WARNING number of MET is not equal to 1" << std::endl;
+                Ptr<flashgg::Met> Met = theMet_->ptrAt( 0 );
+                tthltags_obj.setMetPt((float)Met->pt());
+                tthltags_obj.setMetPhi((float)Met->phi());
+
                 tthltags->push_back( tthltags_obj );
+
                 if( ! evt.isRealData() ) {
                     TagTruthBase truth_obj;
                     truth_obj.setGenPV( higgsVtx );

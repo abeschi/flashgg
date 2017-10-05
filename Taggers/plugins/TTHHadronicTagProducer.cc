@@ -14,11 +14,12 @@
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h"
 #include "flashgg/DataFormats/interface/Electron.h"
 #include "flashgg/DataFormats/interface/Muon.h"
+#include "flashgg/DataFormats/interface/Met.h"
 #include "flashgg/Taggers/interface/LeptonSelection.h"
 
 #include "DataFormats/Math/interface/deltaR.h"
 
-#include "flashgg/DataFormats/interface/TagTruthBase.h"
+#include "flashgg/DataFormats/interface/TTHHadronicTagTruth.h"
 #include "DataFormats/Common/interface/RefToPtr.h"
 
 #include <vector>
@@ -48,9 +49,11 @@ namespace flashgg {
         std::vector<edm::InputTag> inputTagJets_;
         EDGetTokenT<View<Electron> > electronToken_;
         EDGetTokenT<View<flashgg::Muon> > muonToken_;
+        EDGetTokenT<View<flashgg::Met> > METToken_;
         EDGetTokenT<View<reco::Vertex> > vertexToken_;
         EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_;
         EDGetTokenT<View<reco::GenParticle> > genParticleToken_;
+        EDGetTokenT<View<reco::GenJet> > genJetToken_;
         EDGetTokenT<int> stage0catToken_, stage1catToken_, njetsToken_;
         EDGetTokenT<float> pTHToken_,pTVToken_;
         EDGetTokenT<double> rhoTag_;
@@ -131,12 +134,14 @@ namespace flashgg {
         inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         electronToken_( consumes<View<flashgg::Electron> >( iConfig.getParameter<InputTag>( "ElectronTag" ) ) ),
         muonToken_( consumes<View<flashgg::Muon> >( iConfig.getParameter<InputTag>( "MuonTag" ) ) ),
+        METToken_( consumes<View<flashgg::Met> >( iConfig.getParameter<InputTag>( "MetTag" ) ) ),
         vertexToken_( consumes<View<reco::Vertex> >( iConfig.getParameter<InputTag> ( "VertexTag" ) ) ),
         mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag>( "MVAResultTag" ) ) ),
         genParticleToken_( consumes<View<reco::GenParticle> >( iConfig.getParameter<InputTag> ( "GenParticleTag" ) ) ),
+        genJetToken_( consumes<View<reco::GenJet> >( iConfig.getParameter<InputTag> ( "GenJetTag" ) ) ),
         rhoTag_( consumes<double>( iConfig.getParameter<InputTag>( "rhoTag" ) ) ),
         systLabel_( iConfig.getParameter<string> ( "SystLabel" ) ),
-        _MVAMethod( iConfig.getParameter<string> ( "MVAMethod" ) )
+         _MVAMethod( iConfig.getParameter<string> ( "MVAMethod" ) )
     {
         ParameterSet HTXSps = iConfig.getParameterSet( "HTXSTags" );
         stage0catToken_ = consumes<int>( HTXSps.getParameter<InputTag>("stage0cat") );
@@ -218,7 +223,7 @@ namespace flashgg {
         }
 
         produces<vector<TTHHadronicTag> >();
-        produces<vector<TagTruthBase> >();
+        produces<vector<TTHHadronicTagTruth> >();
     }
 
     void TTHHadronicTagProducer::produce( Event &evt, const EventSetup & )
@@ -259,12 +264,20 @@ namespace flashgg {
 
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
+
+        Handle<View<flashgg::Met> > theMet_;
+        evt.getByToken( METToken_, theMet_ );
+ 
         // const PtrVector<flashgg::DiPhotonMVAResult>& mvaResultPointers = mvaResults->ptrVector();
 
         Handle<View<reco::GenParticle> > genParticles;
+        Handle<View<reco::GenJet> > genJets;
 
-        std::unique_ptr<vector<TTHHadronicTag> > tthhtags( new vector<TTHHadronicTag> );
-        std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
+        std::auto_ptr<vector<TTHHadronicTag> >      tthhtags  ( new vector<TTHHadronicTag> );
+        std::auto_ptr<vector<TTHHadronicTagTruth> > truths( new vector<TTHHadronicTagTruth> );
+
+        //std::unique_ptr<vector<TTHHadronicTag> > tthhtags( new vector<TTHHadronicTag> );
+        //std::unique_ptr<vector<TTHHadronicTagTruth> > truths( new vector<TTHHadronicTagTruth> );
 
         Point higgsVtx;
         if( ! evt.isRealData() ) {
@@ -278,8 +291,8 @@ namespace flashgg {
             }
         }
 
-        edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
-        unsigned int idx = 0;
+       edm::RefProd<vector<TTHHadronicTagTruth> > rTagTruth = evt.getRefBeforePut<vector<TTHHadronicTagTruth> >();
+       unsigned int idx = 0;
 
         std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
         if( !useStdLeptonID_) {
@@ -291,25 +304,15 @@ namespace flashgg {
        
         std::vector<edm::Ptr<Electron> > goodElectrons ;
 
-        //if( !useStdLeptonID_) {
-             // goodElectrons = selectAllElectrons( theElectrons->ptrs(), vertices->ptrs(), leptonPtThreshold_, 
-             //                                     TransverseImpactParam_, LongitudinalImpactParam_, nonTrigMVAThresholds_, nonTrigMVAEtaCuts_,
-             //                                     electronIsoThreshold_, electronNumOfHitsThreshold_, electronEtaThresholds_ );
-            //goodElectrons = selectAllElectronsSum16( theElectrons->ptrs(), vertices->ptrs(), 
-            //                                       leptonPtThreshold_, electronEtaThresholds_,
-            //                                       true, true, elMiniIsoEBThreshold_, elMiniIsoEEThreshold_);
-            //goodElectrons = selectAllElectronsSum16( theElectrons->ptrs(), vertices->ptrs(), leptonPtThreshold_, electronEtaThresholds_,
-            //                                         true, true, elMiniIsoEBThreshold_, elMiniIsoEEThreshold_,
-            //                                         TransverseImpactParam_EB, LongitudinalImpactParam_EB, TransverseImpactParam_EE, LongitudinalImpactParam_EE,
-            //                                         rho_, evt.isRealData() );
-        //} else {
-            goodElectrons = selectStdAllElectrons(theElectrons->ptrs(), vertices->ptrs(), leptonPtThreshold_, electronEtaThresholds_,
-                                                  useElectronMVARecipe_, useElectronLooseID_,
-                                                  rho_, evt.isRealData() );
-            //}
+
+        goodElectrons = selectStdAllElectrons(theElectrons->ptrs(), vertices->ptrs(), leptonPtThreshold_, electronEtaThresholds_,
+                                              useElectronMVARecipe_, useElectronLooseID_,
+                                              rho_, evt.isRealData() );
+         
         
         
-        for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ ) {
+        for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ )
+        {
 
             if( goodElectrons.size() > 0 ||  goodMuons.size() > 0 )  continue; 
 
@@ -418,27 +421,19 @@ namespace flashgg {
                 if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
             }
 
-            if(useTTHHadronicMVA_){
+                if(njets_btagloose_ >= bjetsLooseNumberTTHHMVAThreshold_ && njets_btagmedium_ >= bjetsNumberTTHHMVAThreshold_ && jetcount_ >= jetsNumberTTHHMVAThreshold_ && _MVAMethod != "")
+                {
+                    
+                     tthMvaVal_ = TThMva_->EvaluateMVA( _MVAMethod.c_str() );
+               }
+
+
+            if(useTTHHadronicMVA_)
+            {
                 BJetVect.clear();
                 BJetVect = BJetTTHHMVAVect;
 
-                 if(njets_btagloose_ >= bjetsLooseNumberTTHHMVAThreshold_ && njets_btagmedium_ >= bjetsNumberTTHHMVAThreshold_ && jetcount_ >= jetsNumberTTHHMVAThreshold_ && _MVAMethod != ""){
-
-                     tthMvaVal_ = TThMva_->EvaluateMVA( _MVAMethod.c_str() );
-                     //                mvares_tth = TThMva_->EvaluateMVA( "BDT" );
-
-                     /*
-                    cout << "input variables : " << endl;
-                    cout << "nJets_ = " << nJets_ << endl;
-                    cout << "maxBTagVal_ = " << maxBTagVal_ << endl;
-                    cout << "secondMaxBTagVal_ = " << secondMaxBTagVal_ << endl;
-                    cout << "leadJetPt_ = " << leadJetPt_ << endl;
-
-                    cout << "mva result :" << endl;
-                    cout << "tthMvaVal_ = " << tthMvaVal_  << endl;
-                     */
-                 }
-            }
+             }
 
             bool isTTHHadronicTagged = false;
             
@@ -446,12 +441,12 @@ namespace flashgg {
                 
                 isTTHHadronicTagged = true;
             
-            } else if ( useTTHHadronicMVA_ && njets_btagloose_ >= bjetsLooseNumberTTHHMVAThreshold_ && njets_btagmedium_ >= bjetsNumberTTHHMVAThreshold_ && jetcount_ >= jetsNumberTTHHMVAThreshold_ && tthMvaVal_ > tthHadMVAThreshold_ ) {
-                
+            } else if ( useTTHHadronicMVA_ && njets_btagloose_ >= bjetsLooseNumberTTHHMVAThreshold_ && njets_btagmedium_ >= bjetsNumberTTHHMVAThreshold_ && jetcount_ >= jetsNumberTTHHMVAThreshold_ && tthMvaVal_ > tthHadMVAThreshold_ )              { 
                 isTTHHadronicTagged = true;
-            }
-
-            if( isTTHHadronicTagged ) {
+                }
+ 
+            if( isTTHHadronicTagged )
+            {
                 TTHHadronicTag tthhtags_obj( dipho, mvares, JetVect, BJetVect );
                 tthhtags_obj.setNjet( jetcount_ );
                 tthhtags_obj.setNBLoose( njets_btagloose_ );
@@ -475,28 +470,125 @@ namespace flashgg {
                         tthhtags_obj.includeWeightsByLabel( *JetVect[num] , "JetBTagReshapeWeight");
                     }                    
                 }
+
+                if( theMet_ -> size() != 1 )
+                    std::cout << "WARNING number of MET is not equal to 1" << std::endl;
+                Ptr<flashgg::Met> Met = theMet_->ptrAt( 0 );
+                tthhtags_obj.setMetPt(Met->pt());
+                tthhtags_obj.setMetPhi(Met->phi());
+
                 tthhtags_obj.includeWeights( *dipho );
                 tthhtags->push_back( tthhtags_obj );
-                if( ! evt.isRealData() ) {
-                    TagTruthBase truth_obj;
+
+                if( ! evt.isRealData() )
+                {
+                    evt.getByToken( genParticleToken_, genParticles );
+                    evt.getByToken( genJetToken_, genJets );
+
+ 
+                    bool SavedHiggs = 0;
+                    bool SavedTop1 = 0;
+                    bool SavedTop2 = 0;
+
+                    TTHHadronicTagTruth truth_obj;
                     truth_obj.setGenPV( higgsVtx );
+ 
                     if ( stage0cat.isValid() ) {
                         truth_obj.setHTXSInfo( *( stage0cat.product() ),
                                                *( stage1cat.product() ),
                                                *( njets.product() ),
                                                *( pTH.product() ),
                                                *( pTV.product() ) );
-                    } else {
+                    }   
+                    else
                         truth_obj.setHTXSInfo( 0, 0, 0, 0., 0. );
+
+                    vector<reco::GenJet> genJetsVector;
+                    vector<reco::GenParticle> genTop1;
+                    vector<reco::GenParticle> genTop2;
+                    vector<reco::GenParticle> genPhotons;
+
+                    for(unsigned int i=0; i< genJets->size(); i++)
+                    {
+                        edm::Ptr<reco::GenJet> j = genJets->ptrAt(i);
+                        genJetsVector.push_back(*j);
                     }
+
+ 
+                    truth_obj.setGenJets(genJetsVector);
+
+                    for(unsigned int i=0; i< genParticles->size(); i++)
+                    {
+                        edm::Ptr<reco::GenParticle> p = genParticles->ptrAt(i);
+                        if(p->pdgId() == 6 && p->status()==62 && !SavedTop1)
+                        {   if(p->numberOfDaughters()!=2)
+                                cout << "Warning: top quark is not decayed as expected" << endl;
+                            else
+                            {
+                                for(unsigned int topDaugthers = 0; topDaugthers<p->numberOfDaughters(); topDaugthers++)
+                                {
+                                    if(abs(p->daughter(topDaugthers)->pdgId())==24)
+                                    {
+                                        const reco::Candidate* Wboson = p->daughter(topDaugthers);
+                                        while(Wboson -> numberOfDaughters()!=2)
+                                            Wboson = Wboson->daughter(0);
+                                        for(unsigned int WDaugthers = 0; WDaugthers<Wboson->numberOfDaughters(); WDaugthers++)
+                                            genTop1.push_back(*((reco::GenParticle*)(Wboson->daughter(WDaugthers))));
+                                    }
+                                    else if(abs(p->daughter(topDaugthers)->pdgId())==5)
+                                        genTop1.push_back(*((reco::GenParticle*)(p->daughter(topDaugthers))));
+                                }
+                            }
+                            SavedTop1 = 1;
+                        }
+
+                        if(p->pdgId() == -6 && p->status()==62 && !SavedTop2)
+                        {   if(p->numberOfDaughters()!=2)
+                                cout << "Warning: antitop quark is not decayed as expected" << endl;
+                            else
+                            {
+                                for(unsigned int topDaugthers = 0; topDaugthers<p->numberOfDaughters(); topDaugthers++)
+                                {
+                                    if(abs(p->daughter(topDaugthers)->pdgId())==24)
+                                    {
+                                        const reco::Candidate* Wboson = p->daughter(topDaugthers);
+                                        while(Wboson -> numberOfDaughters()!=2)
+                                            Wboson = Wboson->daughter(0);
+                                        for(unsigned int WDaugthers = 0; WDaugthers<Wboson->numberOfDaughters(); WDaugthers++)
+                                            genTop2.push_back(*((reco::GenParticle*)(Wboson->daughter(WDaugthers))));
+                                    }
+                                    else if(abs(p->daughter(topDaugthers)->pdgId())==5)
+                                        genTop2.push_back(*((reco::GenParticle*)(p->daughter(topDaugthers))));
+                                }
+                            }
+                            SavedTop2 = 1;
+                        }
+
+                         if(p->pdgId() == 25 && !SavedHiggs)
+                        {   //genPhotons.push_back(*p);
+                            const reco::Candidate* Hboson = (reco::Candidate*)(&(*p));
+                            while(Hboson -> numberOfDaughters()!=2)
+                                     Hboson = Hboson->daughter(0);
+ 
+                            for(unsigned int HDaugthers = 0; HDaugthers<Hboson->numberOfDaughters(); HDaugthers++)
+                                genPhotons.push_back(*((reco::GenParticle*)(Hboson->daughter(HDaugthers))));
+                            SavedHiggs = 1;
+                         }
+                    }
+
+                    truth_obj.setTop1(genTop1);
+                    truth_obj.setTop2(genTop2);
+                    truth_obj.setPhotons(genPhotons);
+ 
                     truths->push_back( truth_obj );
-                    tthhtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, idx++ ) ) );
-                }
+                    tthhtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TTHHadronicTagTruth> >( rTagTruth, idx++ ) ) );
+
+                } 
                 // count++;
             }
         }
-        evt.put( std::move( tthhtags ) );
-        evt.put( std::move( truths ) );
+        evt.put( tthhtags);
+        evt.put( truths);
         // cout << "tagged events = " << count << endl;
     }
 }
