@@ -37,7 +37,7 @@ hadronic_variables=[
 	"jet_bdiscriminant1 :=  ? jetVector.size()>0 ? jetVector[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
 	"jet_pt2            :=  ? jetVector.size()>1 ? jetVector[1].pt : -100 ",
 	"jet_eta2           :=  ? jetVector.size()>1 ? jetVector[1].eta : -100 ",
-	"jet_ohi2           :=  ? jetVector.size()>1 ? jetVector[1].phi : -100 ",
+	"jet_phi2           :=  ? jetVector.size()>1 ? jetVector[1].phi : -100 ",
 	"jet_energy2        :=  ? jetVector.size()>1 ? jetVector[1].energy : -100 ",
 	"jet_bdiscriminant2 :=  ? jetVector.size()>1 ? jetVector[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
 	"jet_pt3            :=  ? jetVector.size()>2 ? jetVector[2].pt : -100 ",
@@ -53,17 +53,17 @@ hadronic_variables=[
 	"jet_pt5            :=  ? jetVector.size()>4 ? jetVector[4].pt : -100 ",
 	"jet_eta5           :=  ? jetVector.size()>4 ? jetVector[4].eta : -100 ",
 	"jet_phi5           :=  ? jetVector.size()>4 ? jetVector[4].phi : -100 ",
-	"jet_energy5        :=  ? jetVector.size()>5 ? jetVector[4].energy : -100 ",
+	"jet_energy5        :=  ? jetVector.size()>4 ? jetVector[4].energy : -100 ",
 	"jet_bdiscriminant5 :=  ? jetVector.size()>4 ? jetVector[4].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
 	"jet_pt6            :=  ? jetVector.size()>5 ? jetVector[5].pt : -100 ",
 	"jet_eta6           :=  ? jetVector.size()>5 ? jetVector[5].eta : -100 ",
 	"jet_phi6           :=  ? jetVector.size()>5 ? jetVector[5].phi : -100",
-	"jet_energy6        :=  ? jetVector.size()>6 ? jetVector[5].energy : -100 ",
+	"jet_energy6        :=  ? jetVector.size()>5 ? jetVector[5].energy : -100 ",
 	"jet_bdiscriminant6 :=  ? jetVector.size()>5 ? jetVector[5].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
 	"jet_pt7            :=  ? jetVector.size()>6 ? jetVector[6].pt : -100 ",
 	"jet_eta7           :=  ? jetVector.size()>6 ? jetVector[6].eta : -100 ",
 	"jet_phi7           :=  ? jetVector.size()>6 ? jetVector[6].phi : -100",
-	"jet_energy7        :=  ? jetVector.size()>6 ? jetVector[1].energy : -100 ",
+	"jet_energy7        :=  ? jetVector.size()>6 ? jetVector[6].energy : -100 ",
 	"jet_bdiscriminant7 :=  ? jetVector.size()>6 ? jetVector[6].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
 	"jet_pt8            :=  ? jetVector.size()>7 ? jetVector[7].pt : -100 ",
 	"jet_eta8           :=  ? jetVector.size()>7 ? jetVector[7].eta : -100 ",
@@ -80,7 +80,6 @@ hadronic_variables=[
 	"ttHMVA             :=  tthMvaRes ",
 	"MetPt              :=  MetPt ",
 	"MetPhi             :=  MetPhi "
-
 ]
 
 
