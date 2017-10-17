@@ -64,6 +64,7 @@ namespace flashgg {
         bool useTTHHadronicMVA_;
         double tthHadMVAThreshold_;
         //---thresholds---
+        bool isControlSample_;
         //---photons
         double MVAThreshold_;
         double MVATTHHMVAThreshold_;
@@ -150,6 +151,7 @@ namespace flashgg {
         pTHToken_ = consumes<float>( HTXSps.getParameter<InputTag>("pTH") );
         pTVToken_ = consumes<float>( HTXSps.getParameter<InputTag>("pTV") );
 
+        isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
         MVAThreshold_ = iConfig.getParameter<double>( "MVAThreshold");
         MVATTHHMVAThreshold_ = iConfig.getParameter<double>( "MVATTHHMVAThreshold");
         PhoMVAThreshold_ = iConfig.getParameter<double>( "PhoMVAThreshold");
@@ -343,15 +345,27 @@ namespace flashgg {
 
             edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( diphoIndex );
 
+            if( !dipho->leadingPhoton()->passElectronVeto() || !dipho->subLeadingPhoton()->passElectronVeto() ) { continue; }
+
             idmva1_ = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
             idmva2_ = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
 
-            if( idmva1_ <= PhoMVAThreshold_ || idmva2_ <= PhoMVAThreshold_ ) { continue; }
+            bool passPhotonIdSelection = 0;
+            if(isControlSample_)
+            {
+                if((idmva1_ > PhoMVAThreshold_ && idmva2_ <= PhoMVAThreshold_ ) || (idmva1_ <= PhoMVAThreshold_ && idmva2_ > PhoMVAThreshold_ )) passPhotonIdSelection = 1;
+            }
+
+            else
+            {
+                if( idmva1_ > PhoMVAThreshold_ && idmva2_ > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+            }
+
+            if(!passPhotonIdSelection) continue;
 
             edm::Ptr<flashgg::DiPhotonMVAResult> mvares = mvaResults->ptrAt( diphoIndex );
 
-            if( !dipho->leadingPhoton()->passElectronVeto() || !dipho->subLeadingPhoton()->passElectronVeto() ) { continue; }
-
+  
             double leadPhoPtCut = leadPhoPtThreshold_;
             double subleadPhoPtCut = subleadPhoPtThreshold_;
             if( leadPhoUseVariableTh_ )

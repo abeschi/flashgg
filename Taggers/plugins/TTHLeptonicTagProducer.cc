@@ -66,6 +66,8 @@ namespace flashgg {
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
 
         //Thresholds
+        bool isControlSample_;
+
         double leptonPtThreshold_;
         double muonEtaThreshold_;
         double leadPhoOverMassThreshold_;
@@ -121,6 +123,8 @@ namespace flashgg {
         rhoTag_( consumes<double>( iConfig.getParameter<InputTag>( "rhoTag" ) ) ),
         systLabel_( iConfig.getParameter<string> ( "SystLabel" ) )
     {
+
+        isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
 
         leptonPtThreshold_ = iConfig.getParameter<double>( "leptonPtThreshold");
         muonEtaThreshold_ = iConfig.getParameter<double>( "muonEtaThreshold");
@@ -276,11 +280,21 @@ namespace flashgg {
 
             if( dipho->subLeadingPhoton()->pt() < ( dipho->mass() )*subleadPhoOverMassThreshold_ ) { continue; }
 
-
             idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
             idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
 
-            if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
+            bool passPhotonIdSelection = 0;
+            if(isControlSample_)
+            {
+                if((idmva1 > PhoMVAThreshold_ && idmva2 <= PhoMVAThreshold_ ) || (idmva1 <= PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ )) passPhotonIdSelection = 1;
+            }
+
+            else
+            {
+                if( idmva1 > PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+            }
+
+            if(!passPhotonIdSelection) continue;
 
             if( mvares->result < MVAThreshold_ ) { continue; }
 
