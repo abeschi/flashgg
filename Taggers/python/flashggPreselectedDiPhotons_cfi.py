@@ -61,7 +61,7 @@ rediscoveryHLTcutsV1 = cms.VPSet(
 
 #cuts here mimic the miniAOD photon cuts and the non-category based trigger cuts
 #Also included: the super-loose ID MVA cuts
-flashggPreselectedDiPhotons = cms.EDFilter(
+flashggPreselectedDiPhotonsTMP = cms.EDFilter(
     "GenericDiPhotonCandidateSelector",
     src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
     rho = cms.InputTag("fixedGridRhoAll"),
@@ -84,7 +84,7 @@ flashggPreselectedDiPhotons = cms.EDFilter(
 
 
 
-flashggPreselectedDiPhotonsForCS = cms.EDFilter(
+flashggPreselectedDiPhotons = cms.EDFilter(
     "GenericDiPhotonCandidateSelector",
     src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
     rho = cms.InputTag("fixedGridRhoAll"),
