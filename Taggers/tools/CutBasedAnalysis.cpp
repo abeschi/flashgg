@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         TString SignalFold = "/afs/cern.ch/work/a/abeschi/ttH_MassTop_v5/";
         TString BkgFold = "/afs/cern.ch/work/a/abeschi/ttH_MassTop_Bkg_v3/";
         TString DataFold = "/afs/cern.ch/work/a/abeschi/ttH_MassTop_Data_v2/";
-        TString CSFold = "/afs/cern.ch/work/a/abeschi/ttH_MassTop_CS_v1/";
+        TString CSFold = "/afs/cern.ch/work/a/abeschi/ttH_CS_v1/";
         TString names[9] = {"ttH", "ggH", "VBF", "VH", "bbH", "tHq", "tHW", "Data", "Control Sample"};
 
 
@@ -369,6 +369,7 @@ int main(int argc, char *argv[])
 	}
         
 	
+
         std::vector<float> effectiveSigma_CutBased = FindSmallestInterval(Signal_histo_CutBased);
         Signal_histo_CutBased -> Rebin(8);      
         TF1* bkgFunc_CutBased = FitBkg(Bkg_histo_CutBased);
@@ -398,8 +399,8 @@ int main(int argc, char *argv[])
 	TString name = ("NewSelections" + to_string(ProgressiveNumber)).c_str();
 
         packageResults(Signal_histo_CutBased, Bkg_histo_CutBased, Bkg_histo_CutBased, bkgFunc_CutBased, effectiveSigma_CutBased[2], effectiveSigma_CutBased[3], thresholds, passCutBasedSelection, lumiFactor, "2016CutBased");
-        packageResults(Signal_histo_MVA, Bkg_histo_MVA, Bkg_histo_MVA, bkgFunc_MVA, effectiveSigma_MVA[2], effectiveSigma_MVA[3], thresholds, passMVASelection, lumiFactor, "2016MVA");
-        packageResults(Signal_histo_New, Bkg_histo_New, Bkg_histo_New, bkgFunc_New, effectiveSigma_New[2], effectiveSigma_New[3], thresholds, passNewSelection, lumiFactor, name);
+        packageResults(Signal_histo_MVA, Bkg_histo_MVA, CS_histo_MVA, bkgFunc_MVA, effectiveSigma_MVA[2], effectiveSigma_MVA[3], thresholds, passMVASelection, lumiFactor, "2016MVA");
+        packageResults(Signal_histo_New, Bkg_histo_New, CS_histo_New, bkgFunc_New, effectiveSigma_New[2], effectiveSigma_New[3], thresholds, passNewSelection, lumiFactor, name);
 
 
 

@@ -65,6 +65,7 @@ namespace flashgg {
         double tthHadMVAThreshold_;
         //---thresholds---
         bool isControlSample_;
+        bool isControlSample2_;
         //---photons
         double MVAThreshold_;
         double MVATTHHMVAThreshold_;
@@ -152,6 +153,7 @@ namespace flashgg {
         pTVToken_ = consumes<float>( HTXSps.getParameter<InputTag>("pTV") );
 
         isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
+        isControlSample2_ = iConfig.getParameter<bool>( "isControlSample2");
         MVAThreshold_ = iConfig.getParameter<double>( "MVAThreshold");
         MVATTHHMVAThreshold_ = iConfig.getParameter<double>( "MVATTHHMVAThreshold");
         PhoMVAThreshold_ = iConfig.getParameter<double>( "PhoMVAThreshold");
@@ -351,14 +353,23 @@ namespace flashgg {
             idmva2_ = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
 
             bool passPhotonIdSelection = 0;
-            if(isControlSample_)
+
+
+           if(isControlSample_)
             {
                 if((idmva1_ > PhoMVAThreshold_ && idmva2_ <= PhoMVAThreshold_ ) || (idmva1_ <= PhoMVAThreshold_ && idmva2_ > PhoMVAThreshold_ )) passPhotonIdSelection = 1;
             }
 
-            else
-            {
-                if( idmva1_ > PhoMVAThreshold_ && idmva2_ > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+           else
+           {    if(isControlSample2_)
+                {
+                    if(idmva1_ <= PhoMVAThreshold_ && idmva2_ <= PhoMVAThreshold_) passPhotonIdSelection = 1;
+                }
+
+                else
+                {
+                    if( idmva1_ > PhoMVAThreshold_ && idmva2_ > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+                }
             }
 
             if(!passPhotonIdSelection) continue;

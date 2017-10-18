@@ -105,13 +105,13 @@ process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHHadronicTag.jetsNumberThreshold = cms.int32(2)
 process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.int32(0)
 process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.int32(0)
-process.flashggTTHHadronicTag.isControlSample =cms.bool(True)
+process.flashggTTHHadronicTag.isControlSample2 =cms.bool(True)
 
 process.flashggTTHLeptonicTag.jetPtThreshold  = cms.double(20.)
 process.flashggTTHLeptonicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHLeptonicTag.jetsNumberThreshold = cms.double(1)
 process.flashggTTHLeptonicTag.bjetsNumberThreshold = cms.double(0)
-process.flashggTTHLeptonicTag.isControlSample =cms.bool(True)
+process.flashggTTHLeptonicTag.isControlSample2 =cms.bool(True)
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -209,3 +209,4 @@ process.p1 = cms.Path(process.dataRequirements*
 
 
 print process.p1
+

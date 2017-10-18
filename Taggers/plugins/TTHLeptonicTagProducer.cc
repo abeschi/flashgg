@@ -67,7 +67,8 @@ namespace flashgg {
 
         //Thresholds
         bool isControlSample_;
-
+        bool isControlSample2_;
+ 
         double leptonPtThreshold_;
         double muonEtaThreshold_;
         double leadPhoOverMassThreshold_;
@@ -125,6 +126,7 @@ namespace flashgg {
     {
 
         isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
+        isControlSample2_ = iConfig.getParameter<bool>( "isControlSample2");
 
         leptonPtThreshold_ = iConfig.getParameter<double>( "leptonPtThreshold");
         muonEtaThreshold_ = iConfig.getParameter<double>( "muonEtaThreshold");
@@ -289,9 +291,16 @@ namespace flashgg {
                 if((idmva1 > PhoMVAThreshold_ && idmva2 <= PhoMVAThreshold_ ) || (idmva1 <= PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ )) passPhotonIdSelection = 1;
             }
 
-            else
-            {
-                if( idmva1 > PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+           else
+           {    if(isControlSample2_)
+                {
+                    if(idmva1 <= PhoMVAThreshold_ && idmva2 <= PhoMVAThreshold_) passPhotonIdSelection = 1;
+                }
+
+                else
+                {
+                    if( idmva1 > PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+                }
             }
 
             if(!passPhotonIdSelection) continue;
