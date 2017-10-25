@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 
 		data = new TChain("TTHLeptonicDumper/trees/Data_13TeV_all");
 		data -> Add(DataFold + "output_DoubleEG_Run2016*.root");
-		controlSample = new TChain("TTHLeptonicDumper/trees/Data_13TeV_all");
-		controlSample -> Add(CSFold + "output_DoubleEG_Run2016*.root");
+		controlSample = new TChain("ControlSample");
+		controlSample -> Add(CSFold + "ReweightedCS.root");
 	}
 
         else
@@ -138,8 +138,8 @@ int main(int argc, char *argv[])
 
 		data = new TChain("TTHHadronicDumper/trees/Data_13TeV_all");
 		data -> Add(DataFold + "output_DoubleEG_Run2016*.root");
-		controlSample = new TChain("TTHHadronicDumper/trees/Data_13TeV_all");
-		controlSample -> Add(CSFold + "output_DoubleEG_Run2016*.root");
+		controlSample = new TChain("ControlSample");
+		controlSample -> Add(CSFold + "ReweightedCS.root");
 	}
 
 
@@ -177,6 +177,9 @@ int main(int argc, char *argv[])
         float MetPhi = 0.;
         float ttHMVA = 0.;
 
+
+	TH1F* Data_histo_Normalization = new TH1F("Data_histo_Normalization", "; m_{#gamma#gamma} (GeV); Counts/GeV", 80, 100, 180);
+	TH1F* CS_histo_Normalization = new TH1F("CS_histo_Normalization", "; m_{#gamma#gamma} (GeV); Counts/GeV", 80, 100, 180);
 
 
 	TH1F* Signal_histo_CutBased = new TH1F("Signal_histo_CutBased", "; m_{#gamma#gamma} (GeV); Counts/GeV", 640, 100, 180);
@@ -301,7 +304,12 @@ int main(int argc, char *argv[])
 			if(ev%10000==0) cout << "Processing tag " << names[n] << ", event " << ev << " out of " << nentries << "\r" << flush;
 
 			if(n==7 && (dipho_mass>115 && dipho_mass<135)) continue;
-			if(n==7 || n==8) weight=1./lumiFactor;
+			if(n==7 || n==8) weight = weight/lumiFactor;
+
+			if(n==7)
+				Data_histo_Normalization -> Fill(dipho_mass, weight*lumiFactor);
+			if(n==8)
+				CS_histo_Normalization -> Fill(dipho_mass, weight*lumiFactor);
 
 			if(dipho_leadPt<dipho_mass/3. || dipho_subleadPt<dipho_mass/4.) continue;
 
@@ -368,19 +376,26 @@ int main(int argc, char *argv[])
 		cout << "Processing tag " << names[n] << ", processed " << nentries << " events out of " << nentries << endl;
 	}
         
-	
+	//Reweight the CS
+	float DataIntegral = Data_histo_Normalization -> Integral();
+	float CSIntegral = CS_histo_Normalization -> Integral(CS_histo_Normalization ->FindBin(100), CS_histo_Normalization ->FindBin(115)) + CS_histo_Normalization -> Integral(CS_histo_Normalization ->FindBin(135), CS_histo_Normalization ->FindBin(180));
+
+	float scaleFactor = DataIntegral/CSIntegral;
+	CS_histo_CutBased -> Scale(scaleFactor);
+	CS_histo_MVA -> Scale(scaleFactor);
+	CS_histo_New -> Scale(scaleFactor);
 
         std::vector<float> effectiveSigma_CutBased = FindSmallestInterval(Signal_histo_CutBased);
         Signal_histo_CutBased -> Rebin(8);      
-        TF1* bkgFunc_CutBased = FitBkg(Bkg_histo_CutBased);
+        TF1* bkgFunc_CutBased = FitBkg(CS_histo_CutBased);
 
         std::vector<float> effectiveSigma_MVA = FindSmallestInterval(Signal_histo_MVA);
         Signal_histo_MVA -> Rebin(8);      
-        TF1* bkgFunc_MVA = FitBkg(Bkg_histo_MVA);
+        TF1* bkgFunc_MVA = FitBkg(CS_histo_MVA);
 
         std::vector<float> effectiveSigma_New = FindSmallestInterval(Signal_histo_New);
         Signal_histo_New -> Rebin(8);      
-        TF1* bkgFunc_New = FitBkg(Bkg_histo_New);
+        TF1* bkgFunc_New = FitBkg(CS_histo_New);
 
 
 	//Read the progressive index for the name
@@ -398,7 +413,7 @@ int main(int argc, char *argv[])
 
 	TString name = ("NewSelections" + to_string(ProgressiveNumber)).c_str();
 
-        packageResults(Signal_histo_CutBased, Bkg_histo_CutBased, Bkg_histo_CutBased, bkgFunc_CutBased, effectiveSigma_CutBased[2], effectiveSigma_CutBased[3], thresholds, passCutBasedSelection, lumiFactor, "2016CutBased");
+        packageResults(Signal_histo_CutBased, Bkg_histo_CutBased, CS_histo_CutBased, bkgFunc_CutBased, effectiveSigma_CutBased[2], effectiveSigma_CutBased[3], thresholds, passCutBasedSelection, lumiFactor, "2016CutBased");
         packageResults(Signal_histo_MVA, Bkg_histo_MVA, CS_histo_MVA, bkgFunc_MVA, effectiveSigma_MVA[2], effectiveSigma_MVA[3], thresholds, passMVASelection, lumiFactor, "2016MVA");
         packageResults(Signal_histo_New, Bkg_histo_New, CS_histo_New, bkgFunc_New, effectiveSigma_New[2], effectiveSigma_New[3], thresholds, passNewSelection, lumiFactor, name);
 

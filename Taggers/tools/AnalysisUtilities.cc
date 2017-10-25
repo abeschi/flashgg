@@ -159,7 +159,7 @@ std::vector<float> FindSmallestInterval(TH1F* histo, const float& fraction, cons
 TF1* FitBkg(TH1F* histo)
 {
 
-	TF1* fitFunc = new TF1("fitFunc", "expo", 100, 180);
+	TF1* fitFunc = new TF1("fitFunc", "expo", 110, 180);
 	fitFunc -> SetParameter(0, 5);
 	fitFunc -> SetParameter(1, -1);
 
@@ -241,7 +241,7 @@ void packageResults(TH1F* Signal, TH1F* Bkg, TH1F* Cs, TF1* fitFunc, float min, 
 	TLegend* leg = new TLegend(0.6, 0.7, 0.9, 0.9);
 	leg -> AddEntry(Signal, "ttH", "l");
 	leg -> AddEntry(Bkg, "Sidebands", "p");
-	leg -> AddEntry(Bkg, "Control sample", "f");
+	leg -> AddEntry(Bkg, "Control sample", "l");
 	leg -> AddEntry(l1, "1 #sigma^{eff}", "l");
 	leg -> Draw("SAME");
 
