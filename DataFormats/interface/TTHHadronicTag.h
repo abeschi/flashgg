@@ -32,6 +32,11 @@ namespace flashgg {
         float tthMvaRes() const {return tthMvaRes_;}
         float MetPt() const {return MetPt_;}
         float MetPhi() const {return MetPhi_;}
+        bool HasRecoLeptons() const {return hasRecoLeptons_;}
+        bool passPreselection() const {return passPreselection_;}
+        bool passHLT() const {return passHLT_;}
+        bool diphoIndex() const {return diphoIndex_;}
+
         void setNjet( int nb ){ Njet_ = nb; }
         void setNBLoose( int nb ) { Nbtagloose_ = nb; }
         void setNBMedium( int nb ) { Nbtagmedium_ = nb; }
@@ -45,6 +50,10 @@ namespace flashgg {
         void setMVAres(float val) {tthMvaRes_ = val;}
         void setMetPt(float metPt) {MetPt_ = metPt;}
         void setMetPhi(float metPhi) {MetPhi_ = metPhi;}
+        void setHasRecoLeptons(bool hasRecoLeptons) {hasRecoLeptons_ = hasRecoLeptons;}
+        void setPassPreselection(bool passPreselection) {passPreselection_ = passPreselection;}
+        void setPassHLT(bool passHLT) {passHLT_ = passHLT;}
+        void setDiphoIndex(bool diphoIndex) {diphoIndex_ = diphoIndex;}
 
         DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHHadronic; }
 
@@ -53,6 +62,7 @@ namespace flashgg {
         int Nbtagloose_;
         int Nbtagmedium_;
         int Nbtagtight_;
+        int diphoIndex_;
         std::vector<edm::Ptr<flashgg::Jet> > theJetVec_;
         std::vector<edm::Ptr<flashgg::Jet> > theBJetVec_;
         std::vector<float> theJetBTagValVec_;
@@ -64,6 +74,9 @@ namespace flashgg {
         float tthMvaRes_;
         float MetPt_;
         float MetPhi_;
+        bool hasRecoLeptons_;
+        bool passPreselection_;
+        bool passHLT_;
 
     };
 }

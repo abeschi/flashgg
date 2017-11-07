@@ -71,7 +71,10 @@
 <class name="edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> >"/>
 <class name="std::vector<pat::Muon>"/>
 <class name="edm::Ptr<reco::GenParticle>"/>
-<class name="flashgg::TTHHadronicTag" ClassVersion="15">
+<class name="flashgg::TTHHadronicTag" ClassVersion="18">
+ <version ClassVersion="18" checksum="1580467413"/>
+ <version ClassVersion="17" checksum="44656401"/>
+ <version ClassVersion="16" checksum="776512928"/>
  <version ClassVersion="15" checksum="1170306867"/>
  <version ClassVersion="14" checksum="3454620804"/>
  <version ClassVersion="13" checksum="3956710497"/>

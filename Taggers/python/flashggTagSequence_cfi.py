@@ -5,6 +5,7 @@ from flashgg.Taggers.flashggTags_cff import *
 from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
 from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
+from flashgg.Taggers.flashggTTHHadronicEfficiencyProducer import flashggTTHHadronicEfficiencyProducer
 
 flashggTagSequence = cms.Sequence(flashggUpdatedIdMVADiPhotons
                                   * flashggPreselectedDiPhotons
@@ -12,22 +13,7 @@ flashggTagSequence = cms.Sequence(flashggUpdatedIdMVADiPhotons
                                   * flashggUnpackedJets
                                   * flashggVBFMVA
                                   * flashggVBFDiPhoDiJetMVA
-                                  * ( flashggUntagged
-                                      #                                  *( flashggSigmaMoMpToMTag
-                                      + flashggVBFTag
-                                      + flashggTTHLeptonicTag
-                                     + flashggTTHHadronicTag                                      
-                                      #############old VH tags##############
-                                      #                  + flashggVHEtTag
-                                      #                  + flashggVHLooseTag
-                                      #                  + flashggVHTightTag
-                                      ###########updated VH tags############
-                                      + flashggVHMetTag
-                                      + flashggWHLeptonicTag
-                                      + flashggZHLeptonicTag
-                                      + flashggVHLeptonicLooseTag
-                                      + flashggVHHadronicTag
-					)
-                                 * flashggTagSorter
+                                  * flashggTTHHadronicEfficiencyProducer
+                                  * flashggTagSorter
                                   )
 

@@ -132,3 +132,32 @@ const float TTHHadronicTagTruth::SubleadingPhotonEnergy() const
 }
 
 
+
+const int TTHHadronicTagTruth::NGenJets() const
+{
+	int n = 0;
+	for(unsigned int i=0; i<GenJets_.size(); i++)
+	{
+		if(GenJets_[i].pt()>20)
+			n++;
+	}
+	
+	return n;
+}
+
+
+const int TTHHadronicTagTruth::NGenJetsEta2p4() const
+{
+	int n = 0;
+	for(unsigned int i=0; i<GenJets_.size(); i++)
+	{
+		if(GenJets_[i].pt()>20 && abs(GenJets_[i].eta())<2.4)
+			n++;
+	}
+	
+	return n;
+}
+
+
+
+

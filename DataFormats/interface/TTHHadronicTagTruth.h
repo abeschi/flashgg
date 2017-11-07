@@ -40,6 +40,9 @@ namespace flashgg {
         const float SubleadingPhotonPhi() const;
         const float SubleadingPhotonEnergy() const;
 
+        const int NGenJets() const;
+        const int NGenJetsEta2p4() const;
+
      private:
         std::vector<reco::GenJet> GenJets_;
         std::vector<reco::GenParticle> GenTop1_;
