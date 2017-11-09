@@ -102,65 +102,49 @@ if customize.processId == "Data":
     process.dataRequirements += process.eeBadScFilter
  
 #process.load("flashgg.MicroAOD.flashggMets_cfi")
-process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 
-## untagged tag dumper
-process.load("flashgg/Taggers/flashggTagSequence_cfi")
-process.flashggTagSequence.remove(process.flashggUpdatedIdMVADiPhotons) # Needs to be run before systematics
-
-process.flashggUntagged.Boundaries = cms.vdouble(-2)
-process.flashggUntagged.DiPhotonTag    = "flashggTTHHadronicEfficiencyProducer"
-process.flashggDiPhotonMVA.DiPhotonTag = "flashggPreselectedDiPhotons"
 
 
-#remove un-necessary tags
-process.flashggTagSequence.remove(process.flashggVBFTag)
-process.flashggTagSequence.remove(process.flashggTTHLeptonicTag)
-process.flashggTagSequence.remove(process.flashggTTHHadronicTag)
-process.flashggTagSequence.remove(process.flashggVHMetTag)
-process.flashggTagSequence.remove(process.flashggVHLeptonicLooseTag)
-process.flashggTagSequence.remove(process.flashggWHLeptonicTag)
-process.flashggTagSequence.remove(process.flashggZHLeptonicTag)
-process.flashggTagSequence.remove(process.flashggVHHadronicTag)
-#process.flashggTagSequence.remove(process.flashggTagSorter)
+
+#import flashgg.Taggers.ttHEfficiencyVariables as var
+#if customize.processId == "Data":
+#	variables = ''
+#else:
+#	variables = var.dipho_variables + var.hadronic_variables + var.truth_photon_variables + var.efficiency_variables
 
 
+
+
+process.load("flashgg.Taggers.TTHHadronicEfficiencyDumper_cfi") ##  import mumugammaDumper 
 import flashgg.Taggers.dumperConfigTools as cfgTools
-from flashgg.Taggers.tagsDumpers_cfi import createTagDumper
-process.diphotonDumper = createTagDumper("TTHHadronicTag")
-process.diphotonDumper.src = "flashggTTHHadronicEfficiencyProducer"
-process.diphotonDumper.maxCandPerEvent = 1 # take them all
-process.diphotonDumper.dumpTrees = True
-process.diphotonDumper.processId = 'tth'
-process.diphotonDumper.dumpWorkspace = False
-process.diphotonDumper.quietRooFit = True
-#process.diphotonDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL"
-process.diphotonDumper.nameTemplate ="tree_$SQRTS_$LABEL"
 
 
-import flashgg.Taggers.ttHTagVariables as var
-if customize.processId == "Data":
-	hadronic_variables = var.hadronic_variables + var.dipho_variables
-else:
-	hadronic_variables = var.hadronic_variables + var.dipho_variables + var.truth_photon_variables + var.efficiency_variables
+process.TTHHadronicEfficiencyDumper.dumpTrees = True
+process.TTHHadronicEfficiencyDumper.dumpWorkspace = False
+process.TTHHadronicEfficiencyDumper.quietRooFit = True
+
+import flashgg.Taggers.ttHEfficiencyVariables as var
+MyVars =  var.truth_photon_variables + var.efficiency_variables + var.dipho_variables + var.hadronic_variables
 
 
-#process.flashggSystTagMerger = cms.EDProducer("TagMerger",src=cms.VInputTag("flashggTTHHadronicEfficiencyProducer"))
+# split tree, histogram and datasets by process
+process.TTHHadronicEfficiencyDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
-
-## interestng categories 
-cfgTools.addCategories(process.diphotonDumper,
+cfgTools.addCategories(process.TTHHadronicEfficiencyDumper,
                        ## categories definition
                        ## cuts are applied in cascade. Events getting to these categories have already failed the "Reject" selection
-                       [
-                        ("All","1",0)
-                       ],
+                       [("all","1>0",0),
+                        ],
                        ## variables to be dumped in trees/datasets. Same variables for all categories
                        ## if different variables wanted for different categories, can add categorie one by one with cfgTools.addCategory
-                       variables=hadronic_variables,
+                       variables = MyVars,
+                       ## histograms to be plotted. 
+                       ## the variables need to be defined first
                        histograms=[]
                        )
+
+#process.flashggTagSequence.remove(flashggUpdatedIdMVADiPhotons)
 
 
 process.p1 = cms.Path(process.dataRequirements*
@@ -169,9 +153,8 @@ process.p1 = cms.Path(process.dataRequirements*
 		     process.flashggMetSystematics*
                      process.flashggMuonSystematics*process.flashggElectronSystematics*
                      (process.flashggUnpackedJets*process.jetSystematicsSequence)*
-                     (process.flashggTagSequence*process.systematicsTagSequences)*
-                     process.flashggSystTagMerger*
-                     process.diphotonDumper)
+                     process.flashggTagSequence*
+                     process.TTHHadronicEfficiencyDumper)
 
 
 #printSystematicInfo(process)

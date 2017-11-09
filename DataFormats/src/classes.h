@@ -37,6 +37,7 @@
 #include "flashgg/DataFormats/interface/TagTruthBase.h"
 #include "flashgg/DataFormats/interface/VBFTagTruth.h"
 #include "flashgg/DataFormats/interface/TTHHadronicTagTruth.h"
+#include "flashgg/DataFormats/interface/TTHHadronicEfficiency.h"
 #include "flashgg/DataFormats/interface/VHTagTruth.h" //mplaner
 #include "flashgg/DataFormats/interface/WeightedObject.h"
 #include "flashgg/DataFormats/interface/PDFWeightObject.h"
@@ -209,6 +210,10 @@ namespace  {
         flashgg::TTHHadronicTag tthh;
         std::vector<flashgg::TTHHadronicTag> vec_tthh;
         edm::Wrapper<std::vector<flashgg::TTHHadronicTag> > wrp_vec_tthh;
+
+       flashgg::TTHHadronicEfficiency tthEff;
+        std::vector<flashgg::TTHHadronicEfficiency> vec_tthEff;
+        edm::Wrapper<std::vector<flashgg::TTHHadronicEfficiency> > wrp_vec_tthEff;
 
         std::vector<edm::Ptr<flashgg::Jet> > vect_ptr_jet;
 

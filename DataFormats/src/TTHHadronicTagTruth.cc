@@ -159,5 +159,3 @@ const int TTHHadronicTagTruth::NGenJetsEta2p4() const
 }
 
 
-
-
