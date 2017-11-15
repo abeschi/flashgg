@@ -507,10 +507,10 @@ namespace flashgg {
                     for(int i=1; i<8; i++)
                     {
                         std::string pathName2 = pathName + to_string(i);
-      
+ 
                         if(trigNames.triggerName(j)==pathName2)
-                        {   passHLT = 1;
-                            break;
+                        {   passHLT =  triggerResults_->accept(j);
+                           break;
                         }
                     }
 
