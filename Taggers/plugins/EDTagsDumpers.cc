@@ -15,6 +15,8 @@ typedef edm::AnalyzerWrapper<flashgg::CutBasedWHLeptonicTagDumper> CutBasedWHLep
 typedef edm::AnalyzerWrapper<flashgg::CutBasedVHLeptonicLooseTagDumper> CutBasedVHLeptonicLooseTagDumper;
 typedef edm::AnalyzerWrapper<flashgg::CutBasedZHLeptonicTagDumper> CutBasedZHLeptonicTagDumper;
 typedef edm::AnalyzerWrapper<flashgg::CutBasedTTHHadronicEfficiencyDumper> CutBasedTTHHadronicEfficiencyDumper;
+typedef edm::AnalyzerWrapper<flashgg::CutBasedTTHSemiLeptonicEfficiencyDumper> CutBasedTTHSemiLeptonicEfficiencyDumper;
+typedef edm::AnalyzerWrapper<flashgg::CutBasedTTHFullyLeptonicEfficiencyDumper> CutBasedTTHFullyLeptonicEfficiencyDumper;
 
 DEFINE_FWK_MODULE( CutBasedUntaggedTagDumper );
 DEFINE_FWK_MODULE( CutBasedVBFTagDumper );
@@ -28,6 +30,8 @@ DEFINE_FWK_MODULE( CutBasedWHLeptonicTagDumper );
 DEFINE_FWK_MODULE( CutBasedVHLeptonicLooseTagDumper );
 DEFINE_FWK_MODULE( CutBasedZHLeptonicTagDumper );
 DEFINE_FWK_MODULE( CutBasedTTHHadronicEfficiencyDumper );
+DEFINE_FWK_MODULE( CutBasedTTHSemiLeptonicEfficiencyDumper );
+DEFINE_FWK_MODULE( CutBasedTTHFullyLeptonicEfficiencyDumper );
 
 // Local Variables:
 // mode:c++

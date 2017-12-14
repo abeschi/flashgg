@@ -34,6 +34,21 @@ namespace flashgg {
         void setMetPt(float metPt) {MetPt_ = (float)metPt;}
         void setMetPhi(float metPhi) {MetPhi_ = (float)metPhi;}
 
+        void setPassPreselection(bool passPreselection) {passPreselection_ = passPreselection;}
+        void setPassHLT(bool passHLT) {passHLT_ = passHLT;}
+        void setNjet( int nb ){ Njet_ = nb; }
+        void setNBLoose( int nb ) { Nbtagloose_ = nb; }
+        void setNBMedium( int nb ) { Nbtagmedium_ = nb; }
+        void setNBTight( int nb ) { Nbtagtight_ = nb; }
+
+
+        bool passPreselection() const {return passPreselection_;}
+        bool passHLT() const {return passHLT_;}
+        int nJet() const {return Njet_;}
+        int nBLoose() const {return Nbtagloose_;}
+        int nBMedium() const {return Nbtagmedium_;}
+        int nBTight() const {return Nbtagtight_;}
+
 
         DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHLeptonic; }
 
@@ -44,6 +59,14 @@ namespace flashgg {
         std::vector<edm::Ptr<Jet> > BJets_;
         float MetPt_;
         float MetPhi_;
+        bool passPreselection_;
+        bool passHLT_;
+        int Njet_;
+        int Nbtagloose_;
+        int Nbtagmedium_;
+        int Nbtagtight_;
+
+
 
     };
 }

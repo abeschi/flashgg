@@ -93,20 +93,6 @@ if customize.processId == "Data":
     process.dataRequirements += process.eeBadScFilter
  
 
-# ee bad supercluster filter on data
-process.load('RecoMET.METFilters.eeBadScFilter_cfi')
-process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERecHits") # Saved MicroAOD Collection (data only)
-process.dataRequirements = cms.Sequence()
-if customize.processId == "Data":
-    process.dataRequirements += process.hltHighLevel
-    process.dataRequirements += process.eeBadScFilter
- 
-#process.load("flashgg.MicroAOD.flashggMets_cfi")
-
-
-
-
-
 #import flashgg.Taggers.ttHEfficiencyVariables as var
 #if customize.processId == "Data":
 #	variables = ''
@@ -116,7 +102,7 @@ if customize.processId == "Data":
 
 
 
-process.load("flashgg.Taggers.TTHHadronicEfficiencyDumper_cfi") ##  import mumugammaDumper 
+process.load("flashgg.Taggers.TTHEfficiencyDumper_cfi")
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
 
@@ -125,22 +111,49 @@ process.TTHHadronicEfficiencyDumper.dumpWorkspace = False
 process.TTHHadronicEfficiencyDumper.quietRooFit = True
 
 import flashgg.Taggers.ttHEfficiencyVariables as var
-MyVars =  var.truth_photon_variables + var.efficiency_variables + var.dipho_variables + var.hadronic_variables
+MyVarsH =  var.truth_photon_variables + var.efficiency_hadronic_variables + var.dipho_variables + var.hadronic_variables
+MyVarsL =  var.truth_photon_variables + var.efficiency_leptonic_variables + var.dipho_variables + var.leptonic_variables
 
 
 # split tree, histogram and datasets by process
 process.TTHHadronicEfficiencyDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
 cfgTools.addCategories(process.TTHHadronicEfficiencyDumper,
-                       ## categories definition
-                       ## cuts are applied in cascade. Events getting to these categories have already failed the "Reject" selection
                        [("all","1>0",0),
                         ],
-                       ## variables to be dumped in trees/datasets. Same variables for all categories
-                       ## if different variables wanted for different categories, can add categorie one by one with cfgTools.addCategory
-                       variables = MyVars,
-                       ## histograms to be plotted. 
-                       ## the variables need to be defined first
+                        variables = MyVarsH,
+                       histograms=[]
+                       )
+
+process.TTHSemiLeptonicEfficiencyDumper.dumpTrees = True
+process.TTHSemiLeptonicEfficiencyDumper.dumpWorkspace = False
+process.TTHSemiLeptonicEfficiencyDumper.quietRooFit = True
+
+
+
+# split tree, histogram and datasets by process
+process.TTHSemiLeptonicEfficiencyDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+
+cfgTools.addCategories(process.TTHSemiLeptonicEfficiencyDumper,
+                       [("all","1>0",0),
+                        ],
+                        variables = MyVarsL,
+                       histograms=[]
+                       )
+
+
+process.TTHFullyLeptonicEfficiencyDumper.dumpTrees = True
+process.TTHFullyLeptonicEfficiencyDumper.dumpWorkspace = False
+process.TTHFullyLeptonicEfficiencyDumper.quietRooFit = True
+
+
+# split tree, histogram and datasets by process
+process.TTHFullyLeptonicEfficiencyDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+
+cfgTools.addCategories(process.TTHFullyLeptonicEfficiencyDumper,
+                       [("all","1>0",0),
+                        ],
+                        variables = MyVarsL,
                        histograms=[]
                        )
 
@@ -154,13 +167,15 @@ process.p1 = cms.Path(process.dataRequirements*
                      process.flashggMuonSystematics*process.flashggElectronSystematics*
                      (process.flashggUnpackedJets*process.jetSystematicsSequence)*
                      process.flashggTagSequence*
-                     process.TTHHadronicEfficiencyDumper)
-
+                     process.TTHHadronicEfficiencyDumper*
+                     process.TTHSemiLeptonicEfficiencyDumper*
+                     process.TTHFullyLeptonicEfficiencyDumper)
+ 
 
 #printSystematicInfo(process)
 
 ## set default options if needed
-customize.setDefault("maxEvents", -1)
+customize.setDefault("maxEvents", 100)
 customize.setDefault("targetLumi",1e+3)
 ## call the customization
 customize(process)

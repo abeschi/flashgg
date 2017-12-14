@@ -38,6 +38,7 @@
 #include "flashgg/DataFormats/interface/VBFTagTruth.h"
 #include "flashgg/DataFormats/interface/TTHHadronicTagTruth.h"
 #include "flashgg/DataFormats/interface/TTHHadronicEfficiency.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicEfficiency.h"
 #include "flashgg/DataFormats/interface/VHTagTruth.h" //mplaner
 #include "flashgg/DataFormats/interface/WeightedObject.h"
 #include "flashgg/DataFormats/interface/PDFWeightObject.h"
@@ -211,9 +212,13 @@ namespace  {
         std::vector<flashgg::TTHHadronicTag> vec_tthh;
         edm::Wrapper<std::vector<flashgg::TTHHadronicTag> > wrp_vec_tthh;
 
-       flashgg::TTHHadronicEfficiency tthEff;
-        std::vector<flashgg::TTHHadronicEfficiency> vec_tthEff;
-        edm::Wrapper<std::vector<flashgg::TTHHadronicEfficiency> > wrp_vec_tthEff;
+        flashgg::TTHHadronicEfficiency tthHadrEff;
+        std::vector<flashgg::TTHHadronicEfficiency> vec_tthHadrEff;
+        edm::Wrapper<std::vector<flashgg::TTHHadronicEfficiency> > wrp_vec_tthHadrEff;
+
+        flashgg::TTHLeptonicEfficiency tthLeptEff;
+        std::vector<flashgg::TTHLeptonicEfficiency> vec_tthLeptEff;
+        edm::Wrapper<std::vector<flashgg::TTHLeptonicEfficiency> > wrp_vec_tthLeptEff;
 
         std::vector<edm::Ptr<flashgg::Jet> > vect_ptr_jet;
 

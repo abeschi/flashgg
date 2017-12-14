@@ -5,7 +5,7 @@ from flashgg.Taggers.flashggTags_cff import *
 from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
 from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
-from flashgg.Taggers.flashggTTHHadronicEfficiencyProducer import flashggTTHHadronicEfficiencyProducer
+from flashgg.Taggers.flashggTTHEfficiencyProducer import flashggTTHHadronicEfficiencyProducer, flashggTTHSemiLeptonicEfficiencyProducer, flashggTTHFullyLeptonicEfficiencyProducer
 
 flashggTagSequence = cms.Sequence(flashggUpdatedIdMVADiPhotons
                                   * flashggPreselectedDiPhotons
@@ -14,5 +14,7 @@ flashggTagSequence = cms.Sequence(flashggUpdatedIdMVADiPhotons
                                   * flashggVBFMVA
                                   * flashggVBFDiPhoDiJetMVA
                                   * flashggTTHHadronicEfficiencyProducer
+                                  * flashggTTHSemiLeptonicEfficiencyProducer
+                                  * flashggTTHFullyLeptonicEfficiencyProducer
                                   )
 

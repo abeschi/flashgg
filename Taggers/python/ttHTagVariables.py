@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 dipho_variables=[
     "dipho_sumpt                     := ? diphoIndex!=-1 ? diPhoton.sumPt : -100",
     "dipho_mass                      := ? diphoIndex!=-1 ? diPhoton.mass : -100",
@@ -149,11 +142,49 @@ truth_hadronic_variables=[
 	"Top2_pdgId3             := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].pdgId() : -100",
     ]
 
+leptonic_variables=[
+	"mu_pt1             :=  ? muons.size()>0 ? muons[0].pt() : -100 ",
+	"mu_eta1            :=  ? muons.size()>0 ? muons[0].eta() : -100 ",
+	"mu_phi1            :=  ? muons.size()>0 ? muons[0].phi() : -100 ",
+	"mu_pt2             :=  ? muons.size()>1 ? muons[1].pt() : -100 ",
+	"mu_eta2            :=  ? muons.size()>1 ? muons[1].eta() : -100 ",
+	"mu_phi2            :=  ? muons.size()>1 ? muons[1].phi() : -100 ",
+	"ele_pt1            :=  ? electrons.size()>0 ? electrons[0].pt() : -100 ",
+	"ele_eta1           :=  ? electrons.size()>0 ? electrons[0].eta() : -100 ",
+	"ele_phi1           :=  ? electrons.size()>0 ? electrons[0].phi() : -100 ",
+	"ele_pt2            :=  ? electrons.size()>1 ? electrons[1].pt() : -100 ",
+	"ele_eta2           :=  ? electrons.size()>1 ? electrons[1].eta() : -100 ",
+	"ele_phi2           :=  ? electrons.size()>1 ? electrons[1].phi() : -100 ",
+	"jet_pt1            :=  ? jets.size()>0 ? jets[0].pt() : -100 ",
+	"jet_eta1           :=  ? jets.size()>0 ? jets[0].eta() : -100 ",
+	"jet_phi1           :=  ? jets.size()>0 ? jets[0].phi() : -100 ",
+	"jet_energy1        :=  ? jets.size()>0 ? jets[0].energy() : -100 ",
+	"jet_bdiscriminant1 :=  ? jets.size()>0 ? jets[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_pt2            :=  ? jets.size()>1 ? jets[1].pt() : -100 ",
+	"jet_eta2           :=  ? jets.size()>1 ? jets[1].eta() : -100 ",
+	"jet_phi2           :=  ? jets.size()>1 ? jets[1].phi() : -100 ",
+	"jet_energy2        :=  ? jets.size()>1 ? jets[1].energy() : -100 ",
+	"jet_bdiscriminant2 :=  ? jets.size()>1 ? jets[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_pt3            :=  ? jets.size()>2 ? jets[2].pt() : -100 ",
+	"jet_eta3           :=  ? jets.size()>2 ? jets[2].eta() : -100 ",
+	"jet_phi3           :=  ? jets.size()>2 ? jets[2].phi() : -100 ",
+	"jet_energy3        :=  ? jets.size()>2 ? jets[2].energy() : -100 ",
+	"jet_bdiscriminant3 :=  ? jets.size()>2 ? jets[2].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"jet_pt4            :=  ? jets.size()>3 ? jets[3].pt() : -100 ",
+	"jet_eta4           :=  ? jets.size()>3 ? jets[3].eta() : -100 ",
+	"jet_phi4           :=  ? jets.size()>3 ? jets[3].phi() : -100 ",
+	"jet_energy4        :=  ? jets.size()>3 ? jets[3].energy() : -100 ",
+	"jet_bdiscriminant4 :=  ? jets.size()>3 ? jets[3].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"jet_pt5            :=  ? jets.size()>4 ? jets[4].pt() : -100 ",
+	"jet_eta5           :=  ? jets.size()>4 ? jets[4].eta() : -100 ",
+	"jet_phi5           :=  ? jets.size()>4 ? jets[4].phi() : -100 ",
+	"jet_energy5        :=  ? jets.size()>4 ? jets[4].energy() : -100 ",
+	"jet_bdiscriminant5 :=  ? jets.size()>4 ? jets[4].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"MetPt              :=  MetPt ",
+	"MetPhi             :=  MetPhi "
+]
 
-
-
-
-efficiency_variables=[
+efficiency_hadronic_variables=[
         "GenJet_pt1            :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].pt : -100 ",
 	"GenJet_eta1           :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].eta : -100 ",
 	"GenJet_phi1           :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].phi : -100 ",
@@ -174,8 +205,52 @@ efficiency_variables=[
 	"NGenJetsEta2p4        :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().NGenJetsEta2p4 : 0 ",
 	"hasRecoLepton         :=  HasRecoLeptons",
 	"passHLT               :=  passHLT",
-	"passPreselection      :=  passPreselection"
+	"passPreselection      :=  passPreselection",
+	"diphotonSize          :=  NDiphotons"
    ]
+
+
+
+efficiency_leptonic_variables=[
+        "GenJet_pt1            :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].pt : -100 ",
+	"GenJet_eta1           :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].eta : -100 ",
+	"GenJet_phi1           :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].phi : -100 ",
+	"GenJet_energy1        :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().GenJets[0].energy : -100 ",
+        "GenJet_pt2            :=  ? tagTruth().GenJets.size() > 1 ? tagTruth().GenJets[1].pt : -100 ",
+	"GenJet_eta2           :=  ? tagTruth().GenJets.size() > 1 ? tagTruth().GenJets[1].eta : -100 ",
+	"GenJet_phi2           :=  ? tagTruth().GenJets.size() > 1 ? tagTruth().GenJets[1].phi : -100 ",
+	"GenJet_energy2        :=  ? tagTruth().GenJets.size() > 1 ? tagTruth().GenJets[1].energy : -100 ",
+        "GenJet_pt3            :=  ? tagTruth().GenJets.size() > 2 ? tagTruth().GenJets[2].pt : -100 ",
+	"GenJet_eta3           :=  ? tagTruth().GenJets.size() > 2 ? tagTruth().GenJets[2].eta : -100 ",
+	"GenJet_phi3           :=  ? tagTruth().GenJets.size() > 2 ? tagTruth().GenJets[2].phi : -100 ",
+	"GenJet_energy3        :=  ? tagTruth().GenJets.size() > 2 ? tagTruth().GenJets[2].energy : -100 ",
+        "GenJet_pt4            :=  ? tagTruth().GenJets.size() > 3 ? tagTruth().GenJets[3].pt : -100 ",
+	"GenJet_eta4           :=  ? tagTruth().GenJets.size() > 3 ? tagTruth().GenJets[3].eta : -100 ",
+	"GenJet_phi4           :=  ? tagTruth().GenJets.size() > 3 ? tagTruth().GenJets[3].phi : -100 ",
+	"GenJet_energy4        :=  ? tagTruth().GenJets.size() > 3 ? tagTruth().GenJets[3].energy : -100 ",
+	"NGenJets              :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().NGenJets : 0",
+	"NGenJetsEta2p4        :=  ? tagTruth().GenJets.size() > 0 ? tagTruth().NGenJetsEta2p4 : 0 ",
+	"passHLT               :=  passHLT",
+	"passPreselection      :=  passPreselection",
+	"diphotonSize          :=  NDiphotons",
+
+   ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -14,6 +14,7 @@
 #include "flashgg/DataFormats/interface/WHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/ZHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/TTHHadronicEfficiency.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicEfficiency.h"
 
 #include "flashgg/Taggers/interface/CollectionDumper.h"
 
@@ -57,6 +58,12 @@ namespace flashgg {
    typedef CollectionDumper<std::vector<TTHHadronicEfficiency>,
             TTHHadronicEfficiency,
             CutBasedClassifier<TTHHadronicEfficiency> > CutBasedTTHHadronicEfficiencyDumper;
+   typedef CollectionDumper<std::vector<TTHLeptonicEfficiency>,
+            TTHLeptonicEfficiency,
+            CutBasedClassifier<TTHLeptonicEfficiency> > CutBasedTTHSemiLeptonicEfficiencyDumper;
+   typedef CollectionDumper<std::vector<TTHLeptonicEfficiency>,
+            TTHLeptonicEfficiency,
+            CutBasedClassifier<TTHLeptonicEfficiency> > CutBasedTTHFullyLeptonicEfficiencyDumper;
 }
 
 #endif

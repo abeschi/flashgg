@@ -9,8 +9,8 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "flashgg/DataFormats/interface/Jet.h"
 #include "flashgg/DataFormats/interface/DiPhotonCandidate.h"
-#include "flashgg/DataFormats/interface/TTHHadronicTag.h"
-#include "flashgg/DataFormats/interface/TTHHadronicEfficiency.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicEfficiency.h"
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h"
 #include "flashgg/DataFormats/interface/Electron.h"
 #include "flashgg/DataFormats/interface/Muon.h"
@@ -35,14 +35,14 @@ using namespace edm;
 
 namespace flashgg {
 
-    class TTHHadronicEfficiencyProducer : public EDProducer
+    class TTHSemiLeptonicEfficiencyProducer : public EDProducer
     {
 
     public:
         typedef math::XYZPoint Point;
         typedef math::Error<3>::type Error;
 
-        TTHHadronicEfficiencyProducer( const ParameterSet & );
+        TTHSemiLeptonicEfficiencyProducer( const ParameterSet & );
     private:
         void produce( Event &, const EventSetup & ) override;
 
@@ -64,7 +64,6 @@ namespace flashgg {
 
 
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
-        bool useTTHHadronicMVA_;
         double matchingGenPhotons_;
         //---thresholds---
         //---jets
@@ -85,27 +84,9 @@ namespace flashgg {
         bool useElectronMVARecipe_;
         bool useElectronLooseID_;
 
-        unique_ptr<TMVA::Reader>TThMva_;
-        FileInPath tthMVAweightfile_;
-        string _MVAMethod;
-
-        int jetcount_;
-        float nJets_;
-        int njets_btagloose_;
-        int njets_btagmedium_;
-        int njets_btagtight_;
-        double idmva1_;
-        double idmva2_;
-        float leadJetPt_;
-        float subLeadJetPt_;
-        float sumJetPt_;
-        float maxBTagVal_;
-        float secondMaxBTagVal_;
-        float tthMvaVal_;
-
     };
 
-    TTHHadronicEfficiencyProducer::TTHHadronicEfficiencyProducer( const ParameterSet &iConfig ) :
+    TTHSemiLeptonicEfficiencyProducer::TTHSemiLeptonicEfficiencyProducer( const ParameterSet &iConfig ) :
         diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
         inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         electronToken_( consumes<View<flashgg::Electron> >( iConfig.getParameter<InputTag>( "ElectronTag" ) ) ),
@@ -117,8 +98,7 @@ namespace flashgg {
         genParticleToken_( consumes<View<reco::GenParticle> >( iConfig.getParameter<InputTag> ( "GenParticleTag" ) ) ),
         genJetToken_( consumes<View<reco::GenJet> >( iConfig.getParameter<InputTag> ( "GenJetTag" ) ) ),
         rhoTag_( consumes<double>( iConfig.getParameter<InputTag>( "rhoTag" ) ) ),
-        systLabel_( iConfig.getParameter<string> ( "SystLabel" ) ),
-         _MVAMethod( iConfig.getParameter<string> ( "MVAMethod" ) )
+        systLabel_( iConfig.getParameter<string> ( "SystLabel" ) )
     {
         ParameterSet HTXSps = iConfig.getParameterSet( "HTXSTags" );
         stage0catToken_ = consumes<int>( HTXSps.getParameter<InputTag>("stage0cat") );
@@ -137,8 +117,6 @@ namespace flashgg {
         dRJetPhoSubleadCut_ = iConfig.getParameter<double>( "dRJetPhoSubleadCut");
         bDiscriminator_ = iConfig.getParameter<vector<double > >( "bDiscriminator");
         bTag_ = iConfig.getParameter<string> ( "bTag");
-
-        useTTHHadronicMVA_ = iConfig.getParameter<bool>( "useTTHHadronicMVA");
  
         muPFIsoSumRelThreshold_ = iConfig.getParameter<double>( "muPFIsoSumRelThreshold");
         muMiniIsoSumRelThreshold_ = iConfig.getParameter<double>( "muMiniIsoSumRelThreshold");
@@ -147,36 +125,15 @@ namespace flashgg {
         useElectronMVARecipe_=iConfig.getParameter<bool>("useElectronMVARecipe");
         useElectronLooseID_=iConfig.getParameter<bool>("useElectronLooseID");
         
-
-        tthMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "tthMVAweightfile" ); 
-
-        nJets_ = 0;
-        leadJetPt_ = 0.;
-        subLeadJetPt_ = 0.;
-        sumJetPt_ = 0.;
-        maxBTagVal_ = -999.;
-        secondMaxBTagVal_ = -999.;
-
-        if (_MVAMethod != ""){
-            TThMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
-            TThMva_->AddVariable( "nJets", &nJets_);
-            TThMva_->AddVariable( "maxBTagVal",&maxBTagVal_);
-            TThMva_->AddVariable( "secondMaxBTagVal", &secondMaxBTagVal_);
-            TThMva_->AddVariable( "leadJetPt", &leadJetPt_);
-        
-            TThMva_->BookMVA( _MVAMethod.c_str() , tthMVAweightfile_.fullPath() );
-        
-        }       
-
         for (unsigned i = 0 ; i < inputTagJets_.size() ; i++) {
             auto token = consumes<View<flashgg::Jet> >(inputTagJets_[i]);
             tokenJets_.push_back(token);
         }
 
-        produces<vector<TTHHadronicEfficiency> >();
+        produces<vector<TTHLeptonicEfficiency> >();
     }
 
-    void TTHHadronicEfficiencyProducer::produce( Event &evt, const EventSetup & )
+    void TTHSemiLeptonicEfficiencyProducer::produce( Event &evt, const EventSetup & )
     {
 
         Handle<int> stage0cat, stage1cat, njets;
@@ -220,10 +177,9 @@ namespace flashgg {
         Handle<View<reco::GenParticle> > genParticles;
         Handle<View<reco::GenJet> > genJets;
 
-        std::auto_ptr<vector<TTHHadronicEfficiency> > ttheff  ( new vector<TTHHadronicEfficiency> );
+        std::auto_ptr<vector<TTHLeptonicEfficiency> > ttheff  ( new vector<TTHLeptonicEfficiency> );
 
         Point higgsVtx;
-        bool isLeptonic = 0;
 
         if( ! evt.isRealData() )
         {
@@ -248,6 +204,7 @@ namespace flashgg {
 
             vector<reco::GenJet> genJetsVector;
             vector<reco::GenParticle> genPhotons;
+            vector<reco::GenParticle> genLeptons;
 
             for(unsigned int i=0; i< genJets->size(); i++)
             {
@@ -272,9 +229,10 @@ namespace flashgg {
                                     Wboson = Wboson->daughter(0);
                                 for(unsigned int WDaugthers = 0; WDaugthers<Wboson->numberOfDaughters(); WDaugthers++)
                                 {
-                                    if( abs((Wboson->daughter(WDaugthers))->pdgId())>6) isLeptonic = 1;
+                                    if( abs((Wboson->daughter(WDaugthers))->pdgId())==11 || abs((Wboson->daughter(WDaugthers))->pdgId())==13 || abs((Wboson->daughter(WDaugthers))->pdgId())==15 )
+                                       genLeptons.push_back(*((reco::GenParticle*)(Wboson->daughter(WDaugthers))));
                                 }
-                             }      
+                            }      
                         }
                     }
                     SavedTop1 = 1;
@@ -294,10 +252,11 @@ namespace flashgg {
                                     Wboson = Wboson->daughter(0);
                                 for(unsigned int WDaugthers = 0; WDaugthers<Wboson->numberOfDaughters(); WDaugthers++)
                                 {
-                                    if( abs((Wboson->daughter(WDaugthers))->pdgId())>6) isLeptonic = 1;
+                                   if( abs((Wboson->daughter(WDaugthers))->pdgId())==11 || abs((Wboson->daughter(WDaugthers))->pdgId())==13 || abs((Wboson->daughter(WDaugthers))->pdgId())==15 )
+                                       genLeptons.push_back(*((reco::GenParticle*)(Wboson->daughter(WDaugthers))));
                                 }
-                             }
-                         }
+                            }
+                        }
                     }
                     SavedTop2 = 1;
                 }
@@ -328,8 +287,6 @@ namespace flashgg {
                 reco::Vertex vtx_tmp(p, err);
                 vtx0 = vtx_tmp;
             }
-            
-            bool hasRecoLeptons = 0;
 
             std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
             if( !useStdLeptonID_)
@@ -344,24 +301,11 @@ namespace flashgg {
             std::vector<edm::Ptr<Electron> > goodElectrons ;
             goodElectrons = selectStdAllElectrons(theElectrons->ptrs(), vertices->ptrs(), leptonPtThreshold_, electronEtaThresholds_, useElectronMVARecipe_, useElectronLooseID_, rho_, evt.isRealData() );
 
-            if( goodElectrons.size() > 0 ||  goodMuons.size() > 0 )  hasRecoLeptons = 1;
-
-            jetcount_ = 0;
-            nJets_ = 0;
-            njets_btagloose_ = 0;
-            njets_btagmedium_ = 0;
-            njets_btagtight_ = 0;
-            idmva1_ = -999.;
-            idmva2_ = -999.;
-            leadJetPt_ = 0.;
-            subLeadJetPt_ = 0.;
-            sumJetPt_ = 0.;
-            maxBTagVal_ = -999.;
-            secondMaxBTagVal_ = -999.;
-            tthMvaVal_ = -999.;        
-
-            std::vector<flashgg::TTHHadronicTag> ttHtags;
+            int nEle = (int)goodElectrons.size();
+            int nMu = (int)goodMuons.size();
             int diphoSize = (int)diPhotons->size();
+
+            std::vector<flashgg::TTHLeptonicTag> ttHtags;
 
             for( unsigned int diphoIndex = 0; diphoIndex < (double)diPhotons->size(); diphoIndex++ )
             {
@@ -370,19 +314,15 @@ namespace flashgg {
                 bool passPreselection = 0;
                 bool passHLT = 0;          
                 
+                int jetcount_ = 0;
+                int njets_btagloose_ = 0;
+                int njets_btagmedium_ = 0;
+                int njets_btagtight_ = 0;
 
-                std::vector<edm::Ptr<flashgg::Jet> > JetVect;
-                JetVect.clear();
-                std::vector<edm::Ptr<flashgg::Jet> > BJetVect;
-                BJetVect.clear();
-                std::vector<edm::Ptr<flashgg::Jet> > BJetTTHHMVAVect;
-                BJetTTHHMVAVect.clear();
-                std::vector<float> JetBTagVal;
-                JetBTagVal.clear();
+                std::vector<edm::Ptr<Jet> > JetVect;
+                std::vector<edm::Ptr<Jet> > BJetVect;
 
                 edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( diphoIndex );
-
-
 
                 //require matching with genPhotons
                 float dr11 = deltaR( dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi(), genPhotons[0].eta(), genPhotons[0].phi() );
@@ -405,89 +345,54 @@ namespace flashgg {
                     if( thejet->pt() < jetPtThreshold_ ) { continue; }
 
                     jetcount_++;
-                    nJets_ = jetcount_;
                     JetVect.push_back( thejet );
-                        
-                    float jetPt = thejet->pt();
-                    if(jetPt > leadJetPt_)
-                    {
-                        if(leadJetPt_ > subLeadJetPt_) { subLeadJetPt_ = leadJetPt_; }
-                        leadJetPt_ = jetPt;
-                    }
-                    else if(jetPt > subLeadJetPt_)
-                    {
-                            subLeadJetPt_ = jetPt;
-                    }
-                    sumJetPt_ += jetPt;
-                        
-                    float bDiscriminatorValue = -2.;
-                    bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                                                
+                    float bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
                     
-                    if(bDiscriminatorValue > maxBTagVal_)
-                    {
-                        BJetTTHHMVAVect.insert( BJetTTHHMVAVect.begin(), thejet );
-                        if(BJetTTHHMVAVect.size() >= 3){ BJetTTHHMVAVect.pop_back(); }
-                        if(maxBTagVal_ > secondMaxBTagVal_) { secondMaxBTagVal_ = maxBTagVal_; }
-                        maxBTagVal_ = bDiscriminatorValue;
-
-                    } 
-                    else if(bDiscriminatorValue > secondMaxBTagVal_)
-                    {
-                        secondMaxBTagVal_ = bDiscriminatorValue;
-                        if(BJetTTHHMVAVect.size() >= 2){BJetTTHHMVAVect.pop_back();} 
-                        BJetTTHHMVAVect.push_back( thejet );
-                    }
-                        
-                    JetBTagVal.push_back( bDiscriminatorValue );
                     if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                     if( bDiscriminatorValue > bDiscriminator_[1] )
                     {
                         njets_btagmedium_++;
-                        //JetVect.pop_back();
                         BJetVect.push_back( thejet );
                     }
                     if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
-
-
-                }
-                tthMvaVal_ = TThMva_->EvaluateMVA( _MVAMethod.c_str() );
-         
-                if(useTTHHadronicMVA_)
-                {
-                    BJetVect.clear();
-                    BJetVect = BJetTTHHMVAVect;
                 }
 
-                TTHHadronicTag tthhtags_obj( dipho, mvares, JetVect, BJetVect );
+                TTHLeptonicTag tthhtags_obj( dipho, mvares);
+
                 tthhtags_obj.setNjet( jetcount_ );
                 tthhtags_obj.setNBLoose( njets_btagloose_ );
                 tthhtags_obj.setNBMedium( njets_btagmedium_ );
                 tthhtags_obj.setNBTight( njets_btagtight_ );
-                tthhtags_obj.setDiPhotonIndex( diphoIndex );
-                tthhtags_obj.setLeadJetPt( leadJetPt_ );
-                tthhtags_obj.setSubLeadJetPt( subLeadJetPt_ );
-                tthhtags_obj.setSumJetPt( sumJetPt_ );
-                tthhtags_obj.setMaxBTagVal( maxBTagVal_ );
-                tthhtags_obj.setSecondMaxBTagVal( secondMaxBTagVal_ );
                 tthhtags_obj.setSystLabel( systLabel_ );
-                tthhtags_obj.setMVAres(tthMvaVal_);
-                tthhtags_obj.setHasRecoLeptons(hasRecoLeptons);
-                tthhtags_obj.setDiphoIndex(diphoIndex);
+                tthhtags_obj.setJets( JetVect );
+                tthhtags_obj.setBJets( BJetVect );
+                tthhtags_obj.setMuons( goodMuons );
+                tthhtags_obj.setElectrons( goodElectrons );
 
-                if(!useTTHHadronicMVA_)
+                for( unsigned num = 0; num < JetVect.size(); num++ )
+                    tthhtags_obj.includeWeightsByLabel( *JetVect[num] , "JetBTagCutWeight");
+
+                if( nMu>0 && nEle>0)
                 {
-                    for( unsigned num = 0; num < JetVect.size(); num++ )
+                    if( goodMuons.at(0)->pt() > goodElectrons.at(0)->pt() ) 
                     {
-                        tthhtags_obj.includeWeightsByLabel( *JetVect[num] , "JetBTagCutWeight");
+                        tthhtags_obj.includeWeightsByLabel( *goodMuons.at(0), "MuonMiniIsoWeight");
+                    } 
+                    else
+                    {
+                        tthhtags_obj.includeWeights( *goodElectrons.at(0) );
                     }
-                }
-                else
+                } 
+                else if( nMu>0 && nEle==0)
                 {
-                    for( unsigned num = 0; num < JetVect.size(); num++ )
-                    {
-                        tthhtags_obj.includeWeightsByLabel( *JetVect[num] , "JetBTagReshapeWeight");
-                    }                    
+                    tthhtags_obj.includeWeightsByLabel( *goodMuons.at(0), "MuonMiniIsoWeight" );
                 }
+                else if( nMu==0 && nEle>0)
+                {
+                    tthhtags_obj.includeWeights( *goodElectrons.at(0) );
+                }            
+
 
                 if( theMet_ -> size() != 1 )
                 std::cout << "WARNING number of MET is not equal to 1" << std::endl;
@@ -496,7 +401,6 @@ namespace flashgg {
                 tthhtags_obj.setMetPhi(Met->phi());
 
                 tthhtags_obj.includeWeights( *dipho );
-
 
                 const edm::TriggerNames& trigNames = evt.triggerNames(*triggerResults_);   
                 std::string pathName="HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v";
@@ -523,15 +427,14 @@ namespace flashgg {
                 ttHtags.push_back(tthhtags_obj);
             }
 
-            if(!isLeptonic)
+            if(genLeptons.size()==1)
             {   
-                TTHHadronicEfficiency tthhe(genJetsVector, genPhotons, ttHtags);
+                TTHLeptonicEfficiency tthhe(genJetsVector, genPhotons, genLeptons, ttHtags);
                 tthhe.setHiggsVertex(higgsVtx);
                 tthhe.setVertex0(vtx0);
                 tthhe.setNDiphotons(diphoSize);
                 ttheff->push_back( tthhe );
              }
-
         }
 
         evt.put( ttheff );
@@ -541,8 +444,9 @@ namespace flashgg {
 
     }
 }
-typedef flashgg::TTHHadronicEfficiencyProducer FlashggTTHHadronicEfficiencyProducer;
-DEFINE_FWK_MODULE( FlashggTTHHadronicEfficiencyProducer );
+typedef flashgg::TTHSemiLeptonicEfficiencyProducer FlashggTTHSemiLeptonicEfficiencyProducer;
+DEFINE_FWK_MODULE( FlashggTTHSemiLeptonicEfficiencyProducer );
+
 
 // Local Variables:
 // mode:c++

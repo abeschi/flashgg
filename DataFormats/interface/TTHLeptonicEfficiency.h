@@ -1,8 +1,8 @@
-#ifndef FLASHgg_TTHHadronicEfficiency_h
-#define FLASHgg_TTHHadronicEfficiency_h
+#ifndef FLASHgg_TTHLeptonicEfficiency_h
+#define FLASHgg_TTHLeptonicEfficiency_h
 
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
-#include "flashgg/DataFormats/interface/TTHHadronicTag.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -10,20 +10,21 @@
 
 namespace flashgg {
 
-    class TTHHadronicEfficiency: public DiPhotonTagBase
+    class TTHLeptonicEfficiency: public DiPhotonTagBase
     {
     public:
 
        typedef math::XYZPoint Point;
 
-        TTHHadronicEfficiency();
-        TTHHadronicEfficiency(std::vector<reco::GenJet>, std::vector<reco::GenParticle>, std::vector<flashgg::TTHHadronicTag> );
-        TTHHadronicEfficiency *clone() const override { return ( new TTHHadronicEfficiency( *this ) ); }
-        ~TTHHadronicEfficiency();
+        TTHLeptonicEfficiency();
+        TTHLeptonicEfficiency(std::vector<reco::GenJet>, std::vector<reco::GenParticle>, std::vector<reco::GenParticle>, std::vector<flashgg::TTHLeptonicTag> );
+        TTHLeptonicEfficiency *clone() const override { return ( new TTHLeptonicEfficiency( *this ) ); }
+        ~TTHLeptonicEfficiency();
 
-	const std::vector<flashgg::TTHHadronicTag> GetTTH() const {return ttH_;} 
+	const std::vector<flashgg::TTHLeptonicTag> GetTTH() const {return ttH_;} 
 
         const std::vector<reco::GenJet> GenJets() const {return GenJets_;}
+        const std::vector<reco::GenParticle> GenLeptons() const {return GenLeptons_;}
 
         const float LeadingPhotonPt() const;
         const float LeadingPhotonEta() const;
@@ -51,12 +52,14 @@ namespace flashgg {
 
 
     private:
-        std::vector<flashgg::TTHHadronicTag> ttH_;
+        std::vector<flashgg::TTHLeptonicTag> ttH_;
         std::vector<reco::GenJet> GenJets_;
         std::vector<reco::GenParticle> Photons_;
+        std::vector<reco::GenParticle> GenLeptons_;
         Point higgsVtx_;
         reco::Vertex vertex0_;
 	int nDiphotons_;
+
 
     };
 }
