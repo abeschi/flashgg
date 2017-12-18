@@ -225,14 +225,69 @@ efficiency_leptonic_variables=[
 
 
 
+leptonic_variables_all=[
+	"fggmu_pt1                 :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].pt() : -100 ",
+	"fggmu_eta1                :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].eta() : -100 ",
+	"fggmu_phi1                :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].phi() : -100 ",
+	"fggmu_isLoose1            :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].isLooseMuon() : -100 ",
+	"fggmu_isMedium1           :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].isMediumMuon() : -100 ",
+#	"fggmu_innerTrackdz1       :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].innerTrack().vz() : -100 ",
+	"fggmu_MiniIso1            :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].fggMiniIsoSumRel() : -100 ",
+	"fggmu_trackIso1           :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].isolationR03().sumPt/Muons[0].pt() : -100 ",
+	"fggmu_sumChargedHadronPt1 :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].pfIsolationR04().sumChargedHadronPt() : -100 ",
+	"fggmu_sumNeutralHadronEt1 :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].pfIsolationR04().sumNeutralHadronEt() : -100 ",
+	"fggmu_sumPhotonEt1        :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].pfIsolationR04().sumPhotonEt() : -100 ",
+	"fggmu_sumPUPt1            :=  ? GetTTH.size()>0 && Muons.size()>0 ? Muons[0].pfIsolationR04().sumPUPt() : -100 ",
+	"fggmu_pt2                 :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].pt() : -100 ",
+	"fggmu_eta2                :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].eta() : -100 ",
+	"fggmu_phi2                :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].phi() : -100 ",
+	"fggmu_isLoose2            :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].isLooseMuon() : -100 ",
+	"fggmu_isMedium2           :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].isMediumMuon() : -100 ",
+#	"fggmu_innerTrackdz2       :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].innerTrack().vz() : -100 ",
+	"fggmu_MiniIso2            :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].fggMiniIsoSumRel() : -100 ",
+	"fggmu_trackIso2           :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].isolationR03().sumPt/Muons[1].pt() : -100 ",
+	"fggmu_sumChargedHadronPt2 :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].pfIsolationR04().sumChargedHadronPt() : -100 ",
+	"fggmu_sumNeutralHadronEt2 :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].pfIsolationR04().sumNeutralHadronEt() : -100 ",
+	"fggmu_sumPhotonEt2        :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].pfIsolationR04().sumPhotonEt() : -100 ",
+	"fggmu_sumPUPt2            :=  ? GetTTH.size()>0 && Muons.size()>1 ? Muons[1].pfIsolationR04().sumPUPt() : -100 ",
+	"fggele_pt1                :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].pt() : -100 ",
+	"fggele_eta1               :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].eta() : -100 ",
+	"fggele_phi1               :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].phi() : -100 ",
+	"fggele_SCeta1             :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].superCluster().eta() : -100 ",
+	"fggele_SCphi1             :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].superCluster().phi() : -100 ",
+	"fggele_energy1            :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].energy() : -100 ",
+	"fggele_ecalEnergy1        :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].ecalEnergy() : -100 ",
+	"fggele_SCx1               :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].superCluster().position().x() : -100 ",
+	"fggele_SCy1               :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].superCluster().position().y() : -100 ",
+	"fggele_SCz1               :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].superCluster().position().z() : -100 ",
+	"fggele_dEtaSCTrackAtVtx1  :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].deltaEtaSuperClusterTrackAtVtx() : -100 ",
+	"fggele_dPhiSCTrackAtVtx1  :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].deltaPhiSuperClusterTrackAtVtx() : -100 ",
+	"fggele_passLooseId1       :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].passLooseId() : -100 ",
+	"fggele_passMediumId1      :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].passMediumId() : -100 ",
+	"fggele_passTightId1       :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].passTightId() : -100 ",
+	"fggele_MVAMediumId1       :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].passMVAMediumId() : -100 ",
+	"fggele_MVATightId1        :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].passMVATightId() : -100 ",
+	"fggele_MiniIso1           :=  ? GetTTH.size()>0 && Electrons.size()>0 ? Electrons[0].fggMiniIsoSumRel() : -100 ",
+	"fggele_pt2                :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].pt() : -100 ",
+	"fggele_eta2               :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].eta() : -100 ",
+	"fggele_phi2               :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].phi() : -100 ",
+	"fggele_SCeta2             :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().eta() : -100 ",
+	"fggele_SCphi2             :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().phi() : -100 ",
+	"fggele_ecalEnergy2        :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].ecalEnergy() : -100 ",
+	"fggele_SCx2               :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().position().x() : -100 ",
+	"fggele_SCy2               :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().position().y() : -100 ",
+	"fggele_SCz2               :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().position().z() : -100 ",
+	"fggele_energy2            :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].superCluster().energy() : -100 ",
+	"fggele_dEtaSCTrackAtVtx2  :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].deltaEtaSuperClusterTrackAtVtx() : -100 ",
+	"fggele_dPhiSCTrackAtVtx2  :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].deltaPhiSuperClusterTrackAtVtx() : -100 ",
+	"fggele_passLooseId2       :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passLooseId() : -100 ",
+	"fggele_passMediumId2      :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passMediumId() : -100 ",
+	"fggele_passTightId2       :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passTightId() : -100 ",
+	"fggele_MVAMediumId2       :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passMVAMediumId() : -100 ",
+	"fggele_MVATightId2        :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passMVATightId() : -100 ",
+	"fggele_MiniIso2           :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].fggMiniIsoSumRel() : -100 ",
 
-
-
-
-
-
-
-
+]
 
 
 

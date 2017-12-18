@@ -48,6 +48,14 @@ namespace flashgg {
 	void setNDiphotons(int ndiphotons) {nDiphotons_ = ndiphotons;}
 	const int NDiphotons() const {return nDiphotons_;}
 
+
+	void setAllMuons(std::vector<flashgg::Muon> AllMuons) {AllMuons_ = AllMuons;}
+	void setAllElectrons(std::vector<flashgg::Electron> AllElectrons) {AllElectrons_ = AllElectrons;}
+
+	const std::vector<flashgg::Muon> Muons() const {return AllMuons_;}
+	const std::vector<flashgg::Electron> Electrons() const {return AllElectrons_;}
+
+
         DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHHadronic; }
 
 
@@ -56,6 +64,8 @@ namespace flashgg {
         std::vector<reco::GenJet> GenJets_;
         std::vector<reco::GenParticle> Photons_;
         std::vector<reco::GenParticle> GenLeptons_;
+	std::vector<flashgg::Muon> AllMuons_;
+	std::vector<flashgg::Electron> AllElectrons_;
         Point higgsVtx_;
         reco::Vertex vertex0_;
 	int nDiphotons_;

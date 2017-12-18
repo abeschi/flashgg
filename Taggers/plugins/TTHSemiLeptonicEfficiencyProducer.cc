@@ -306,6 +306,8 @@ namespace flashgg {
             int diphoSize = (int)diPhotons->size();
 
             std::vector<flashgg::TTHLeptonicTag> ttHtags;
+            std::vector<flashgg::Muon> AllMuons;
+            std::vector<flashgg::Electron> AllElectrons;
 
             for( unsigned int diphoIndex = 0; diphoIndex < (double)diPhotons->size(); diphoIndex++ )
             {
@@ -424,6 +426,19 @@ namespace flashgg {
                 tthhtags_obj.setPassPreselection(passPreselection);
                 tthhtags_obj.setPassHLT(passHLT);
 
+
+                for( unsigned int i=0; i<(double)theMuons->size(); i++ )
+                {
+                    edm::Ptr<flashgg::Muon> Muon = theMuons->ptrAt( i );
+                    AllMuons.push_back(*Muon);
+                }
+
+                for( unsigned int i=0; i<(double)theElectrons->size(); i++ )
+                {
+                    edm::Ptr<flashgg::Electron> Electron = theElectrons->ptrAt( i );
+                    AllElectrons.push_back(*Electron);
+                }
+
                 ttHtags.push_back(tthhtags_obj);
             }
 
@@ -433,6 +448,8 @@ namespace flashgg {
                 tthhe.setHiggsVertex(higgsVtx);
                 tthhe.setVertex0(vtx0);
                 tthhe.setNDiphotons(diphoSize);
+                tthhe.setAllMuons(AllMuons);
+                tthhe.setAllElectrons(AllElectrons);
                 ttheff->push_back( tthhe );
              }
         }

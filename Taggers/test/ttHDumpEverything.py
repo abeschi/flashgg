@@ -112,7 +112,7 @@ process.TTHHadronicEfficiencyDumper.quietRooFit = True
 
 import flashgg.Taggers.ttHEfficiencyVariables as var
 MyVarsH =  var.truth_photon_variables + var.efficiency_hadronic_variables + var.dipho_variables + var.hadronic_variables
-MyVarsL =  var.truth_photon_variables + var.efficiency_leptonic_variables + var.dipho_variables + var.leptonic_variables
+MyVarsL =  var.truth_photon_variables + var.efficiency_leptonic_variables + var.dipho_variables + var.leptonic_variables + var.leptonic_variables_all
 
 
 # split tree, histogram and datasets by process
@@ -175,7 +175,7 @@ process.p1 = cms.Path(process.dataRequirements*
 #printSystematicInfo(process)
 
 ## set default options if needed
-customize.setDefault("maxEvents", 100)
+customize.setDefault("maxEvents", -1)
 customize.setDefault("targetLumi",1e+3)
 ## call the customization
 customize(process)
