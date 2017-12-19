@@ -11,9 +11,9 @@ import os
 # maxEvents is the max number of events processed of each file, not globally
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/ttHToGG_M125_13TeV_powheg_pythia8_v2/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_093929/0000/myMicroAODOutputFile_1.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_095729/0000/myMicroAODOutputFile_10.root"
-inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195858/0000/myMicroAODOutputFile_99.root"
+#inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195858/0000/myMicroAODOutputFile_99.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195858/0000/myMicroAODOutputFile_1.root"
-#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_4/2_5_1/DoubleEG/ReMiniAOD-03Feb2017-2_5_4-2_5_1-v0-Run2016C-03Feb2017-v1/170310_111520/0000/myMicroAODOutputFile_7.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_4/2_5_1/DoubleEG/ReMiniAOD-03Feb2017-2_5_4-2_5_1-v0-Run2016C-03Feb2017-v1/170310_111520/0000/myMicroAODOutputFile_7.root"
 outputFile = "output.root" 
 
 dropVBFInNonGold = False
@@ -65,6 +65,8 @@ musystlabels = []
 # Or use the official tool instead
 useEGMTools(process)
 
+customize.processId = "Data"
+
 if customize.processId == "Data":
     customizeSystematicsForData(process)
 else:
@@ -104,11 +106,15 @@ process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHHadronicTag.jetsNumberThreshold = cms.int32(2)
 process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.int32(0)
 process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.int32(0)
+process.flashggTTHHadronicTag.isControlSample = cms.bool(False)
+process.flashggTTHHadronicTag.isControlSample2 = cms.bool(False)
 
 process.flashggTTHLeptonicTag.jetPtThreshold  = cms.double(20.)
 process.flashggTTHLeptonicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHLeptonicTag.jetsNumberThreshold = cms.double(1)
 process.flashggTTHLeptonicTag.bjetsNumberThreshold = cms.double(0)
+process.flashggTTHLeptonicTag.isControlSample = cms.bool(False)
+process.flashggTTHLeptonicTag.isControlSample2 = cms.bool(False)
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
