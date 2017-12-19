@@ -310,14 +310,20 @@ namespace flashgg {
             photonSelection = true;
 
             std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
-            if( !useStdLeptonID_) {
+           /* if( !useStdLeptonID_) {
                 goodMuons = selectMuonsSum16( theMuons->ptrs(), dipho, vertices->ptrs(), muonEtaThreshold_ , 
                          leptonPtThreshold_,muMiniIsoSumRelThreshold_, deltaRMuonPhoThreshold_, deltaRMuonPhoThreshold_ );
-            } else {
+            }
+            else {
                 goodMuons = selectMuons( theMuons->ptrs(), dipho, vertices->ptrs(), muonEtaThreshold_ , 
                                      leptonPtThreshold_,muPFIsoSumRelThreshold_, deltaRMuonPhoThreshold_, deltaRMuonPhoThreshold_ );
+            }*/
+
+            for(unsigned int i=0; i<theMuons->size(); i++)            
+            {   
+                edm::Ptr<flashgg::Muon> muon = theMuons->ptrAt(i);
+                goodMuons.push_back(muon);
             }
-            
             
             std::vector<edm::Ptr<Electron> > goodElectrons;
             // if( !useStdElectronID_) goodElectrons= selectElectrons( theElectrons->ptrs(), dipho, vertices->ptrs(), leptonPtThreshold_, 
@@ -337,6 +343,12 @@ namespace flashgg {
                                                    rho_, evt.isRealData() );
                 //}
             
+           for(unsigned int i=0; i<theElectrons->size(); i++)            
+            {   
+                edm::Ptr<flashgg::Electron> ele = theElectrons->ptrAt(i);
+                goodElectrons.push_back(ele);
+            }
+ 
 
             hasGoodElec = ( goodElectrons.size() > 0 );
             hasGoodMuons = ( goodMuons.size() > 0 );
