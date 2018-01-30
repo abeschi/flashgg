@@ -41,12 +41,9 @@ namespace flashgg {
         if( fabs((ElectronSC+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
         if( fabs((ElectronSC+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
  
-        if( *( dipho->leadingPhoton()->superCluster() ) == *( Ele[l1]->superCluster() ) )
-        {
-            float TrkElecSCDeltaR = sqrt( Ele[l1]->deltaEtaSuperClusterTrackAtVtx() * Ele[l1]->deltaEtaSuperClusterTrackAtVtx() + Ele[l1]->deltaPhiSuperClusterTrackAtVtx() * Ele[l1]->deltaPhiSuperClusterTrackAtVtx() );
-            if( TrkElecSCDeltaR < DeltaRTrkEle ) continue;
-        }
-      
+        float TrkElecSCDeltaR = sqrt( Ele[l1]->deltaEtaSuperClusterTrackAtVtx() * Ele[l1]->deltaEtaSuperClusterTrackAtVtx() + Ele[l1]->deltaPhiSuperClusterTrackAtVtx() * Ele[l1]->deltaPhiSuperClusterTrackAtVtx() );
+        if( TrkElecSCDeltaR > DeltaRTrkEle ) continue;
+        
         output.push_back(Ele[l1]);
     }
 
@@ -62,7 +59,7 @@ namespace flashgg {
         if(Muons[l1]->pt()<MuonPtCut) continue;
         if(fabs(Muons[l1]->eta()) > MuonEtaCut) continue;
         if( !Muons[l1]->innerTrack() ) continue; 
-        if(Muons[l1] -> fggMiniIsoSumRel() < MuonMiniIsoCut) continue;
+        if(Muons[l1] -> fggMiniIsoSumRel() > MuonMiniIsoCut) continue;
 
         int vtxInd = 0;
         double dzmin = 9999;
