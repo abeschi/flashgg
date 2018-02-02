@@ -97,6 +97,7 @@ namespace flashgg {
     {
         for(unsigned int l2=l1+1; l2<Muons.size(); ++l2)
         {
+            if(Muons[l1]->charge() == Muons[l2]->charge()) continue;
             if(!Muons[l1]->isLooseMuon()) continue;
             if(!Muons[l2]->isLooseMuon()) continue;
             if(Muons[l1]->pt()<MuonPtCut) continue;
@@ -136,6 +137,7 @@ namespace flashgg {
     {
         for(unsigned int l2=l1+1; l2<Ele.size(); ++l2)
         {
+            if(Ele[l1]->charge() == Ele[l2]->charge()) continue;
             if(!Ele[l1]->passVetoId()) continue;
             if(!Ele[l2]->passVetoId()) continue;
             if(Ele[l1]->pt()<ElePtCut) continue;
@@ -184,6 +186,7 @@ namespace flashgg {
     {
         for(unsigned int l2=0; l2<Ele.size(); ++l2)
         {
+            if(Muons[l1]->charge() == Ele[l2]->charge()) continue;
             if(!Muons[l1]->isMediumMuon()) continue;
             if(!Ele[l2]->passVetoId()) continue;
             if(Muons[l1]->pt()<MuonPtCut) continue;
