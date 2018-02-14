@@ -159,7 +159,7 @@ flashggVHEtTag = cms.EDProducer("FlashggVHEtTagProducer",
 flashggTTHLeptonicTag = cms.EDProducer("FlashggTTHLeptonicTagProducer",
                                        DiPhotonTag=cms.InputTag('flashggPreselectedDiPhotons'),
                                        SystLabel=cms.string(""),
-                                       MVAResultTag=cms.InputTag('flashggDiPhotonMVA'),
+                                       MVAResultTag=cms.InputTag('flashggDiPhotonMVAForTTH'),
                                        inputTagJets= UnpackedJetCollectionVInputTag,
                                        ElectronTag=cms.InputTag('flashggSelectedElectrons'),
                                        MuonTag=cms.InputTag('flashggSelectedMuons'),
@@ -190,13 +190,15 @@ flashggTTHLeptonicTag = cms.EDProducer("FlashggTTHLeptonicTagProducer",
 				       ElePhotonDrCut = cms.double(0.3),
 				       ElePhotonZMassCut = cms.double(5),
 				       DeltaRTrkEle = cms.double(0.35),
+				       UseCutBasedDiphoId = cms.bool(False),
+				       CutBasedDiphoId = cms.vdouble(0.4,0.3,0.0,-0.5,2.0,2.5),    # pT/m lead, pT/m sublead, leadIdMVA, subleadIdMVA, DeltaEta, DeltaPhi
                                        HTXSTags     = HTXSInputTags
 )
 
 flashggTTHDiLeptonTag = cms.EDProducer("FlashggTTHDiLeptonTagProducer",
                                        DiPhotonTag=cms.InputTag('flashggPreselectedDiPhotons'),
                                        SystLabel=cms.string(""),
-                                       MVAResultTag=cms.InputTag('flashggDiPhotonMVA'),
+                                       MVAResultTag=cms.InputTag('flashggDiPhotonMVAForTTH'),
                                        inputTagJets= UnpackedJetCollectionVInputTag,
                                        ElectronTag=cms.InputTag('flashggSelectedElectrons'),
                                        MuonTag=cms.InputTag('flashggSelectedMuons'),
@@ -234,6 +236,8 @@ flashggTTHDiLeptonTag = cms.EDProducer("FlashggTTHDiLeptonTagProducer",
 				       ElesLeadingLeptonPtCut = cms.double(20),
 				       EleMuDrCut = cms.double(0.1),
 				       MixedLeadingLeptonPtCut = cms.double(15),
+				       UseCutBasedDiphoId = cms.bool(False),
+				       CutBasedDiphoId = cms.vdouble(0.4,0.3,0.0,-0.5,2.0,2.5),    # pT/m lead, pT/m sublead, leadIdMVA, subleadIdMVA, DeltaEta, DeltaPhi
                                        HTXSTags     = HTXSInputTags
 )
 

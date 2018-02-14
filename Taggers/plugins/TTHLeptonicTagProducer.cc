@@ -92,6 +92,9 @@ namespace flashgg {
         vector<double> bDiscriminator_;
         string bTag_;
         double PhoMVAThreshold_;
+
+        bool UseCutBasedDiphoId_;
+        vector<double> CutBasedDiphoId_;
     };
 
     TTHLeptonicTagProducer::TTHLeptonicTagProducer( const ParameterSet &iConfig ) :
@@ -136,6 +139,8 @@ namespace flashgg {
         bDiscriminator_ = iConfig.getParameter<vector<double > >( "bDiscriminator");
         bTag_ = iConfig.getParameter<string>( "bTag");
 
+        UseCutBasedDiphoId_ = iConfig.getParameter<bool>( "UseCutBasedDiphoId" );
+        CutBasedDiphoId_ = iConfig.getParameter<std::vector<double>>( "CutBasedDiphoId" );
 
         ParameterSet HTXSps = iConfig.getParameterSet( "HTXSTags" );
         stage0catToken_ = consumes<int>( HTXSps.getParameter<InputTag>("stage0cat") );
@@ -216,7 +221,6 @@ namespace flashgg {
 
         assert( diPhotons->size() == mvaResults->size() );
 
-        bool photonSelection = false;
         double idmva1 = 0.;
         double idmva2 = 0.;
 
@@ -233,9 +237,22 @@ namespace flashgg {
             idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
 
             if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
-            if( mvares->result < MVAThreshold_ ) { continue; }
 
-            photonSelection = true;
+            bool passDiphotonSelection = true;
+            if(UseCutBasedDiphoId_)
+            {
+                assert(CutBasedDiphoId_.size()==6);
+                if(dipho->leadingPhoton()->pt()/dipho->mass() < CutBasedDiphoId_[0]) passDiphotonSelection = false;
+                if(dipho->subLeadingPhoton()->pt()/dipho->mass() < CutBasedDiphoId_[1]) passDiphotonSelection = false;
+                if(dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() ) < CutBasedDiphoId_[2]) passDiphotonSelection = false;
+                if(dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() ) < CutBasedDiphoId_[3]) passDiphotonSelection = false;
+                if(abs (dipho->leadingPhoton()->eta() - dipho->subLeadingPhoton()->eta()) > CutBasedDiphoId_[4]) passDiphotonSelection = false;
+                if(deltaPhi(dipho->leadingPhoton()->phi(), dipho->subLeadingPhoton()->phi() ) > CutBasedDiphoId_[5] ) passDiphotonSelection = false;
+            }
+            else
+                if( mvares->result < MVAThreshold_ ) passDiphotonSelection = false;
+
+            if(!passDiphotonSelection) continue;
 
             std::vector<edm::Ptr<flashgg::Muon> >     Muons;
             std::vector<edm::Ptr<flashgg::Electron> > Electrons;
@@ -299,7 +316,7 @@ namespace flashgg {
                     if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
                 }
 
-                if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && photonSelection && leadingJetPt>leadingJetPtThreshold_)
+                if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && leadingJetPt>leadingJetPtThreshold_)
                 {
                     passMuonSelection = true;
                     tagMuons.push_back(muon);
@@ -350,7 +367,7 @@ namespace flashgg {
                     if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
                 }
 
-                if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && photonSelection && leadingJetPt>leadingJetPtThreshold_)
+                if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && leadingJetPt>leadingJetPtThreshold_)
                 {
                     passEleSelection = true;
                     tagElectrons.push_back(ele);
