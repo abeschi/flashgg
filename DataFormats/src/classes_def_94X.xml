@@ -68,13 +68,6 @@
 </class>
 <class name="std::vector<flashgg::TTHLeptonicTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> >"/>
-
-<class name="flashgg::TTHGenericTag" ClassVersion="12">
- <version ClassVersion="12" checksum="2341601757"/>
-</class>
-<class name="std::vector<flashgg::TTHGenericTag>"/>
-<class name="edm::Wrapper<std::vector<flashgg::TTHGenericTag> >"/>
-
 <class name="std::vector<pat::Muon>"/>
 <class name="flashgg::TTHHadronicTag" ClassVersion="14">
  <version ClassVersion="14" checksum="3454620804"/>
@@ -89,6 +82,13 @@
    <version ClassVersion="10" checksum="3643272763"/>
    <version ClassVersion="11" checksum="619869289"/>
 </class>
+
+<class name="flashgg::TTHGenericTag" ClassVersion="12">
+ <version ClassVersion="12" checksum="2341601757"/>
+</class>
+<class name="std::vector<flashgg::TTHGenericTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::TTHGenericTag> >"/>
+
 <class name="std::vector<flashgg::VHMetTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::VHMetTag> >"/>
 

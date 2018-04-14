@@ -167,8 +167,8 @@ namespace flashgg {
         Handle<View<flashgg::Met> > theMet_;
         evt.getByToken( METToken_, theMet_ );
 
-        std::auto_ptr<vector<TTHGenericTag> > tthtags( new vector<TTHGenericTag> );
-        std::auto_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
+        std::unique_ptr<vector<TTHGenericTag> > tthtags( new vector<TTHGenericTag> );
+        std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
 
         Point higgsVtx;
 
@@ -313,8 +313,8 @@ namespace flashgg {
 
         }//diPho loop end !
 
-        evt.put( tthtags );
-        evt.put( truths );
+        evt.put( std::move(tthtags) );
+        evt.put( std::move(truths) );
     }
 
 }
