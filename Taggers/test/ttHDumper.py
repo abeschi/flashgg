@@ -32,6 +32,8 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4' 
 elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
     process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2'
+elif os.environ["CMSSW_VERSION"].count("CMSSW_9_4"):
+ process.GlobalTag.globaltag = '94X_mc2017_realistic_v12'
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
@@ -68,7 +70,8 @@ useEGMTools(process)
 customize.processId = "Data"
 
 if customize.processId == "Data":
-    customizeSystematicsForData(process)
+#    customizeSystematicsForData(process)
+     print 'No scale now'
 else:
     customizeSystematicsForBackground(process) # only central corrections, no syst. shifts
 
@@ -106,15 +109,15 @@ process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHHadronicTag.jetsNumberThreshold = cms.int32(2)
 process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.int32(0)
 process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.int32(0)
-process.flashggTTHHadronicTag.isControlSample = cms.bool(False)
-process.flashggTTHHadronicTag.isControlSample2 = cms.bool(True)
+process.flashggTTHHadronicTag.isControlSample = cms.bool(True)
+process.flashggTTHHadronicTag.isControlSample2 = cms.bool(False)
 
 process.flashggTTHLeptonicTag.jetPtThreshold  = cms.double(20.)
 process.flashggTTHLeptonicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHLeptonicTag.jetsNumberThreshold = cms.double(1)
 process.flashggTTHLeptonicTag.bjetsNumberThreshold = cms.double(0)
-process.flashggTTHLeptonicTag.isControlSample = cms.bool(False)
-process.flashggTTHLeptonicTag.isControlSample2 = cms.bool(True)
+process.flashggTTHLeptonicTag.isControlSample = cms.bool(True)
+process.flashggTTHLeptonicTag.isControlSample2 = cms.bool(False)
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 

@@ -277,8 +277,8 @@ namespace flashgg {
         Handle<View<reco::GenParticle> > genParticles;
         Handle<View<reco::GenJet> > genJets;
 
-        std::auto_ptr<vector<TTHHadronicTag> >      tthhtags  ( new vector<TTHHadronicTag> );
-        std::auto_ptr<vector<TTHHadronicTagTruth> > truths( new vector<TTHHadronicTagTruth> );
+        std::unique_ptr<vector<TTHHadronicTag> >      tthhtags  ( new vector<TTHHadronicTag> );
+        std::unique_ptr<vector<TTHHadronicTagTruth> > truths( new vector<TTHHadronicTagTruth> );
 
         //std::unique_ptr<vector<TTHHadronicTag> > tthhtags( new vector<TTHHadronicTag> );
         //std::unique_ptr<vector<TTHHadronicTagTruth> > truths( new vector<TTHHadronicTagTruth> );
@@ -612,8 +612,8 @@ namespace flashgg {
                 // count++;
             }
         }
-        evt.put( tthhtags);
-        evt.put( truths);
+        evt.put( std::move(tthhtags));
+        evt.put( std::move(truths));
         // cout << "tagged events = " << count << endl;
     }
 }

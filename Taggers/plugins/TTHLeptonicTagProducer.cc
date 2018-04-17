@@ -337,12 +337,12 @@ namespace flashgg {
             //                                        TransverseImpactParam_EB, LongitudinalImpactParam_EB, TransverseImpactParam_EE, LongitudinalImpactParam_EE,
             //                                         rho_, evt.isRealData() );
             //} else {
-                goodElectrons = selectStdElectrons(theElectrons->ptrs(), dipho, vertices->ptrs(), leptonPtThreshold_,  electronEtaThresholds_ ,
+ /*               goodElectrons = selectStdElectrons(theElectrons->ptrs(), dipho, vertices->ptrs(), leptonPtThreshold_,  electronEtaThresholds_ ,
                                                     useElectronMVARecipe_,useElectronLooseID_,
                                                    deltaRPhoElectronThreshold_,DeltaRTrkElec_,deltaMassElectronZThreshold_,
-                                                   rho_, evt.isRealData() );
+                                                 rho_, evt.isRealData() );
                 //}
-            
+*/            
            for(unsigned int i=0; i<theElectrons->size(); i++)            
             {   
                 edm::Ptr<flashgg::Electron> ele = theElectrons->ptrAt(i);
