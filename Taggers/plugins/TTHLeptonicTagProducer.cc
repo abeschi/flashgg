@@ -13,6 +13,7 @@
 #include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/Electron.h"
 #include "flashgg/DataFormats/interface/Muon.h"
+#include "flashgg/DataFormats/interface/Met.h"
 #include "flashgg/DataFormats/interface/Photon.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 
@@ -52,6 +53,7 @@ namespace flashgg {
         std::vector<edm::InputTag> inputTagJets_;
         EDGetTokenT<View<Electron> > electronToken_;
         EDGetTokenT<View<flashgg::Muon> > muonToken_;
+        EDGetTokenT<View<flashgg::Met> > METToken_;
         EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_;
         EDGetTokenT<View<Photon> > photonToken_;
         EDGetTokenT<View<reco::Vertex> > vertexToken_;
@@ -64,6 +66,9 @@ namespace flashgg {
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
 
         //Thresholds
+        bool isControlSample_;
+        bool isControlSample2_;
+ 
         double leptonPtThreshold_;
         double muonEtaThreshold_;
         double leadPhoOverMassThreshold_;
@@ -112,12 +117,16 @@ namespace flashgg {
         inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         electronToken_( consumes<View<flashgg::Electron> >( iConfig.getParameter<InputTag>( "ElectronTag" ) ) ),
         muonToken_( consumes<View<flashgg::Muon> >( iConfig.getParameter<InputTag>( "MuonTag" ) ) ),
+        METToken_( consumes<View<flashgg::Met> >( iConfig.getParameter<InputTag>( "MetTag" ) ) ),
         mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ),
         vertexToken_( consumes<View<reco::Vertex> >( iConfig.getParameter<InputTag> ( "VertexTag" ) ) ),
         genParticleToken_( consumes<View<reco::GenParticle> >( iConfig.getParameter<InputTag> ( "GenParticleTag" ) ) ),
         rhoTag_( consumes<double>( iConfig.getParameter<InputTag>( "rhoTag" ) ) ),
         systLabel_( iConfig.getParameter<string> ( "SystLabel" ) )
     {
+
+        isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
+        isControlSample2_ = iConfig.getParameter<bool>( "isControlSample2");
 
         leptonPtThreshold_ = iConfig.getParameter<double>( "leptonPtThreshold");
         muonEtaThreshold_ = iConfig.getParameter<double>( "muonEtaThreshold");
@@ -210,6 +219,9 @@ namespace flashgg {
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
 
+        Handle<View<flashgg::Met> > theMet_;
+        evt.getByToken( METToken_, theMet_ );
+
         Handle<View<reco::GenParticle> > genParticles;
 
         std::unique_ptr<vector<TTHLeptonicTag> > tthltags( new vector<TTHLeptonicTag> );
@@ -270,25 +282,48 @@ namespace flashgg {
 
             if( dipho->subLeadingPhoton()->pt() < ( dipho->mass() )*subleadPhoOverMassThreshold_ ) { continue; }
 
-
             idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
             idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
 
-            if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
+            bool passPhotonIdSelection = 0;
+            if(isControlSample_)
+            {
+                if((idmva1 > PhoMVAThreshold_ && idmva2 <= PhoMVAThreshold_ ) || (idmva1 <= PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ )) passPhotonIdSelection = 1;
+            }
+
+           else
+           {    if(isControlSample2_)
+                {
+                    if(idmva1 <= PhoMVAThreshold_ && idmva2 <= PhoMVAThreshold_) passPhotonIdSelection = 1;
+                }
+
+                else
+                {
+                    if( idmva1 > PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ ) passPhotonIdSelection = 1;
+                }
+            }
+
+            if(!passPhotonIdSelection) continue;
 
             if( mvares->result < MVAThreshold_ ) { continue; }
 
             photonSelection = true;
 
             std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
-            if( !useStdLeptonID_) {
+           /* if( !useStdLeptonID_) {
                 goodMuons = selectMuonsSum16( theMuons->ptrs(), dipho, vertices->ptrs(), muonEtaThreshold_ , 
                          leptonPtThreshold_,muMiniIsoSumRelThreshold_, deltaRMuonPhoThreshold_, deltaRMuonPhoThreshold_ );
-            } else {
+            }
+            else {
                 goodMuons = selectMuons( theMuons->ptrs(), dipho, vertices->ptrs(), muonEtaThreshold_ , 
                                      leptonPtThreshold_,muPFIsoSumRelThreshold_, deltaRMuonPhoThreshold_, deltaRMuonPhoThreshold_ );
+            }*/
+
+            for(unsigned int i=0; i<theMuons->size(); i++)            
+            {   
+                edm::Ptr<flashgg::Muon> muon = theMuons->ptrAt(i);
+                goodMuons.push_back(muon);
             }
-            
             
             std::vector<edm::Ptr<Electron> > goodElectrons;
             // if( !useStdElectronID_) goodElectrons= selectElectrons( theElectrons->ptrs(), dipho, vertices->ptrs(), leptonPtThreshold_, 
@@ -308,6 +343,12 @@ namespace flashgg {
                                                    rho_, evt.isRealData() );
                 //}
             
+           for(unsigned int i=0; i<theElectrons->size(); i++)            
+            {   
+                edm::Ptr<flashgg::Electron> ele = theElectrons->ptrAt(i);
+                goodElectrons.push_back(ele);
+            }
+ 
 
             hasGoodElec = ( goodElectrons.size() > 0 );
             hasGoodMuons = ( goodMuons.size() > 0 );
@@ -571,13 +612,23 @@ namespace flashgg {
                     }
                 }
 
+
+
                 tthltags_obj.setJets( tagJets );
                 tthltags_obj.setBJets( tagBJets );
                 tthltags_obj.setMuons( tagMuons );
                 tthltags_obj.setElectrons( tagElectrons );
                 tthltags_obj.setDiPhotonIndex( diphoIndex );
                 tthltags_obj.setSystLabel( systLabel_ );
+
+              if( theMet_ -> size() != 1 )
+                    std::cout << "WARNING number of MET is not equal to 1" << std::endl;
+                Ptr<flashgg::Met> Met = theMet_->ptrAt( 0 );
+                tthltags_obj.setMetPt((float)Met->pt());
+                tthltags_obj.setMetPhi((float)Met->phi());
+
                 tthltags->push_back( tthltags_obj );
+
                 if( ! evt.isRealData() ) {
                     TagTruthBase truth_obj;
                     truth_obj.setGenPV( higgsVtx );
