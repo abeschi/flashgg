@@ -31,6 +31,7 @@
 #include "flashgg/DataFormats/interface/VHLooseTag.h"
 #include "flashgg/DataFormats/interface/VHHadronicTag.h"
 #include "flashgg/DataFormats/interface/VBFTagTruth.h"
+#include "flashgg/DataFormats/interface/TTHHadronicTagTruth.h"
 #include "flashgg/DataFormats/interface/ZPlusJetTag.h"
 
 using namespace std;
@@ -189,6 +190,11 @@ namespace flashgg {
                           << " and NBLoose= " << tthhadronictag->nBLoose()
                           << " and NBMedium= " << tthhadronictag->nBMedium()
                           << std::endl;
+            }
+            if( tthhadronictag->tagTruth().isNonnull() ) {
+                const TTHHadronicTagTruth *truth = dynamic_cast<const TTHHadronicTagTruth *>( &*tthhadronictag->tagTruth() );
+                cout << "ciao" << endl;
+               assert( truth != NULL );
             }
 
             const   TTHLeptonicTag *tthleptonictag = dynamic_cast<const TTHLeptonicTag *>( chosenTag );

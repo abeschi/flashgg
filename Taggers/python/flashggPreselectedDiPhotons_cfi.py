@@ -61,7 +61,7 @@ rediscoveryHLTcutsV1 = cms.VPSet(
 
 #cuts here mimic the miniAOD photon cuts and the non-category based trigger cuts
 #Also included: the super-loose ID MVA cuts
-flashggPreselectedDiPhotons = cms.EDFilter(
+flashggPreselectedDiPhotonsTMP = cms.EDFilter(
     "GenericDiPhotonCandidateSelector",
     src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
     rho = cms.InputTag("fixedGridRhoAll"),
@@ -73,11 +73,39 @@ flashggPreselectedDiPhotons = cms.EDFilter(
         " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
         " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
         " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
-        " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
+
+ #        " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
 #        " && (leadingPhoton.pt > mass/3. && subLeadingPhoton.pt > mass/4.)"
 #        " && (leadingPhoton.passElectronVeto) && (subLeadingPhoton.passElectronVeto)"
         ),
     variables = rediscoveryHLTvariables,
     categories = rediscoveryHLTcutsV1
     )
+
+
+
+flashggPreselectedDiPhotons = cms.EDFilter(
+    "GenericDiPhotonCandidateSelector",
+    src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
+    rho = cms.InputTag("fixedGridRhoAll"),
+    cut = cms.string(
+      	"    (leadingPhoton.pt >30.0 && subLeadingPhoton.pt > 20.0)"
+        " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
+        " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
+        " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
+
+        " && ( ( (leadingPhoton.full5x5_r9>0.8||leadingPhoton.egChargedHadronIso<20||leadingPhoton.egChargedHadronIso/leadingPhoton.pt<0.3) && (leadingPhoton.hadronicOverEm < 0.08 && leadPhotonId > -0.9)"
+	" &&   (subLeadingPhoton.full5x5_r9<0.8||subLeadingPhoton.egChargedHadronIso>20||subLeadingPhoton.egChargedHadronIso/subLeadingPhoton.pt>0.3 || subLeadingPhoton.hadronicOverEm >0.08) )"
+
+        " || ( (leadingPhoton.full5x5_r9<0.8||leadingPhoton.egChargedHadronIso>20||leadingPhoton.egChargedHadronIso/leadingPhoton.pt>0.3 ||leadingPhoton.hadronicOverEm > 0.08 )"
+	" &&   ((subLeadingPhoton.full5x5_r9>0.8|| subLeadingPhoton.egChargedHadronIso<20||subLeadingPhoton.egChargedHadronIso/subLeadingPhoton.pt<0.3) && subLeadingPhoton.hadronicOverEm <0.08 && subLeadPhotonId > -0.9) )  )"
+
+ #        " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
+#        " && (leadingPhoton.pt > mass/3. && subLeadingPhoton.pt > mass/4.)"
+#        " && (leadingPhoton.passElectronVeto) && (subLeadingPhoton.passElectronVeto)"
+        ),
+    variables = rediscoveryHLTvariables,
+    categories = rediscoveryHLTcutsV1
+    )
+
 
