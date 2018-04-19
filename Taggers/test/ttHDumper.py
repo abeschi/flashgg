@@ -13,7 +13,9 @@ import os
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_095729/0000/myMicroAODOutputFile_10.root"
 #inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195858/0000/myMicroAODOutputFile_99.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170121_195858/0000/myMicroAODOutputFile_1.root"
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_4/2_5_1/DoubleEG/ReMiniAOD-03Feb2017-2_5_4-2_5_1-v0-Run2016C-03Feb2017-v1/170310_111520/0000/myMicroAODOutputFile_7.root"
+#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_4/2_5_1/DoubleEG/ReMiniAOD-03Feb2017-2_5_4-2_5_1-v0-Run2016C-03Feb2017-v1/170310_111520/0000/myMicroAODOutputFile_7.root"
+#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
 outputFile = "output.root" 
 
 dropVBFInNonGold = False
@@ -67,8 +69,6 @@ musystlabels = []
 # Or use the official tool instead
 useEGMTools(process)
 
-customize.processId = "Data"
-
 if customize.processId == "Data":
 #    customizeSystematicsForData(process)
      print 'No scale now'
@@ -85,7 +85,7 @@ printSystematicVPSet([process.flashggDiPhotonSystematics.SystMethods2D])
 
 # Require standard diphoton trigger
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
-process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*",
+process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*",
 #                                                                "HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1",
 #                                                                "HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1"
                                                                 ))
@@ -109,15 +109,15 @@ process.flashggTTHHadronicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHHadronicTag.jetsNumberThreshold = cms.int32(2)
 process.flashggTTHHadronicTag.bjetsNumberThreshold = cms.int32(0)
 process.flashggTTHHadronicTag.bjetsLooseNumberThreshold =cms.int32(0)
-process.flashggTTHHadronicTag.isControlSample = cms.bool(True)
-process.flashggTTHHadronicTag.isControlSample2 = cms.bool(False)
+process.flashggTTHHadronicTag.isControlSample = cms.bool(False)
+process.flashggTTHHadronicTag.isControlSample2 = cms.bool(True)
 
 process.flashggTTHLeptonicTag.jetPtThreshold  = cms.double(20.)
 process.flashggTTHLeptonicTag.MVAThreshold = cms.double(-1.)
 process.flashggTTHLeptonicTag.jetsNumberThreshold = cms.double(1)
 process.flashggTTHLeptonicTag.bjetsNumberThreshold = cms.double(0)
-process.flashggTTHLeptonicTag.isControlSample = cms.bool(True)
-process.flashggTTHLeptonicTag.isControlSample2 = cms.bool(False)
+process.flashggTTHLeptonicTag.isControlSample = cms.bool(False)
+process.flashggTTHLeptonicTag.isControlSample2 = cms.bool(True)
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -147,11 +147,8 @@ process.TTHHadronicDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$
 #massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
 
 import flashgg.Taggers.ttHTagVariables as var
-if customize.processId == "Data":
-	hadronic_variables = var.hadronic_variables + var.dipho_variables
-else:
-	hadronic_variables = var.hadronic_variables + var.dipho_variables + var.truth_photon_variables + var.truth_hadronic_variables
-
+hadronic_variables = var.hadronic_variables + var.dipho_variables
+leptonic_variables = var.generic_variables + var.dipho_variables
 
 cfgTools.addCategories(process.TTHHadronicDumper,
                        ## categories definition  
@@ -169,7 +166,7 @@ process.TTHLeptonicDumper.dumpHistos = False
 process.TTHLeptonicDumper.dumpWorkspace = False
 process.TTHLeptonicDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
 
-leptonic_variables = var.leptonic_variables + var.dipho_variables
+
 
 
 cfgTools.addCategories(process.TTHLeptonicDumper,

@@ -5,12 +5,13 @@ dipho_variables=[
     "dipho_leadEt           := diPhoton.leadingPhoton.et",
     "dipho_leadEta          := diPhoton.leadingPhoton.eta",
     "dipho_leadPhi          := diPhoton.leadingPhoton.phi",
-    "dipho_leadEnergy          := diPhoton.leadingPhoton.energy",
+    "dipho_leadEnergy       := diPhoton.leadingPhoton.energy",
     "dipho_lead_sieie       := diPhoton.leadingPhoton.sigmaIetaIeta",
     "dipho_lead_hoe         := diPhoton.leadingPhoton.hadronicOverEm",
     "dipho_lead_sigmaEoE    := diPhoton.leadingPhoton.sigEOverE",
     "dipho_lead_ptoM        := diPhoton.leadingPhoton.pt/diPhoton.mass",
     "dipho_leadR9           := diPhoton.leadingPhoton.full5x5_r9",
+    "dipho_leadGenMatch     := diPhoton.leadingPhoton.genMatchType",
     "dipho_subleadPt        := diPhoton.subLeadingPhoton.pt",
     "dipho_subleadEt        := diPhoton.subLeadingPhoton.et",
     "dipho_subleadEta       := diPhoton.subLeadingPhoton.eta",
@@ -21,11 +22,16 @@ dipho_variables=[
     "dipho_sublead_sigmaEoE := diPhoton.subLeadingPhoton.sigEOverE",
     "dipho_sublead_ptoM     := diPhoton.subLeadingPhoton.pt/diPhoton.mass",
     "dipho_subleadR9        := diPhoton.subLeadingPhoton.full5x5_r9",
+    "dipho_subleadGenMatch  := diPhoton.subLeadingPhoton.genMatchType",
     "dipho_leadIDMVA        := diPhoton.leadingView.phoIdMvaWrtChosenVtx",
     "dipho_subleadIDMVA     := diPhoton.subLeadingView.phoIdMvaWrtChosenVtx",
     "dipho_lead_elveto      := diPhoton.leadingPhoton.passElectronVeto",
     "dipho_sublead_elveto   := diPhoton.subLeadingPhoton.passElectronVeto",
-    "dipho_mva              := diPhotonMVA.result"
+    "dipho_mva              := diPhotonMVA.result",
+    "dipho_cosDeltaphi      := diPhotonMVA.CosPhi",
+    "dipho_sigmaRV          := diPhotonMVA.sigmarv",
+    "dipho_sigmaWV          := diPhotonMVA.sigmawv",
+    "dipho_vtxProb          := diPhotonMVA.vtxprob"
     ]
 
 
@@ -83,7 +89,7 @@ hadronic_variables=[
 ]
 
 
-leptonic_variables=[
+generic_variables=[
 	"mu_pt1                 :=  ? muons.size()>0 ? muons[0].pt() : -100 ",
 	"mu_eta1                :=  ? muons.size()>0 ? muons[0].eta() : -100 ",
 	"mu_phi1                :=  ? muons.size()>0 ? muons[0].phi() : -100 ",
@@ -95,6 +101,7 @@ leptonic_variables=[
 	"mu_sumNeutralHadronEt1 :=  ? muons.size()>0 ? muons[0].pfIsolationR04().sumNeutralHadronEt() : -100 ",
 	"mu_sumPhotonEt1        :=  ? muons.size()>0 ? muons[0].pfIsolationR04().sumPhotonEt() : -100 ",
 	"mu_sumPUPt1            :=  ? muons.size()>0 ? muons[0].pfIsolationR04().sumPUPt() : -100 ",
+	"mu_charge1             :=  ? muons.size()>0 ? muons[0].charge() : -100 ",
 	"mu_pt2                 :=  ? muons.size()>1 ? muons[1].pt() : -100 ",
 	"mu_eta2                :=  ? muons.size()>1 ? muons[1].eta() : -100 ",
 	"mu_phi2                :=  ? muons.size()>1 ? muons[1].phi() : -100 ",
@@ -106,10 +113,12 @@ leptonic_variables=[
 	"mu_sumNeutralHadronEt2 :=  ? muons.size()>1 ? muons[1].pfIsolationR04().sumNeutralHadronEt() : -100 ",
 	"mu_sumPhotonEt2        :=  ? muons.size()>1 ? muons[1].pfIsolationR04().sumPhotonEt() : -100 ",
 	"mu_sumPUPt2            :=  ? muons.size()>1 ? muons[1].pfIsolationR04().sumPUPt() : -100 ",
+	"mu_charge2             :=  ? muons.size()>1 ? muons[1].charge() : -100 ",
 	"ele_pt1                :=  ? electrons.size()>0 ? electrons[0].pt() : -100 ",
 	"ele_eta1               :=  ? electrons.size()>0 ? electrons[0].eta() : -100 ",
 	"ele_phi1               :=  ? electrons.size()>0 ? electrons[0].phi() : -100 ",
 	"ele_energy1            :=  ? electrons.size()>0 ? electrons[0].energy() : -100 ",
+	"ele_charge1            :=  ? electrons.size()>0 ? electrons[0].charge() : -100 ",
 	"ele_SCeta1             :=  ? electrons.size()>0 ? electrons[0].superCluster().eta() : -100 ",
 	"ele_SCphi1             :=  ? electrons.size()>0 ? electrons[0].superCluster().phi() : -100 ",
 	"ele_ecalEnergy1        :=  ? electrons.size()>0 ? electrons[0].ecalEnergy() : -100 ",
@@ -118,16 +127,22 @@ leptonic_variables=[
 	"ele_SCz1               :=  ? electrons.size()>0 ? electrons[0].superCluster().position().z() : -100 ",
 	"ele_dEtaSCTrackAtVtx1  :=  ? electrons.size()>0 ? electrons[0].deltaEtaSuperClusterTrackAtVtx() : -100 ",
 	"ele_dPhiSCTrackAtVtx1  :=  ? electrons.size()>0 ? electrons[0].deltaPhiSuperClusterTrackAtVtx() : -100 ",
+	"ele_passVetoId1        :=  ? electrons.size()>0 ? electrons[0].passVetoId() : -100 ",
 	"ele_passLooseId1       :=  ? electrons.size()>0 ? electrons[0].passLooseId() : -100 ",
 	"ele_passMediumId1      :=  ? electrons.size()>0 ? electrons[0].passMediumId() : -100 ",
 	"ele_passTightId1       :=  ? electrons.size()>0 ? electrons[0].passTightId() : -100 ",
+	"ele_MVALooseId1        :=  ? electrons.size()>0 ? electrons[0].passMVALooseId() : -100 ",
 	"ele_MVAMediumId1       :=  ? electrons.size()>0 ? electrons[0].passMVAMediumId() : -100 ",
 	"ele_MVATightId1        :=  ? electrons.size()>0 ? electrons[0].passMVATightId() : -100 ",
+	"ele_MVALooseNoIsoId1   :=  ? electrons.size()>0 ? electrons[0].passMVALooseNoIsoId() : -100 ",
+	"ele_MVAMediumNoIsoId1  :=  ? electrons.size()>0 ? electrons[0].passMVAMediumNoIsoId() : -100 ",
+	"ele_MVATightNoIsoId1   :=  ? electrons.size()>0 ? electrons[0].passMVATightNoIsoId() : -100 ",
 	"ele_MiniIso1           :=  ? electrons.size()>0 ? electrons[0].fggMiniIsoSumRel() : -100 ",
 	"ele_pt2                :=  ? electrons.size()>1 ? electrons[1].pt() : -100 ",
 	"ele_eta2               :=  ? electrons.size()>1 ? electrons[1].eta() : -100 ",
 	"ele_phi2               :=  ? electrons.size()>1 ? electrons[1].phi() : -100 ",
 	"ele_energy2            :=  ? electrons.size()>1 ? electrons[1].energy() : -100 ",
+	"ele_charge2            :=  ? electrons.size()>1 ? electrons[1].charge() : -100 ",
 	"ele_SCeta2             :=  ? electrons.size()>1 ? electrons[1].superCluster().eta() : -100 ",
 	"ele_SCphi2             :=  ? electrons.size()>1 ? electrons[1].superCluster().phi() : -100 ",
 	"ele_ecalEnergy2        :=  ? electrons.size()>1 ? electrons[1].ecalEnergy() : -100 ",
@@ -136,37 +151,71 @@ leptonic_variables=[
 	"ele_SCz2               :=  ? electrons.size()>1 ? electrons[1].superCluster().position().z() : -100 ",
 	"ele_dEtaSCTrackAtVtx2  :=  ? electrons.size()>1 ? electrons[1].deltaEtaSuperClusterTrackAtVtx() : -100 ",
 	"ele_dPhiSCTrackAtVtx2  :=  ? electrons.size()>1 ? electrons[1].deltaPhiSuperClusterTrackAtVtx() : -100 ",
+	"ele_passVetoId2        :=  ? electrons.size()>1 ? electrons[1].passVetoId() : -100 ",
 	"ele_passLooseId2       :=  ? electrons.size()>1 ? electrons[1].passLooseId() : -100 ",
 	"ele_passMediumId2      :=  ? electrons.size()>1 ? electrons[1].passMediumId() : -100 ",
 	"ele_passTightId2       :=  ? electrons.size()>1 ? electrons[1].passTightId() : -100 ",
+	"ele_MVALooseId2        :=  ? electrons.size()>1 ? electrons[1].passMVALooseId() : -100 ",
 	"ele_MVAMediumId2       :=  ? electrons.size()>1 ? electrons[1].passMVAMediumId() : -100 ",
 	"ele_MVATightId2        :=  ? electrons.size()>1 ? electrons[1].passMVATightId() : -100 ",
+	"ele_MVALooseNoIsoId2   :=  ? electrons.size()>1 ? electrons[1].passMVALooseNoIsoId() : -100 ",
+	"ele_MVAMediumNoIsoId2  :=  ? electrons.size()>1 ? electrons[1].passMVAMediumNoIsoId() : -100 ",
+	"ele_MVATightNoIsoId2   :=  ? electrons.size()>1 ? electrons[1].passMVATightNoIsoId() : -100 ",
 	"ele_MiniIso2           :=  ? electrons.size()>1 ? electrons[1].fggMiniIsoSumRel() : -100 ",
 	"jet_pt1                :=  ? jets.size()>0 ? jets[0].pt() : -100 ",
 	"jet_eta1               :=  ? jets.size()>0 ? jets[0].eta() : -100 ",
 	"jet_phi1               :=  ? jets.size()>0 ? jets[0].phi() : -100 ",
 	"jet_energy1            :=  ? jets.size()>0 ? jets[0].energy() : -100 ",
-	"jet_bdiscriminant1     :=  ? jets.size()>0 ? jets[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantCSV1  :=  ? jets.size()>0 ? jets[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep1 :=  ? jets.size()>0 ? jets[0].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
 	"jet_pt2                :=  ? jets.size()>1 ? jets[1].pt() : -100 ",
 	"jet_eta2               :=  ? jets.size()>1 ? jets[1].eta() : -100 ",
 	"jet_phi2               :=  ? jets.size()>1 ? jets[1].phi() : -100 ",
 	"jet_energy2            :=  ? jets.size()>1 ? jets[1].energy() : -100 ",
-	"jet_bdiscriminant2     :=  ? jets.size()>1 ? jets[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantCSV2  :=  ? jets.size()>1 ? jets[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep2 :=  ? jets.size()>1 ? jets[1].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
 	"jet_pt3                :=  ? jets.size()>2 ? jets[2].pt() : -100 ",
 	"jet_eta3               :=  ? jets.size()>2 ? jets[2].eta() : -100 ",
 	"jet_phi3               :=  ? jets.size()>2 ? jets[2].phi() : -100 ",
 	"jet_energy3            :=  ? jets.size()>2 ? jets[2].energy() : -100 ",
-	"jet_bdiscriminant3     :=  ? jets.size()>2 ? jets[2].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"jet_bdiscriminantCSV3  :=  ? jets.size()>2 ? jets[2].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep3 :=  ? jets.size()>2 ? jets[2].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
 	"jet_pt4                :=  ? jets.size()>3 ? jets[3].pt() : -100 ",
 	"jet_eta4               :=  ? jets.size()>3 ? jets[3].eta() : -100 ",
 	"jet_phi4               :=  ? jets.size()>3 ? jets[3].phi() : -100 ",
 	"jet_energy4            :=  ? jets.size()>3 ? jets[3].energy() : -100 ",
-	"jet_bdiscriminant4     :=  ? jets.size()>3 ? jets[3].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"jet_bdiscriminantCSV4  :=  ? jets.size()>3 ? jets[3].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep4 :=  ? jets.size()>3 ? jets[3].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
 	"jet_pt5                :=  ? jets.size()>4 ? jets[4].pt() : -100 ",
 	"jet_eta5               :=  ? jets.size()>4 ? jets[4].eta() : -100 ",
 	"jet_phi5               :=  ? jets.size()>4 ? jets[4].phi() : -100 ",
 	"jet_energy5            :=  ? jets.size()>4 ? jets[4].energy() : -100 ",
-	"jet_bdiscriminant5     :=  ? jets.size()>4 ? jets[4].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100 ",
+	"jet_bdiscriminantCSV5  :=  ? jets.size()>4 ? jets[4].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep5 :=  ? jets.size()>4 ? jets[4].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
+	"jet_pt6                :=  ? jets.size()>5 ? jets[5].pt : -100 ",
+	"jet_eta6               :=  ? jets.size()>5 ? jets[5].eta : -100 ",
+	"jet_phi6               :=  ? jets.size()>5 ? jets[5].phi : -100",
+	"jet_energy6            :=  ? jets.size()>5 ? jets[5].energy : -100 ",
+	"jet_bdiscriminantCSV6  :=  ? jets.size()>5 ? jets[5].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep6 :=  ? jets.size()>5 ? jets[5].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
+	"jet_pt7                :=  ? jets.size()>6 ? jets[6].pt : -100 ",
+	"jet_eta7               :=  ? jets.size()>6 ? jets[6].eta : -100 ",
+	"jet_phi7               :=  ? jets.size()>6 ? jets[6].phi : -100",
+	"jet_energy7            :=  ? jets.size()>6 ? jets[6].energy : -100 ",
+	"jet_bdiscriminantCSV7  :=  ? jets.size()>6 ? jets[6].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep7 :=  ? jets.size()>6 ? jets[6].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
+	"jet_pt8                :=  ? jets.size()>7 ? jets[7].pt : -100 ",
+	"jet_eta8               :=  ? jets.size()>7 ? jets[7].eta : -100 ",
+	"jet_phi8               :=  ? jets.size()>7 ? jets[7].phi : -100",
+	"jet_energy8            :=  ? jets.size()>7 ? jets[7].energy : -100 ",
+	"jet_bdiscriminantCSV8  :=  ? jets.size()>7 ? jets[7].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep8 :=  ? jets.size()>7 ? jets[7].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
+	"jet_pt9                :=  ? jets.size()>8 ? jets[8].pt : -100 ",
+	"jet_eta9               :=  ? jets.size()>8 ? jets[8].eta : -100 ",
+	"jet_phi9               :=  ? jets.size()>8 ? jets[8].phi : -100",
+	"jet_energy9            :=  ? jets.size()>8 ? jets[8].energy : -100 ",
+	"jet_bdiscriminantCSV9  :=  ? jets.size()>8 ? jets[8].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
+	"jet_bdiscriminantDeep9 :=  ? jets.size()>8 ? jets[8].bDiscriminator('pfDeepCSVJetTags:probb') : -100",
 	"MetPt                  :=  MetPt ",
 	"MetPhi                 :=  MetPhi "
 ]
@@ -242,31 +291,6 @@ truth_hadronic_variables=[
 	"Top2_phi3               := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].phi() : -100",
 	"Top2_pdgId3             := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].pdgId() : -100",
     ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
