@@ -189,18 +189,14 @@ namespace flashgg {
 
         Handle<View<reco::GenParticle> > genParticles;
 
-
-        std::unique_ptr<vector<TTHLeptonicTag> > tthltags( new vector<TTHLeptonicTag> );
-
         Handle<View<reco::Vertex> > vertices;
         evt.getByToken( vertexToken_, vertices );
 
+
+        std::unique_ptr<vector<TTHLeptonicTag> > tthltags( new vector<TTHLeptonicTag> );
         std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
-        //edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
+        edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
         unsigned int idx = 0;
-
-
-
 
 
         Point higgsVtx;
@@ -297,16 +293,16 @@ namespace flashgg {
                         leadingJetPt = thejet->pt();
 
                     float bDiscriminatorValue = -2.;
-                    bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                    if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
+                    else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+
 
                     if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                     if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
                     if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
                 }
 
-                if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
-                else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
-
+  
                 if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && photonSelection && leadingJetPt>leadingJetPtThreshold_)
                 {
                     passMuonSelection = true;

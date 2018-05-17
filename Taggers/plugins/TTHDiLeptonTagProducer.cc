@@ -206,8 +206,9 @@ namespace flashgg {
         Handle<View<flashgg::Met> > theMet_;
         evt.getByToken( METToken_, theMet_ );
 
-        std::auto_ptr<vector<TTHDiLeptonTag> > tthtags( new vector<TTHDiLeptonTag> );
-        std::auto_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
+        std::unique_ptr<vector<TTHDiLeptonTag> > tthtags( new vector<TTHDiLeptonTag> );
+        std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
+        edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
 
         Point higgsVtx;
 
@@ -222,9 +223,7 @@ namespace flashgg {
             }
         }
 
-        edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
         unsigned int idx = 0;
-
 
         assert( diPhotons->size() == mvaResults->size() );
 
@@ -309,7 +308,8 @@ namespace flashgg {
                         LeadingJetPt = thejet->pt();
                     
                     float bDiscriminatorValue = -2.;
-                    bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                    if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
+                    else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
 
                     if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                     if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
@@ -361,7 +361,8 @@ namespace flashgg {
 
                         
                         float bDiscriminatorValue = -2.;
-                        bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                        if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
+                        else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
 
                         if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                         if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
@@ -413,7 +414,8 @@ namespace flashgg {
                             LeadingJetPt = thejet->pt();
 
                         float bDiscriminatorValue = -2.;
-                        bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                        if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
+                        else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
 
                         if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                         if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
@@ -495,8 +497,8 @@ namespace flashgg {
              }
         }//diPho loop end !
 
-        evt.put( tthtags );
-        evt.put( truths );
+        evt.put( std::move(tthtags) );
+        evt.put( std::move(truths) );
     }
 
 }
