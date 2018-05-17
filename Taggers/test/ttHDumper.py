@@ -9,9 +9,9 @@ from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,clo
 import os
 
 # maxEvents is the max number of events processed of each file, not globally
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
+#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_204512/0000/myMicroAODOutputFile_1.root"
-#inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/GluGluHToGG_M-70_13TeV_powheg_pythia8/RunIIFall17-3_0_1-3_0_1-v0-RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/180405_124501/0000/myMicroAODOutputFile_19.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/GluGluHToGG_M-70_13TeV_powheg_pythia8/RunIIFall17-3_0_1-3_0_1-v0-RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/180405_124501/0000/myMicroAODOutputFile_19.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
 
 outputFile = "output.root" 
@@ -101,8 +101,8 @@ process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 process.load('RecoMET.METFilters.eeBadScFilter_cfi')
 process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERecHits") # Saved MicroAOD Collection (data only)
 process.dataRequirements = cms.Sequence()
+process.dataRequirements += process.hltHighLevel
 if customize.processId == "Data":
-    process.dataRequirements += process.hltHighLevel
     process.dataRequirements += process.eeBadScFilter
  
 #process.load("flashgg.MicroAOD.flashggMets_cfi")
@@ -216,7 +216,7 @@ if (customize.processId.count("qcd") or customize.processId.count("gjet")) and c
 
 
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents" , -1)    # max-number of events
+customize.setDefault("maxEvents" , 1000)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
