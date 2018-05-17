@@ -15,11 +15,14 @@
 
      "tth_125" : [
      	       ["/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/sethzenz-RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1-fd3d243cf5f28cac24db2f3e18034279/USER", {"args" : ["outputFile=ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8.root"], "njobs":100}]
+<<<<<<< HEAD
 	     ],
 
      "tth_125" : [
      	       ["/ttHToGG_M125_13TeV_powheg_pythia8/sethzenz-RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1-fd3d243cf5f28cac24db2f3e18034279/USER", {"args" : ["outputFile=ttHToGG_M125_13TeV_powheg_pythia8.root"], "njobs":100}]
 
+=======
+>>>>>>> bafb6f4695c47c00c0671d4dd5dffa83346bc6e3
 	      ]
 },
 

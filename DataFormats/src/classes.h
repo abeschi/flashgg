@@ -19,8 +19,13 @@
 #include "flashgg/DataFormats/interface/SinglePhotonView.h"
 #include "flashgg/DataFormats/interface/SingleVertexView.h"
 #include "flashgg/DataFormats/interface/TTHHadronicTag.h"
+<<<<<<< HEAD
 #include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
 #include "flashgg/DataFormats/interface/TTHDiLeptonTag.h"
+=======
+#include "flashgg/DataFormats/interface/TTHGenericTag.h"
+#include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
+>>>>>>> bafb6f4695c47c00c0671d4dd5dffa83346bc6e3
 #include "flashgg/DataFormats/interface/VBFDiPhoDiJetMVAResult.h"
 #include "flashgg/DataFormats/interface/VBFMVAResult.h"
 #include "flashgg/DataFormats/interface/VBFTag.h"
@@ -205,15 +210,22 @@ namespace  {
         std::vector<flashgg::TTHLeptonicTag> vec_tthl;
         edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> > wrp_vec_tthl;
 
+<<<<<<< HEAD
         flashgg::TTHDiLeptonTag tthDl;
         std::vector<flashgg::TTHDiLeptonTag> vec_tthDl;
         edm::Wrapper<std::vector<flashgg::TTHDiLeptonTag> > wrp_vec_tthDl;
 
+=======
+>>>>>>> bafb6f4695c47c00c0671d4dd5dffa83346bc6e3
         edm::Ptr<reco::GenParticle> ptr_genp;
 
         flashgg::TTHHadronicTag tthh;
         std::vector<flashgg::TTHHadronicTag> vec_tthh;
         edm::Wrapper<std::vector<flashgg::TTHHadronicTag> > wrp_vec_tthh;
+
+        flashgg::TTHGenericTag tthg;
+        std::vector<flashgg::TTHGenericTag> vec_tthg;
+        edm::Wrapper<std::vector<flashgg::TTHGenericTag> > wrp_vec_tthg;
 
         std::vector<edm::Ptr<flashgg::Jet> > vect_ptr_jet;
 
@@ -324,11 +336,3 @@ namespace  {
 
     };
 }
-// Local Variables:
-// mode:c++
-// indent-tabs-mode:nil
-// tab-width:4
-// c-basic-offset:4
-// End:
-// vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
