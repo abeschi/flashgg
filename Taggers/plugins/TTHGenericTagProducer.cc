@@ -81,6 +81,7 @@ namespace flashgg {
         vector<double> bDiscriminator_;
         string bTag_;
         double PhoMVAThreshold_;
+        bool isControlSample_;
     };
 
     TTHGenericTagProducer::TTHGenericTagProducer( const ParameterSet &iConfig ) :
@@ -113,6 +114,7 @@ namespace flashgg {
         bTag_ = iConfig.getParameter<string>( "bTag");
 
         PhoMVAThreshold_ = iConfig.getParameter<double>( "PhoMVAThreshold");
+        isControlSample_ = iConfig.getParameter<bool>( "isControlSample");
 
         ParameterSet HTXSps = iConfig.getParameterSet( "HTXSTags" );
         stage0catToken_ = consumes<int>( HTXSps.getParameter<InputTag>("stage0cat") );
@@ -186,8 +188,6 @@ namespace flashgg {
         edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
         unsigned int idx = 0;
 
-
-
         std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
  
         for(unsigned int i=0; i<theMuons->size(); i++)            
@@ -218,18 +218,24 @@ namespace flashgg {
             edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( diphoIndex );
             edm::Ptr<flashgg::DiPhotonMVAResult> mvares = mvaResults->ptrAt( diphoIndex );
 
+            idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
+            idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
+            
             TTHGenericTag tthtags_obj( dipho, mvares );
 
             if( dipho->leadingPhoton()->pt() < ( dipho->mass() )*leadPhoOverMassThreshold_ ) { continue; }
             if( dipho->subLeadingPhoton()->pt() < ( dipho->mass() )*subleadPhoOverMassThreshold_ ) { continue; }
-
-            idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
-            idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
-
-            if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
+ 
             if( mvares->result < MVAThreshold_ ) { continue; }
 
-            photonSelection = true;
+            if(!isControlSample_)
+            {    if( idmva1 > PhoMVAThreshold_ && idmva2 > PhoMVAThreshold_ )
+                    photonSelection = true;
+            }
+            else
+            {      if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) 
+                      photonSelection = true;
+            }
 
             int njet_ = 0;
             int njets_btagloose_ = 0;
@@ -254,7 +260,10 @@ namespace flashgg {
                 JetVect.push_back(thejet);
                 
                 float bDiscriminatorValue = -2.;
-                bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+                if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
+                else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
+
+                cout << bDiscriminatorValue << endl;
 
                 if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                 if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
@@ -264,7 +273,7 @@ namespace flashgg {
 
             if( njets_btagloose_ >= bjetsLooseNumberThreshold_ && njet_ >= jetsNumberThreshold_ && photonSelection)
             {
-                for( unsigned num = 0; num < JetVect.size(); num++ )
+               for( unsigned num = 0; num < JetVect.size(); num++ )
                     tthtags_obj.includeWeightsByLabel( *JetVect.at(num), "JetBTagCutWeight");
                 
                 tthtags_obj.includeWeights( *dipho );

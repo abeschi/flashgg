@@ -9,18 +9,14 @@ from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag,clo
 import os
 
 # maxEvents is the max number of events processed of each file, not globally
-<<<<<<< HEAD
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_204512/0000/myMicroAODOutputFile_1.root"
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/GluGluHToGG_M-70_13TeV_powheg_pythia8/RunIIFall17-3_0_1-3_0_1-v0-RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/180405_124501/0000/myMicroAODOutputFile_19.root"
-#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
-
-=======
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
->>>>>>> bafb6f4695c47c00c0671d4dd5dffa83346bc6e3
+#inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/GluGluHToGG_M-70_13TeV_powheg_pythia8/RunIIFall17-3_0_1-3_0_1-v0-RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/180405_124501/0000/myMicroAODOutputFile_19.root"
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
 outputFile = "output.root" 
 
 dropVBFInNonGold = False
+
 
 ## I/O SETUP ##
 process = cms.Process("TTHDumper")
@@ -72,7 +68,7 @@ musystlabels = []
 # Or use the official tool instead
 useEGMTools(process)
 
-#customize.processId = "Data"
+customize.processId = "Data"
 
 if customize.processId == "Data":
     customizeSystematicsForData(process)
@@ -115,13 +111,15 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 from flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
-process.TTHDiLeptonTagDumper = createTagDumper("TTHDiLeptonTag")
+process.TTHGenericTagDumper = createTagDumper("TTHGenericTag")
 #process.load("flashgg.Taggers.tthDumper_cfi")
 #process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
-process.TTHDiLeptonTagDumper.dumpTrees = True
-process.TTHDiLeptonTagDumper.dumpHistos = False
-process.TTHDiLeptonTagDumper.dumpWorkspace = False
-process.TTHDiLeptonTagDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
+process.TTHGenericTagDumper.dumpTrees = True
+process.TTHGenericTagDumper.dumpHistos = False
+process.TTHGenericTagDumper.dumpWorkspace = False
+process.TTHGenericTagDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
+
+process.flashggTTHGenericTag.isControlSample = cms.bool(True)
 
 #from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
 #massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
@@ -133,63 +131,13 @@ else:
 	variables_ = var.generic_variables + var.dipho_variables
 
 
-cfgTools.addCategories(process.TTHDiLeptonTagDumper,
+cfgTools.addCategories(process.TTHGenericTagDumper,
                        ## categories definition  
 			[	("all","1",0)
 			],
 			variables = variables_,
 			histograms = []
                      )
-
-
-
-process.TTHLeptonicDumper = createTagDumper("TTHLeptonicTag")
-#process.load("flashgg.Taggers.tthDumper_cfi")
-#process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
-process.TTHLeptonicDumper.dumpTrees = True
-process.TTHLeptonicDumper.dumpHistos = False
-process.TTHLeptonicDumper.dumpWorkspace = False
-process.TTHLeptonicDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
-
-#from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
-#massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
-
-
-cfgTools.addCategories(process.TTHLeptonicDumper,
-                       ## categories definition  
-			[	("all","1",0)
-			],
-			variables = variables_,
-			histograms = []
-                     )
-
-
-
-
-process.TTHHadronicDumper = createTagDumper("TTHHadronicTag")
-#process.load("flashgg.Taggers.tthDumper_cfi")
-#process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
-process.TTHHadronicDumper.dumpTrees = True
-process.TTHHadronicDumper.dumpHistos = False
-process.TTHHadronicDumper.dumpWorkspace = False
-process.TTHHadronicDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
-
-#from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
-#massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
-
-variables_hadronic = var.hadronic_variables + var.dipho_variables
-
-cfgTools.addCategories(process.TTHHadronicDumper,
-                       ## categories definition  
-			[	("all","1",0)
-			],
-			variables = variables_hadronic,
-			histograms = []
-                     )
-
-
-
-
 
 process.finalFilter = cms.Sequence()
 if (customize.processId.count("qcd") or customize.processId.count("gjet")) and customize.processId.count("fake"):
@@ -220,7 +168,7 @@ if (customize.processId.count("qcd") or customize.processId.count("gjet")) and c
 
 
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents" , 1000)    # max-number of events
+customize.setDefault("maxEvents" , -1)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
@@ -233,9 +181,7 @@ process.p1 = cms.Path(process.dataRequirements*
                      (process.flashggTagSequence*process.systematicsTagSequences)*
                      process.flashggSystTagMerger*
                      process.finalFilter*
-                     process.TTHDiLeptonTagDumper*
-		     process.TTHLeptonicDumper*
-		     process.TTHHadronicDumper)
+                     process.TTHGenericTagDumper)
 
 
 print process.p1
