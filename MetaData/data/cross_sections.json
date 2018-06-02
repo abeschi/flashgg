@@ -188,9 +188,11 @@
         "VBFHToGG_M-129_13TeV_powheg_pythia8"                          : { "xs" : 3.6650,   "br" : 0.002251, "kf" : 1.06, "itype":-129100 },
         "VBFHToGG_M130_13TeV_amcatnlo_pythia8"                          : { "xs" : 3.6370,   "br" : 0.002238, "kf" : 1.06, "itype":-130100 },
         "VBFHToGG_M-130_13TeV_powheg_pythia8"                          : { "xs" : 3.6370,   "br" : 0.002238, "kf" : 1.06, "itype":-130100 },
+
 	"GJet_Pt-20toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8" : { "xs" : 3216.0, "br" : 1.0, "kf" : 1.0, "itype":3 },
 	"GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8" : { "xs" : 220.0, "br" : 1.0, "kf" : 1.0, "itype":1 },
 	"GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8" :  { "xs" : 850.8,  "br" : 1.0,   "kf" : 1.0, "itype":2 },
+
 	"DiPhotonJetsBox_M40_80-Sherpa" : { "xs" : 303.2, "itype":10 },
 	"DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa" : { "xs" : 84.4, "itype":10 },
 	"DiPhotonJets_MGG-80toInf_13TeV_amcatnloFXFX_pythia8" : { "xs" : 135.1 },
@@ -212,8 +214,11 @@
         "GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8" : { "xs" :85.4 , "itype" : 8 },
         "TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8" : { "xs" : 830 },
         "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8" : { "xs" : 665 },
+        "TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8" : { "xs" : 830 },
         "TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8" : { "xs" : 3.819 },
+        "TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8" : { "xs" : 3.819 },
         "TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8" : { "xs" : 0.01731 },
+        "TTGG_0Jets_TCP5_13TeV_amcatnlo_madspin_pythia8" : { "xs" : 0.01731 },
         "TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8" : { "xs" : 2.967 },
         "THQ_HToGG_13TeV-madgraph-pythia8_TuneCUETP8M1" : { "xs" : 0.07425,   "br" : 0.00227, "kf" : 1.815 },
         "THW_HToGG_13TeV-madgraph-pythia8_TuneCUETP8M1" : { "xs" : 0.01517,   "br" : 0.00227, "kf" : 1.815 },
