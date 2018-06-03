@@ -12,7 +12,9 @@ import os
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_144315/0000/myMicroAODOutputFile_1.root"
 #inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_204512/0000/myMicroAODOutputFile_1.root"
 #inputFIles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/GluGluHToGG_M-70_13TeV_powheg_pythia8/RunIIFall17-3_0_1-3_0_1-v0-RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/180405_124501/0000/myMicroAODOutputFile_19.root"
-inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
+#inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_1/3_0_1/DoubleEG/RunIIFall17-3_0_1-3_0_1-v0-Run2017F-17Nov2017-v1/180331_074338/0000/myMicroAODOutputFile_1.root"
+#outputFile = "output.root" 
+inputFiles = "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall17-3_0_0/3_0_0/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/RunIIFall17-3_0_0-3_0_0-v0-RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180325_204215/0000/myMicroAODOutputFile_12.root"
 outputFile = "output.root" 
 
 dropVBFInNonGold = False
@@ -34,22 +36,27 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
     process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2'
 elif os.environ["CMSSW_VERSION"].count("CMSSW_9_4"):
     process.GlobalTag.globaltag = '94X_mc2017_realistic_v10'
-
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
+
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000)
 
-process.source = cms.Source ("PoolSource",
-                             fileNames = cms.untracked.vstring(inputFiles))
+process.source = cms.Source (
+    "PoolSource",
+    fileNames = cms.untracked.vstring(inputFiles))
 
-process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string(outputFile))
+process.TFileService = cms.Service(
+    "TFileService",
+    fileName = cms.string(outputFile))
+
+process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+
 from flashgg.MetaData.JobConfig import customize
 customize.parse()
 
-# SYSTEMATICS SECTION
 
+# SYSTEMATICS SECTION
 from flashgg.Systematics.SystematicsCustomize import *
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
 if dropVBFInNonGold:
@@ -68,8 +75,6 @@ musystlabels = []
 # Or use the official tool instead
 useEGMTools(process)
 
-customize.processId = "Data"
-
 if customize.processId == "Data":
     customizeSystematicsForData(process)
 else:
@@ -85,17 +90,19 @@ printSystematicVPSet([process.flashggDiPhotonSystematics.SystMethods2D])
 
 # Require standard diphoton trigger
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
-process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*",
-#                                                                "HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1",
-#                                                                "HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1"
-                                                                ))
-
-process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+process.hltHighLevel= hltHighLevel.clone(
+    HLTPaths = cms.vstring(
+        "HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*",
+        #"HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1",
+        #"HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v1"
+        )
+    )
 
 #release cuts
-#process.flashggTTHGenericTag.bjetsLooseNumberThreshold =  cms.double(0)
-
-process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+process.flashggTTHGenericTag.bjetsLooseNumberThreshold =  cms.double(0)
+process.flashggTTHGenericTag.leadPhoOverMassThreshold = cms.double(0.25)
+process.flashggTTHGenericTag.subleadPhoOverMassThreshold = cms.double(0.25)
+process.flashggTTHGenericTag.jetsNumberThreshold = cms.double(0)
 
 # ee bad supercluster filter on data
 process.load('RecoMET.METFilters.eeBadScFilter_cfi')
@@ -112,32 +119,28 @@ from flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
 process.TTHGenericTagDumper = createTagDumper("TTHGenericTag")
-#process.load("flashgg.Taggers.tthDumper_cfi")
-#process.flashggMuMuGamma.PhotonTag=cms.InputTag('flashggUpdatedIdMVAPhotons')
 process.TTHGenericTagDumper.dumpTrees = True
 process.TTHGenericTagDumper.dumpHistos = False
 process.TTHGenericTagDumper.dumpWorkspace = False
 process.TTHGenericTagDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
 
-process.flashggTTHGenericTag.isControlSample = cms.bool(True)
-
-#from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
-#massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
+process.flashggTTHGenericTag.isControlSample = cms.bool(False)
 
 import flashgg.Taggers.ttHTagVariables as var
-if customize.processId == "Data":
-	variables_ = var.generic_variables + var.dipho_variables
-else:
-	variables_ = var.generic_variables + var.dipho_variables
+variables_ = var.dipho_variables + var.generic_variables
+#if customize.processId == "Data":
+#	variables_ += 
+#else
+#	variables_ += 
 
-
-cfgTools.addCategories(process.TTHGenericTagDumper,
-                       ## categories definition  
-			[	("all","1",0)
-			],
-			variables = variables_,
-			histograms = []
-                     )
+cfgTools.addCategories(
+    process.TTHGenericTagDumper,
+    ## categories definition  
+    [	("all","1",0)
+        ],
+    variables = variables_,
+    histograms = []
+    )
 
 process.finalFilter = cms.Sequence()
 if (customize.processId.count("qcd") or customize.processId.count("gjet")) and customize.processId.count("fake"):
@@ -153,7 +156,6 @@ if (customize.processId.count("qcd") or customize.processId.count("gjet")) and c
         raise Exception,"Mis-configuration of python for prompt-fake filter"
 
 
-
 #remove un-necessary tags
 #process.flashggTagSequence.remove(process.flashggVBFTag)
 #process.flashggTagSequence.remove(process.flashggTTHLeptonicTag)
@@ -166,22 +168,22 @@ if (customize.processId.count("qcd") or customize.processId.count("gjet")) and c
 #process.flashggTagSequence.remove(process.flashggUntagged)
 
 
-
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents" , -1)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
-process.p1 = cms.Path(process.dataRequirements*
-                     process.flashggUpdatedIdMVADiPhotons*
-                     process.flashggDiPhotonSystematics*
-		     process.flashggMetSystematics*
-                     process.flashggMuonSystematics*process.flashggElectronSystematics*
-                     (process.flashggUnpackedJets*process.jetSystematicsSequence)*
-                     (process.flashggTagSequence*process.systematicsTagSequences)*
-                     process.flashggSystTagMerger*
-                     process.finalFilter*
-                     process.TTHGenericTagDumper)
-
+process.p1 = cms.Path(
+    process.dataRequirements*
+    process.flashggUpdatedIdMVADiPhotons*
+    process.flashggDiPhotonSystematics*
+    process.flashggMetSystematics*
+    process.flashggMuonSystematics*process.flashggElectronSystematics*
+    (process.flashggUnpackedJets*process.jetSystematicsSequence)*
+    (process.flashggTagSequence*process.systematicsTagSequences)*
+    process.flashggSystTagMerger*
+    process.finalFilter*
+    process.TTHGenericTagDumper
+    )
 
 print process.p1

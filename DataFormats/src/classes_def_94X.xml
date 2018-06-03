@@ -77,6 +77,8 @@
 <class name="std::vector<flashgg::TTHDiLeptonTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::TTHDiLeptonTag> >"/>
 <class name="flashgg::TTHGenericTag"/>
+<class name="std::vector<flashgg::TTHGenericTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::TTHGenericTag> >"/>
 <class name="flashgg::TTHHadronicTag" ClassVersion="15">
  <version ClassVersion="15" checksum="705798933"/>
  <version ClassVersion="14" checksum="3454620804"/>

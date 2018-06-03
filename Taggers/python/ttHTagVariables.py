@@ -29,11 +29,11 @@ dipho_variables=[
     "dipho_sublead_elveto   := diPhoton.subLeadingPhoton.passElectronVeto",
     "dipho_mva              := diPhotonMVA.result",
     "dipho_cosDeltaphi      := diPhotonMVA.CosPhi",
+    "dipho_deltaphi         := acos(diPhotonMVA.CosPhi)",
     "dipho_sigmaRV          := diPhotonMVA.sigmarv",
     "dipho_sigmaWV          := diPhotonMVA.sigmawv",
     "dipho_vtxProb          := diPhotonMVA.vtxprob"
     ]
-
 
 hadronic_variables=[
         "jet_pt1            :=  ? jetVector.size()>0 ? jetVector[0].pt : -100 ",
@@ -84,10 +84,7 @@ hadronic_variables=[
 	"njet               :=  nJet ",
 	"nbjet              :=  nBMedium ",
 	"ttHMVA             :=  tthMvaRes ",
-#	"MetPt              :=  MetPt ",
-#	"MetPhi             :=  MetPhi "
-]
-
+        ]
 
 generic_variables=[
 	"mu_pt1                 :=  ? muons.size()>0 ? muons[0].pt() : -100 ",
@@ -218,12 +215,13 @@ generic_variables=[
 	"jet_energy9            :=  ? jets.size()>8 ? jets[8].energy : -100 ",
 	"jet_bdiscriminantCSV9  :=  ? jets.size()>8 ? jets[8].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -100",
 	"jet_bdiscriminantDeep9 :=  ? jets.size()>8 ? jets[8].bDiscriminator('pfDeepCSVJetTags:probb') + jets[8].bDiscriminator('pfDeepCSVJetTags:probbb') : -100",
-	"MetPt                  :=  MetPt ",
-	"MetPhi                 :=  MetPhi "
-]
-
-
-
+	"MetPt                  := MetPt",
+	"MetPhi                 := MetPhi",
+        "nJets                  := jets.size()",
+        "nJets_bTagLoose        := nBLoose()",
+        "nJets_bTagMedium       := nBMedium()",
+        "nJets_bTagTight        := nBTight()"
+        ]
 
 leptonic_variables_all=[
 	"fggele_pt2                :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].pt() : -100 ",
@@ -243,11 +241,8 @@ leptonic_variables_all=[
 	"fggele_passTightId2       :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passTightId() : -100 ",
 	"fggele_MVAMediumId2       :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passMVAMediumId() : -100 ",
 	"fggele_MVATightId2        :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].passMVATightId() : -100 ",
-	"fggele_MiniIso2           :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].fggMiniIsoSumRel() : -100 ",
-
-]
-
-
+	"fggele_MiniIso2           :=  ? GetTTH.size()>0 && Electrons.size()>1 ? Electrons[1].fggMiniIsoSumRel() : -100 "
+        ]
 
 truth_photon_variables=[
 	"GenLeadPhton_pt         :=  tagTruth().LeadingPhotonPt ",
@@ -258,8 +253,7 @@ truth_photon_variables=[
 	"GenSubleadPhton_eta     :=  tagTruth().SubleadingPhotonEta ",
 	"GenSubleadPhton_phi     :=  tagTruth().SubleadingPhotonPhi ",
 	"GenSubleadPhton_energy  :=  tagTruth().SubleadingPhotonEnergy "
-    ]
-
+        ]
 
 truth_hadronic_variables=[
 	"Top1_pt1                := ? tagTruth().GenTop1.size()==3 ? tagTruth().GenTop1[0].pt() : -100",
@@ -292,7 +286,4 @@ truth_hadronic_variables=[
 	"Top2_eta3               := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].eta() : -100",
 	"Top2_phi3               := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].phi() : -100",
 	"Top2_pdgId3             := ? tagTruth().GenTop2.size()==3 ? tagTruth().GenTop2[2].pdgId() : -100",
-    ]
-
-
-
+        ]
