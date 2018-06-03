@@ -1,5 +1,5 @@
-#ifndef FLASHgg_TTHGeneric_h
-#define FLASHgg_TTHGeneric_h
+#ifndef FLASHgg_TTHDiLepton_h
+#define FLASHgg_TTHDiLepton_h
 
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
 #include "flashgg/DataFormats/interface/Muon.h"
