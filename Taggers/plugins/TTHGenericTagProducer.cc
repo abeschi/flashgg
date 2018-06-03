@@ -263,8 +263,6 @@ namespace flashgg {
                 if(bTag_ == "pfDeepCSV") bDiscriminatorValue = thejet->bDiscriminator("pfDeepCSVJetTags:probb")+thejet->bDiscriminator("pfDeepCSVJetTags:probbb") ;
                 else  bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
 
-                cout << bDiscriminatorValue << endl;
-
                 if( bDiscriminatorValue > bDiscriminator_[0] ) njets_btagloose_++;
                 if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
                 if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
