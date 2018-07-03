@@ -111,8 +111,8 @@ namespace flashgg {
             leadeta_        = g1->eta();
             subleadeta_     = g2->eta();
 
-            leadsigmaEoE_ = g2 -> sigEOverE();
-            subleadsigmaEoE_ = g2 -> sigEOverE();
+            leadsigmaEoE_    = g1->sigEOverE();
+            subleadsigmaEoE_ = g2->sigEOverE();
 
             sigmarv_        = SigmaM;
             CosPhi_         = TMath::Cos( deltaPhi( g1->phi(), g2->phi() ) );

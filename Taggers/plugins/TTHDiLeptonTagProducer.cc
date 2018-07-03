@@ -321,8 +321,8 @@ namespace flashgg {
                     if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
                     if( thejet->pt() < jetPtThreshold_ ) { continue; }
 
-                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
+                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
 
                     if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
 
@@ -373,8 +373,8 @@ namespace flashgg {
                         if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
                         if( thejet->pt() < jetPtThreshold_ ) { continue; }
 
-                        float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                        float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
+                        float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                        float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
 
                         if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
 
@@ -427,8 +427,8 @@ namespace flashgg {
                         if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
                         if( thejet->pt() < jetPtThreshold_ ) { continue; }
 
-                        float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                        float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
+                        float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                        float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
 
                         if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
 
@@ -493,6 +493,7 @@ namespace flashgg {
                 tthtags_obj.setElectrons( tagElectrons );
                 tthtags_obj.setDiPhotonIndex( diphoIndex );
                 tthtags_obj.setSystLabel( systLabel_ );
+                tthtags_obj.setNjet( njet_ );
                 tthtags_obj.setNBLoose( njets_btagloose_ );
                 tthtags_obj.setNBMedium( njets_btagmedium_ );
                 tthtags_obj.setNBTight( njets_btagtight_ );

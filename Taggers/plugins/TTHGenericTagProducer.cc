@@ -22,7 +22,7 @@
 
 #include "DataFormats/Math/interface/deltaR.h"
 
-#include "flashgg/DataFormats/interface/TagTruthBase.h"
+#include "flashgg/DataFormats/interface/TTHTagTruth.h"
 #include "DataFormats/Common/interface/RefToPtr.h"
 
 #include <vector>
@@ -39,10 +39,7 @@ using namespace edm;
 namespace flashgg {
     class TTHGenericTagProducer : public EDProducer
     {
-
     public:
-        typedef math::XYZPoint Point;
-
         TTHGenericTagProducer( const ParameterSet & );
     private:
         void produce( Event &, const EventSetup & ) override;
@@ -128,7 +125,7 @@ namespace flashgg {
             tokenJets_.push_back(token);
         }
         produces<vector<TTHGenericTag> >();
-        produces<vector<TagTruthBase> >();
+        produces<vector<TTHTagTruth> >();
     }
 
     void TTHGenericTagProducer::produce( Event &evt, const EventSetup & )
@@ -170,22 +167,70 @@ namespace flashgg {
         evt.getByToken( METToken_, theMet_ );
 
         std::unique_ptr<vector<TTHGenericTag> > tthtags( new vector<TTHGenericTag> );
-        std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
-
-        Point higgsVtx;
-
-        if( ! evt.isRealData() ) {
+        std::unique_ptr<vector<TTHTagTruth> > truths( new vector<TTHTagTruth> );
+        
+        edm::Ptr<reco::GenParticle> gen_H;
+        edm::Ptr<reco::GenParticle> gen_leadPhoton;
+        edm::Ptr<reco::GenParticle> gen_subleadPhoton;
+        edm::Ptr<reco::GenParticle> gen_t;
+        edm::Ptr<reco::GenParticle> gen_b;
+        edm::Ptr<reco::GenParticle> gen_Wplus1;
+        edm::Ptr<reco::GenParticle> gen_Wplus2;
+        edm::Ptr<reco::GenParticle> gen_tbar;
+        edm::Ptr<reco::GenParticle> gen_bbar;
+        edm::Ptr<reco::GenParticle> gen_Wminus1;
+        edm::Ptr<reco::GenParticle> gen_Wminus2;
+        
+        if( ! evt.isRealData() ){
             evt.getByToken( genParticleToken_, genParticles );
             for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
-                int pdgid = genParticles->ptrAt( genLoop )->pdgId();
-                if( pdgid == 25 || pdgid == 22 ) {
-                    higgsVtx = genParticles->ptrAt( genLoop )->vertex();
-                    break;
+                int pdgid = genParticles->ptrAt(genLoop)->pdgId();
+                // int dpdgid[2] = {0,0};
+                
+                if( pdgid == 25 ) {
+                    if( genParticles->ptrAt(genLoop) -> numberOfDaughters() == 2 )
+                    {
+                        gen_H = genParticles->ptrAt(genLoop);
+                        // dpdgid[0] = genParticles->ptrAt(genLoop)->daughter(0)->pdgId();
+                        // dpdgid[1] = genParticles->ptrAt(genLoop)->daughter(1)->pdgId();
+                    }
+                }
+                
+                if( pdgid == 6 ) {
+                    if( genParticles->ptrAt(genLoop) -> numberOfDaughters() == 2 )
+                    {
+                        // dpdgid[0] = genParticles->ptrAt(genLoop)->daughter(0)->pdgId();
+                        // dpdgid[1] = genParticles->ptrAt(genLoop)->daughter(1)->pdgId();
+                    }
+                }
+                
+                if( pdgid == -6 ) {
+                    if( genParticles->ptrAt(genLoop) -> numberOfDaughters() == 2 )
+                    {
+                        // dpdgid[0] = genParticles->ptrAt(genLoop)->daughter(0)->pdgId();
+                        // dpdgid[1] = genParticles->ptrAt(genLoop)->daughter(1)->pdgId();
+                    }
+                }
+                
+                if( pdgid == 24 ) {
+                    if( genParticles->ptrAt(genLoop) -> numberOfDaughters() == 2 )
+                    {
+                        // dpdgid[0] = genParticles->ptrAt(genLoop)->daughter(0)->pdgId();
+                        // dpdgid[1] = genParticles->ptrAt(genLoop)->daughter(1)->pdgId();
+                    }
+                }
+                
+                if( pdgid == -24 ) {
+                    if( genParticles->ptrAt(genLoop) -> numberOfDaughters() == 2 )
+                    {
+                        // dpdgid[0] = genParticles->ptrAt(genLoop)->daughter(0)->pdgId();
+                        // dpdgid[1] = genParticles->ptrAt(genLoop)->daughter(1)->pdgId();
+                    }
                 }
             }
         }
-
-        edm::RefProd<vector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<vector<TagTruthBase> >();
+        
+        edm::RefProd<vector<TTHTagTruth> > rTagTruth = evt.getRefBeforePut<vector<TTHTagTruth> >();
         unsigned int idx = 0;
 
         std::vector<edm::Ptr<flashgg::Muon> > goodMuons;
@@ -249,9 +294,9 @@ namespace flashgg {
                 edm::Ptr<flashgg::Jet> thejet = Jets[jetCollectionIndex]->ptrAt( jetIndex );
                 if( fabs( thejet->eta() ) > jetEtaThreshold_ ) { continue; }
                 if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
-                float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(),
-                                                dipho->subLeadingPhoton()->superCluster()->phi() );
+                float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(),
+                                                dipho->subLeadingPhoton()->phi() );
 
                 if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
                 if( thejet->pt() < jetPtThreshold_ ) { continue; }
@@ -275,7 +320,8 @@ namespace flashgg {
                     tthtags_obj.includeWeightsByLabel( *JetVect.at(num), "JetBTagCutWeight");
                 
                 tthtags_obj.includeWeights( *dipho );
-
+                
+                tthtags_obj.setVertices( vertices->ptrs() );
                 tthtags_obj.setJets( JetVect );
                 tthtags_obj.setMuons( goodMuons );
                 tthtags_obj.setElectrons( goodElectrons );
@@ -292,12 +338,12 @@ namespace flashgg {
                 tthtags_obj.setMetPhi((float)Met->phi());
                 
                 tthtags->push_back( tthtags_obj );
-
- 
+                
+                
                 if( !evt.isRealData() )
                 {
-                    TagTruthBase truth_obj;
-                    truth_obj.setGenPV( higgsVtx );
+                    TTHTagTruth truth_obj;
+                    truth_obj.setH( gen_H );
                     if ( stage0cat.isValid() )
                     {
                         truth_obj.setHTXSInfo( *( stage0cat.product() ),
@@ -308,18 +354,14 @@ namespace flashgg {
                     } 
                     else
                         truth_obj.setHTXSInfo( 0, 0, 0, 0., 0. );
-
+                    
                     truths->push_back( truth_obj );
-                    tthtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, idx++ ) ) );
+                    tthtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TTHTagTruth> >( rTagTruth, idx++ ) ) );
                 }
-
-
- 
-
              }
-
+            
         }//diPho loop end !
-
+        
         evt.put( std::move(tthtags) );
         evt.put( std::move(truths) );
     }

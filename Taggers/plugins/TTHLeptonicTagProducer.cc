@@ -50,7 +50,6 @@ namespace flashgg {
 
         std::vector<edm::EDGetTokenT<View<flashgg::Jet> > > tokenJets_;
         EDGetTokenT<View<DiPhotonCandidate> > diPhotonToken_;
-        //EDGetTokenT<View<Jet> > thejetToken_;
         std::vector<edm::InputTag> inputTagJets_;
         EDGetTokenT<View<Electron> > electronToken_;
         EDGetTokenT<View<flashgg::Muon> > muonToken_;
@@ -194,8 +193,7 @@ namespace flashgg {
 
         edm::Handle<double>  rho;
         evt.getByToken(rhoTag_,rho);
-        double rho_    = *rho;
-
+        
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
 
@@ -226,26 +224,26 @@ namespace flashgg {
                 }
             }
         }
-
+        
         assert( diPhotons->size() == mvaResults->size() );
-
+        
         double idmva1 = 0.;
         double idmva2 = 0.;
-
+        
         for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ )
         {
             unsigned int jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex();
-
+            
             edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( diphoIndex );
             edm::Ptr<flashgg::DiPhotonMVAResult> mvares = mvaResults->ptrAt( diphoIndex );
-
+            
             if( dipho->leadingPhoton()->pt() < ( dipho->mass() )*leadPhoOverMassThreshold_ ) { continue; }
             if( dipho->subLeadingPhoton()->pt() < ( dipho->mass() )*subleadPhoOverMassThreshold_ ) { continue; }
             idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
             idmva2 = dipho->subLeadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
-
+            
             if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
-
+            
             bool passDiphotonSelection = true;
             if(UseCutBasedDiphoId_)
             {
@@ -259,9 +257,9 @@ namespace flashgg {
             }
             else
                 if( mvares->result < MVAThreshold_ ) passDiphotonSelection = false;
-
+            
             if(!passDiphotonSelection) continue;
-
+            
             std::vector<edm::Ptr<flashgg::Muon> >     Muons;
             std::vector<edm::Ptr<flashgg::Electron> > Electrons;
             
@@ -269,12 +267,12 @@ namespace flashgg {
                 Muons = selectMuons(theMuons->ptrs(), dipho, vertices->ptrs(), MuonPtCut_, MuonEtaCut_, MuonMiniIsoCut_, MuonPhotonDrCut_);
             if(theElectrons->size()>0)
                 Electrons = selectElectrons(theElectrons->ptrs(), dipho, ElePtCut_, EleEtaCuts_, ElePhotonDrCut_, ElePhotonZMassCut_, DeltaRTrkEle_);
-
+            
             if( (Muons.size() + Electrons.size()) == 0) continue;
-
+            
             bool passMuonSelection = false;
             bool passEleSelection  = false;
-
+            
             int njet_ = 0;
             int njets_btagloose_ = 0;
             int njets_btagmedium_ = 0;
@@ -283,34 +281,34 @@ namespace flashgg {
             std::vector<edm::Ptr<Muon> > tagMuons;
             std::vector<edm::Ptr<Electron> > tagElectrons;
             std::vector<edm::Ptr<flashgg::Jet>> tagJets;
-
+            
             for( unsigned int muonIndex = 0; muonIndex < Muons.size(); muonIndex++ )
             {
                 Ptr<flashgg::Muon> muon = Muons[muonIndex];
-
+                
                 njet_ = 0;
                 njets_btagloose_ = 0;
                 njets_btagmedium_ = 0;
                 njets_btagtight_ = 0;
                 leadingJetPt = -1;
                 tagJets.clear();
-
+                
                 for( unsigned int jetIndex = 0; jetIndex < Jets[jetCollectionIndex]->size() ; jetIndex++ )
                 {
                     edm::Ptr<flashgg::Jet> thejet = Jets[jetCollectionIndex]->ptrAt( jetIndex );
-
+                    
                     if( fabs( thejet->eta() ) > jetEtaThreshold_ ) { continue; }
                     if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
                     if( thejet->pt() < jetPtThreshold_ ) { continue; }
-
-                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
-
+                    
+                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
+                    
                     if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
-
+                    
                     float dRLept = deltaR( thejet->eta(), thejet->phi(), muon->eta(),  muon->phi() ) ;
                     if( dRLept < deltaRJetLepton_) { continue; }
-
+                    
                     njet_++;
                     tagJets.push_back(thejet);
                     if(thejet->pt()>leadingJetPt)
@@ -344,9 +342,7 @@ namespace flashgg {
                 njets_btagmedium_ = 0;
                 njets_btagtight_ = 0;
                 leadingJetPt = -1;
-                std::vector<flashgg::Jet> ElectronJets;
-                ElectronJets.clear();
-
+                
                 for( unsigned int jetIndex = 0; jetIndex < Jets[jetCollectionIndex]->size() ; jetIndex++ )
                 {
                     edm::Ptr<flashgg::Jet> thejet = Jets[jetCollectionIndex]->ptrAt( jetIndex );
@@ -355,8 +351,8 @@ namespace flashgg {
                     if(!thejet->passesJetID  ( flashgg::Loose ) ) { continue; }
                     if( thejet->pt() < jetPtThreshold_ ) { continue; }
 
-                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
+                    float dRPhoLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+                    float dRPhoSubLeadJet = deltaR( thejet->eta(), thejet->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
 
                     if( dRPhoLeadJet < deltaRJetLeadPhoThreshold_ || dRPhoSubLeadJet < deltaRJetSubLeadPhoThreshold_ ) { continue; }
 
@@ -377,7 +373,7 @@ namespace flashgg {
                     if( bDiscriminatorValue > bDiscriminator_[1] ) njets_btagmedium_++;
                     if( bDiscriminatorValue > bDiscriminator_[2] ) njets_btagtight_++;
                 }
-
+                
                 if(njet_ >= jetsNumberThreshold_ && njets_btagmedium_ >= bjetsNumberThreshold_ && leadingJetPt>leadingJetPtThreshold_)
                 {
                     passEleSelection = true;
@@ -385,9 +381,9 @@ namespace flashgg {
                     break;
                 }
             }
-
-            if(passEleSelection || passMuonSelection)
-            {
+           
+           if(passEleSelection || passMuonSelection)
+           {
                 TTHLeptonicTag tthltags_obj( dipho, mvares );
 
                 for( unsigned num = 0; num < tagJets.size(); num++ )
@@ -411,6 +407,10 @@ namespace flashgg {
                 tthltags_obj.setElectrons( tagElectrons );
                 tthltags_obj.setDiPhotonIndex( diphoIndex );
                 tthltags_obj.setSystLabel( systLabel_ );
+                tthltags_obj.setNjet( njet_ );
+                tthltags_obj.setNBLoose( njets_btagloose_ );
+                tthltags_obj.setNBMedium( njets_btagmedium_ );
+                tthltags_obj.setNBTight( njets_btagtight_ );
                 tthltags->push_back( tthltags_obj );
  
                 if( ! evt.isRealData() )

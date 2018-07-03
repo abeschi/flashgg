@@ -22,24 +22,24 @@ namespace flashgg {
         if( fabs(Ele[l1]->eta()) > EleEtaCuts[2] || ( fabs(Ele[l1]->eta()) > EleEtaCuts[0] && fabs(Ele[l1]->eta()) < EleEtaCuts[1] ) ) continue; 
         if( Ele[l1]->hasMatchedConversion() ) continue; 
 
-        float dRPhoLeadEle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-        float dRPhoSubLeadEle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
+        float dRPhoLeadEle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+        float dRPhoSubLeadEle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ); 
         if( dRPhoLeadEle < ElePhotonDrCut || dRPhoSubLeadEle < ElePhotonDrCut) continue;
-        float dRPhoLeadEleSC = deltaR( Ele[l1]->superCluster()->eta(), Ele[l1]->superCluster()->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-        float dRPhoSubLeadEleSC = deltaR( Ele[l1]->superCluster()->eta(), Ele[l1]->superCluster()->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
-        if( dRPhoLeadEleSC < ElePhotonDrCut || dRPhoSubLeadEleSC < ElePhotonDrCut) continue;
+        // float dRPhoLeadEleSC = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+        // float dRPhoSubLeadEleSC = deltaR( Ele[l1]->superCluster()->eta(), Ele[l1]->superCluster()->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
+        // if( dRPhoLeadEleSC < ElePhotonDrCut || dRPhoSubLeadEleSC < ElePhotonDrCut) continue;
 
         TLorentzVector Electron, ElectronSC;
         Electron.SetPtEtaPhiE(Ele[l1]->pt(), Ele[l1]->eta(), Ele[l1]->phi(), Ele[l1]->energy());
         ElectronSC.SetXYZT(Ele[l1]->superCluster()->position().x(), Ele[l1]->superCluster()->position().y(), Ele[l1]->superCluster()->position().z(), Ele[l1]->ecalEnergy()); 
         TLorentzVector Ph1, Ph2;
-        Ph1.SetPtEtaPhiE(dipho->leadingPhoton()->pt(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi(), dipho->leadingPhoton()->energy());
-        Ph2.SetPtEtaPhiE(dipho->subLeadingPhoton()->pt(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi(), dipho->subLeadingPhoton()->energy());         
+        Ph1.SetPtEtaPhiE(dipho->leadingPhoton()->pt(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi(), dipho->leadingPhoton()->energy());
+        Ph2.SetPtEtaPhiE(dipho->subLeadingPhoton()->pt(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi(), dipho->subLeadingPhoton()->energy());         
 
         if( fabs((Electron+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
         if( fabs((Electron+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
-        if( fabs((ElectronSC+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
-        if( fabs((ElectronSC+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
+        // if( fabs((ElectronSC+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
+        // if( fabs((ElectronSC+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
  
         float TrkElecSCDeltaR = sqrt( Ele[l1]->deltaEtaSuperClusterTrackAtVtx() * Ele[l1]->deltaEtaSuperClusterTrackAtVtx() + Ele[l1]->deltaPhiSuperClusterTrackAtVtx() * Ele[l1]->deltaPhiSuperClusterTrackAtVtx() );
         if( TrkElecSCDeltaR > DeltaRTrkEle ) continue;
@@ -62,21 +62,20 @@ namespace flashgg {
         if(Muons[l1] -> fggMiniIsoSumRel() > MuonMiniIsoCut) continue;
 
         int vtxInd = 0;
-        double dzmin = 9999;
-        for( unsigned int i = 0 ; i < vtx.size(); i++ )
-        {
-            Ptr<reco::Vertex> Vtx = vtx[i];
-            if( fabs( Muons[l1]->innerTrack()->vz() - Vtx->position().z() ) < dzmin )
-            {
-                dzmin = fabs( Muons[l1]->innerTrack()->vz() - Vtx->position().z() );
-                vtxInd = i;
-            }
-        }
-
+        // double dzmin = 9999;
+        // for( unsigned int i = 0 ; i < vtx.size(); i++ )
+        // {
+        //     Ptr<reco::Vertex> Vtx = vtx[i];
+        //     if( fabs( Muons[l1]->innerTrack()->vz() - Vtx->position().z() ) < dzmin )
+        //     {
+        //         dzmin = fabs( Muons[l1]->innerTrack()->vz() - Vtx->position().z() );
+        //         vtxInd = i;
+        //     }
+        // }
         if( !Muons[l1]->isTightMuon(*vtx[vtxInd] ) ) continue; 
 
-        float dRPhoLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-        float dRPhoSubLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ) ;
+        float dRPhoLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+        float dRPhoSubLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ) ;
         if( dRPhoLeadMuon < MuonPhotonDrCut || dRPhoSubLeadMuon < MuonPhotonDrCut ) continue; 
 
         output.push_back(Muons[l1]);
@@ -97,6 +96,9 @@ namespace flashgg {
     {
         for(unsigned int l2=l1+1; l2<Muons.size(); ++l2)
         {
+            // std::cout << "ele1: " << l1 << "   pt: " << Ele[l1]->pt() << "   eta:  " << Ele[l1]->eta() << "   looseID: " << Ele[l1]->passMVALooseId() << "   DR(ph1): " << dRPhoLeadEle1 << "   DR(ph2): " << dRPhoSubLeadEle1 << std::endl;
+            // std::cout << "ele2: " << l2 << "   pt: " << Ele[l2]->pt() << "   eta:  " << Ele[l2]->eta() << "   looseID: " << Ele[l2]->passMVALooseId() << "   DR"std::endl;
+            
             //if(Muons[l1]->charge() == Muons[l2]->charge()) continue;
             if(!Muons[l1]->isMediumMuon()) continue;
             if(!Muons[l2]->isMediumMuon()) continue;
@@ -106,10 +108,10 @@ namespace flashgg {
             if(fabs(Muons[l1]->eta()) > MuonEtaCut) continue;
             if(fabs(Muons[l2]->eta()) > MuonEtaCut) continue;
 
-            float dRPhoLeadMuon1 = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoSubLeadMuon1 = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoLeadMuon2 = deltaR( Muons[l2]->eta(), Muons[l2]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ); 
-            float dRPhoSubLeadMuon2 = deltaR( Muons[l2]->eta(), Muons[l2]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() );
+            float dRPhoLeadMuon1 = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+            float dRPhoSubLeadMuon1 = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ) ;
+            float dRPhoLeadMuon2 = deltaR( Muons[l2]->eta(), Muons[l2]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ); 
+            float dRPhoSubLeadMuon2 = deltaR( Muons[l2]->eta(), Muons[l2]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() );
             if( dRPhoLeadMuon1 < MuonPhotonDrCut || dRPhoSubLeadMuon1 < MuonPhotonDrCut ||  dRPhoLeadMuon2 < MuonPhotonDrCut || dRPhoSubLeadMuon2 < MuonPhotonDrCut ) continue; 
 
             float dRMuons = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), Muons[l2]->eta(), Muons[l2]->phi() ) ;
@@ -137,6 +139,23 @@ namespace flashgg {
     {
         for(unsigned int l2=l1+1; l2<Ele.size(); ++l2)
         {
+            float dRPhoLeadEle1 = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+            float dRPhoSubLeadEle1 = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ); 
+            float dRPhoLeadEle2 = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+            float dRPhoSubLeadEle2 = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ); 
+            float dREle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), Ele[l2]->eta(), Ele[l2]->phi() ) ;
+            
+            TLorentzVector Ele1, Ele2;
+            Ele1.SetPtEtaPhiE(Ele[l1]->pt(), Ele[l1]->eta(), Ele[l1]->phi(), Ele[l1]->energy());
+            Ele2.SetPtEtaPhiE(Ele[l2]->pt(), Ele[l2]->eta(), Ele[l2]->phi(), Ele[l2]->energy());
+            
+            TLorentzVector Ph1, Ph2;
+            Ph1.SetPtEtaPhiE(dipho->leadingPhoton()->pt(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi(), dipho->leadingPhoton()->energy());
+            Ph2.SetPtEtaPhiE(dipho->subLeadingPhoton()->pt(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi(), dipho->subLeadingPhoton()->energy());         
+            
+            // std::cout << "ele1: " << l1 << "   pt: " << Ele[l1]->pt() << "   eta:  " << Ele[l1]->eta() << "   looseID: " << Ele[l1]->passMVALooseId() << "   DR(ph1): " << dRPhoLeadEle1 << "   DR(ph2): " << dRPhoSubLeadEle1 << std::endl;
+            // std::cout << "ele2: " << l2 << "   pt: " << Ele[l2]->pt() << "   eta:  " << Ele[l2]->eta() << "   looseID: " << Ele[l2]->passMVALooseId() << "   DR"std::endl;
+            
             //if(Ele[l1]->charge() == Ele[l2]->charge()) continue;
             if(!Ele[l1]->passMVALooseId()) continue;
             if(!Ele[l2]->passMVALooseId()) continue;
@@ -145,30 +164,19 @@ namespace flashgg {
             if(max(Ele[l1]->pt(), Ele[l2]->pt()) < LeadingLeptonPtCut) continue;
             if( fabs(Ele[l1]->eta()) > EleEtaCuts[2] || ( fabs(Ele[l1]->eta()) > EleEtaCuts[0] && fabs(Ele[l1]->eta()) < EleEtaCuts[1] ) ) continue; 
             if( fabs(Ele[l2]->eta()) > EleEtaCuts[2] || ( fabs(Ele[l2]->eta()) > EleEtaCuts[0] && fabs(Ele[l2]->eta()) < EleEtaCuts[1] ) ) continue; 
-
-            float dRPhoLeadEle1 = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoSubLeadEle1 = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
-            float dRPhoLeadEle2 = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoSubLeadEle2 = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
+            
             if( dRPhoLeadEle1 < ElePhotonDrCut || dRPhoSubLeadEle1 < ElePhotonDrCut || dRPhoLeadEle2 < ElePhotonDrCut || dRPhoSubLeadEle2 < ElePhotonDrCut) continue;
 
-            float dREle = deltaR( Ele[l1]->eta(), Ele[l1]->phi(), Ele[l2]->eta(), Ele[l2]->phi() ) ;
             if( dREle < ElesDrCut) continue;
-
-            TLorentzVector Ele1, Ele2;
-            Ele1.SetPtEtaPhiE(Ele[l1]->pt(), Ele[l1]->eta(), Ele[l1]->phi(), Ele[l1]->energy());
-            Ele2.SetPtEtaPhiE(Ele[l2]->pt(), Ele[l2]->eta(), Ele[l2]->phi(), Ele[l2]->energy());
+            
             if( fabs((Ele1+Ele2).M() - 91.187) < ElesZMassCut) continue;
-
-            TLorentzVector Ph1, Ph2;
-            Ph1.SetPtEtaPhiE(dipho->leadingPhoton()->pt(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi(), dipho->leadingPhoton()->energy());
-            Ph2.SetPtEtaPhiE(dipho->subLeadingPhoton()->pt(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi(), dipho->subLeadingPhoton()->energy());         
+            
 
             if( fabs((Ele1+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
             if( fabs((Ele2+Ph1).M() - 91.187) < ElePhotonZMassCut) continue;
             if( fabs((Ele1+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
             if( fabs((Ele2+Ph2).M() - 91.187) < ElePhotonZMassCut) continue;
-
+            
             pair<edm::Ptr<flashgg::Electron>, edm::Ptr<flashgg::Electron>> thePair(Ele[l1], Ele[l2]);
             output.push_back(thePair);
         }
@@ -195,10 +203,10 @@ namespace flashgg {
             if(fabs(Muons[l1]->eta()) > MuonEtaCut) continue;
             if( fabs(Ele[l2]->eta()) > EleEtaCuts[2] || ( fabs(Ele[l2]->eta()) > EleEtaCuts[0] && fabs(Ele[l2]->eta()) < EleEtaCuts[1] ) ) continue; 
 
-            float dRPhoLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoSubLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoLeadEle = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->leadingPhoton()->superCluster()->eta(), dipho->leadingPhoton()->superCluster()->phi() ) ;
-            float dRPhoSubLeadEle = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->subLeadingPhoton()->superCluster()->eta(), dipho->subLeadingPhoton()->superCluster()->phi() ); 
+            float dRPhoLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+            float dRPhoSubLeadMuon = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ) ;
+            float dRPhoLeadEle = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->leadingPhoton()->eta(), dipho->leadingPhoton()->phi() ) ;
+            float dRPhoSubLeadEle = deltaR( Ele[l2]->eta(), Ele[l2]->phi(), dipho->subLeadingPhoton()->eta(), dipho->subLeadingPhoton()->phi() ); 
             if( dRPhoLeadMuon < MuonPhotonDrCut || dRPhoSubLeadMuon < MuonPhotonDrCut ||  dRPhoLeadEle < ElePhotonDrCut || dRPhoSubLeadEle < ElePhotonDrCut ) continue; 
 
             float dREleMu = deltaR( Muons[l1]->eta(), Muons[l1]->phi(), Ele[l2]->eta(), Ele[l2]->phi() ) ;

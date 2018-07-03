@@ -28,7 +28,17 @@ namespace flashgg {
         void setBJets( std::vector<edm::Ptr<Jet> > BJets )  { BJets_ = BJets;}
         void setMuons( std::vector<edm::Ptr<Muon> > Muons ) {Muons_ = Muons;}
         void setElectrons( std::vector<edm::Ptr<Electron> > Electrons ) {Electrons_ = Electrons;}
+        
+        void setNjet( int nb ){ Njet_ = nb; }
+        void setNBLoose( int nb ) { Nbtagloose_ = nb; }
+        void setNBMedium( int nb ) { Nbtagmedium_ = nb; }
+        void setNBTight( int nb ) { Nbtagtight_ = nb; }
 
+        int nJet() const {return Njet_;}
+        int nBLoose() const {return Nbtagloose_;}
+        int nBMedium() const {return Nbtagmedium_;}
+        int nBTight() const {return Nbtagtight_;}
+        
         DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHLeptonic; }
 
     private:
@@ -36,6 +46,12 @@ namespace flashgg {
         std::vector<edm::Ptr<Electron> > Electrons_;
         std::vector<edm::Ptr<Jet> > Jets_;
         std::vector<edm::Ptr<Jet> > BJets_;
+        float MetPt_;
+        float MetPhi_;        
+        int Njet_;
+        int Nbtagloose_;
+        int Nbtagmedium_;
+        int Nbtagtight_;
     };
 }
 
