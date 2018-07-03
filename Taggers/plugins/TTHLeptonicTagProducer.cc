@@ -52,7 +52,6 @@ namespace flashgg {
 
         std::vector<edm::EDGetTokenT<View<flashgg::Jet> > > tokenJets_;
         EDGetTokenT<View<DiPhotonCandidate> > diPhotonToken_;
-        //EDGetTokenT<View<Jet> > thejetToken_;
         std::vector<edm::InputTag> inputTagJets_;
         EDGetTokenT<View<Electron> > electronToken_;
         EDGetTokenT<View<flashgg::Muon> > muonToken_;
@@ -250,8 +249,7 @@ namespace flashgg {
 
         edm::Handle<double>  rho;
         evt.getByToken(rhoTag_,rho);
-        double rho_    = *rho;
-
+        
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
 
@@ -284,19 +282,19 @@ namespace flashgg {
                 }
             }
         }
-
+        
         assert( diPhotons->size() == mvaResults->size() );
-
+        
         double idmva1 = 0.;
         double idmva2 = 0.;
-
+        
         for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ )
         {
             unsigned int jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex();
-
+            
             edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( diphoIndex );
             edm::Ptr<flashgg::DiPhotonMVAResult> mvares = mvaResults->ptrAt( diphoIndex );
-
+            
             if( dipho->leadingPhoton()->pt() < ( dipho->mass() )*leadPhoOverMassThreshold_ ) { continue; }
             if( dipho->subLeadingPhoton()->pt() < ( dipho->mass() )*subleadPhoOverMassThreshold_ ) { continue; }
             idmva1 = dipho->leadingPhoton()->phoIdMvaDWrtVtx( dipho->vtx() );
@@ -304,9 +302,10 @@ namespace flashgg {
 
             if(debug_)
                 cout << "Photon pair with PhoIdMVA values: " << idmva1 << " " << idmva2 << endl;
- 
-            if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
 
+           
+            if( idmva1 < PhoMVAThreshold_ || idmva2 < PhoMVAThreshold_ ) { continue; }
+            
             bool passDiphotonSelection = true;
             if(UseCutBasedDiphoId_)
             {
@@ -320,7 +319,7 @@ namespace flashgg {
             }
 
             if(!passDiphotonSelection) continue;
-
+            
             std::vector<edm::Ptr<flashgg::Muon> >     Muons;
             std::vector<edm::Ptr<flashgg::Electron> > Electrons;
 
@@ -331,7 +330,7 @@ namespace flashgg {
 
             if( (Muons.size() + Electrons.size()) == 0) continue;
 
- 
+
             int njet_ = 0;
             int njets_btagloose_ = 0;
             int njets_btagmedium_ = 0;
@@ -378,6 +377,7 @@ namespace flashgg {
                         break;
                     }
                 }
+
 
                 if(passDrLeptons)
                 {
@@ -466,6 +466,8 @@ namespace flashgg {
             int leadEleIndex = 0;
             float leadElePt = -1;
 
+
+
             for( unsigned int muonIndex = 0; muonIndex < Muons.size(); muonIndex++ )
             {
                 Ptr<flashgg::Muon> muon = Muons[muonIndex];
@@ -498,6 +500,7 @@ namespace flashgg {
                 lepton_leadPt_ = Electrons[leadEleIndex]->pt();
                 lepton_leadEta_ = Electrons[leadEleIndex]->eta();
             }
+
 
             float mvaValue = DiphotonMva_-> EvaluateMVA( "BDT" );
             int catNumber = -1;
@@ -547,6 +550,12 @@ namespace flashgg {
                 tthltags_obj.setDiPhotonIndex( diphoIndex );
                 tthltags_obj.setSystLabel( systLabel_ );
                 tthltags_obj.setMvaRes(mvaValue);
+
+                tthltags_obj.setNjet( njet_ );
+                tthltags_obj.setNBLoose( njets_btagloose_ );
+                tthltags_obj.setNBMedium( njets_btagmedium_ );
+                tthltags_obj.setNBTight( njets_btagtight_ );
+
                 tthltags->push_back( tthltags_obj );
  
                 if( ! evt.isRealData() )

@@ -6,31 +6,34 @@ from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDi
 from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
 
-flashggTagSequence = cms.Sequence(flashggUpdatedIdMVADiPhotons
-                                  * flashggPreselectedDiPhotons
-				  * flashggDiPhotonMVA
-                                  * flashggUnpackedJets
-                                  * flashggVBFMVA
-                                  * flashggVBFDiPhoDiJetMVA
-                                  * ( flashggUntagged
-                                      #                                  *( flashggSigmaMoMpToMTag
-                                      + flashggVBFTag
-#                                     + flashggTTHDiLeptonTag
-                                      + flashggTTHLeptonicTag
-#                                     + flashggTTHHadronicTTag                                      
-#                                     + flashggTTHHadronicLTag                                      
-                                      + flashggTTHHadronicTag
-                                      #############old VH tags##############
-                                      #                  + flashggVHEtTag
-                                      #                  + flashggVHLooseTag
-                                      #                  + flashggVHTightTag
-                                      ###########updated VH tags############
-                                      + flashggVHMetTag
-                                      + flashggWHLeptonicTag
-                                      + flashggZHLeptonicTag
-                                      + flashggVHLeptonicLooseTag
-                                      + flashggVHHadronicTag
-					)
-                                 * flashggTagSorter
-                                  )
+
+flashggTagSequence = cms.Sequence(
+    flashggUpdatedIdMVADiPhotons
+    * flashggPreselectedDiPhotons
+    * flashggDiPhotonMVA
+    * flashggUnpackedJets
+    * flashggVBFMVA
+    * flashggVBFDiPhoDiJetMVA
+    * ( flashggUntagged
+        # *( flashggSigmaMoMpToMTag
+        + flashggVBFTag
+        + flashggTTHDiLeptonTag
+        + flashggTTHLeptonicTag
+        # + flashggTTHHadronicTTag                                      
+        # + flashggTTHHadronicLTag                                      
+        + flashggTTHHadronicTag
+        #############old VH tags##############
+        #                  + flashggVHEtTag
+        #                  + flashggVHLooseTag
+        #                  + flashggVHTightTag
+        ###########updated VH tags############
+        + flashggVHMetTag
+        + flashggWHLeptonicTag
+        + flashggZHLeptonicTag
+        + flashggVHLeptonicLooseTag
+        + flashggVHHadronicTag
+        + flashggTTHGenericTag
+        )
+    * flashggTagSorter
+    )
 

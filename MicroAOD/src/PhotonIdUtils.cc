@@ -428,6 +428,7 @@ void PhotonIdUtils::recomputeNonZsClusterShapes( reco::Photon &pho, const EcalRe
     showerShape.sigmaIetaIeta =  sqrt( locCov[0] );
     showerShape.sigmaIetaIphi =  sqrt( locCov[1] );
     showerShape.sigmaIphiIphi =  sqrt( locCov[2] );
+
     pho.full5x5_setShowerShapeVariables( showerShape );
 }
 

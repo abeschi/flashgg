@@ -1,5 +1,5 @@
-#ifndef FLASHgg_TTHDiLepton_h
-#define FLASHgg_TTHDiLepton_h
+#ifndef FLASHgg_TTHGeneric_h
+#define FLASHgg_TTHGeneric_h
 
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
 #include "flashgg/DataFormats/interface/Muon.h"
@@ -8,25 +8,27 @@
 
 namespace flashgg {
 
-    class TTHDiLeptonTag: public DiPhotonTagBase
+    class TTHGenericTag: public DiPhotonTagBase
     {
     public:
-        TTHDiLeptonTag();
-        TTHDiLeptonTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
-        TTHDiLeptonTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
+        TTHGenericTag();
+        TTHGenericTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
+        TTHGenericTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
 
-        ~TTHDiLeptonTag();
+        ~TTHGenericTag();
 
-        TTHDiLeptonTag *clone() const override { return ( new TTHDiLeptonTag( *this ) ); }
+        TTHGenericTag *clone() const override { return ( new TTHGenericTag( *this ) ); }
 
         const std::vector<edm::Ptr<Muon> > muons() const { return Muons_;}
         const std::vector<edm::Ptr<flashgg::Electron> > electrons() const {return Electrons_;}
         const std::vector<edm::Ptr<Jet> > jets() const { return Jets_;}
         const std::vector<edm::Ptr<Jet> > bJets() const { return BJets_;}
+        int isTightMuon (const int& muId, const int& vtxId) const { return Muons_.at(muId)->isTightMuon(*Vertices_.at(vtxId));}
         float MetPt() const {return MetPt_;}
         float MetPhi() const {return MetPhi_;}
 
 
+        void setVertices( std::vector<edm::Ptr<reco::Vertex> > Vertices ) { Vertices_ = Vertices; }
         void setJets( std::vector<edm::Ptr<Jet> > Jets ) { Jets_ = Jets; }
         void setBJets( std::vector<edm::Ptr<Jet> > BJets )  { BJets_ = BJets;}
         void setMuons( std::vector<edm::Ptr<Muon> > Muons ) {Muons_ = Muons;}
@@ -38,16 +40,17 @@ namespace flashgg {
         void setNBLoose( int nb ) { Nbtagloose_ = nb; }
         void setNBMedium( int nb ) { Nbtagmedium_ = nb; }
         void setNBTight( int nb ) { Nbtagtight_ = nb; }
-
+        
         int nJet() const {return Njet_;}
         int nBLoose() const {return Nbtagloose_;}
         int nBMedium() const {return Nbtagmedium_;}
         int nBTight() const {return Nbtagtight_;}
 
 
-        DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHDiLepton; }
+        DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kTTHLeptonic; }
 
     private:
+        std::vector<edm::Ptr<reco::Vertex> > Vertices_;
         std::vector<edm::Ptr<Muon> > Muons_;
         std::vector<edm::Ptr<Electron> > Electrons_;
         std::vector<edm::Ptr<Jet> > Jets_;
