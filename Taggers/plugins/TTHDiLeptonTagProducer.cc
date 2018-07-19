@@ -618,7 +618,17 @@ namespace flashgg {
                 tthtags_obj.setElectrons( Electrons );
                 tthtags_obj.setDiPhotonIndex( diphoIndex );
                 tthtags_obj.setSystLabel( systLabel_ );
-                tthtags_obj.setMvaRes(mvaValue);
+                tthtags_obj.setNjet( njet_ );
+                tthtags_obj.setNBLoose( njets_btagloose_ );
+                tthtags_obj.setNBMedium( njets_btagmedium_ );
+                tthtags_obj.setNBTight( njets_btagtight_ );
+
+                if( theMet_ -> size() != 1 )
+                    std::cout << "WARNING number of MET is not equal to 1" << std::endl;
+                Ptr<flashgg::Met> Met = theMet_->ptrAt( 0 );
+                tthtags_obj.setMetPt((float)Met->pt());
+                tthtags_obj.setMetPhi((float)Met->phi());
+                
                 tthtags->push_back( tthtags_obj );
 
                 if( !evt.isRealData() )
