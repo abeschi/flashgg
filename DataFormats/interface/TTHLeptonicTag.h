@@ -33,6 +33,8 @@ namespace flashgg {
         void setNBLoose( int nb ) { Nbtagloose_ = nb; }
         void setNBMedium( int nb ) { Nbtagmedium_ = nb; }
         void setNBTight( int nb ) { Nbtagtight_ = nb; }
+        void setMetPt(float metPt) {MetPt_ = (float)metPt;}
+        void setMetPhi(float metPhi) {MetPhi_ = (float)metPhi;}
 
         int nJet() const {return Njet_;}
         int nBLoose() const {return Nbtagloose_;}

@@ -1,4 +1,4 @@
-ffrom optpars_utils import *
+from optpars_utils import *
 
 from pprint import pprint
 
