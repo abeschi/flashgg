@@ -32,7 +32,7 @@ flashggTagSequence = cms.Sequence(
         #+ flashggZHLeptonicTag
         #+ flashggVHLeptonicLooseTag
         #+ flashggVHHadronicTag
-        + flashggTTHGenericTag
+        flashggTTHGenericTag
         )
     * flashggTagSorter
     )
