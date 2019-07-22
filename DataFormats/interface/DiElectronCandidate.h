@@ -3,10 +3,12 @@
 
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
 #include "flashgg/DataFormats/interface/Electron.h"
+
 #include "TLorentzVector.h"
+#include "flashgg/DataFormats/interface/WeightedObject.h"
 
 namespace flashgg {
-    class DiElectronCandidate : public reco::CompositeCandidate
+    class DiElectronCandidate : public reco::CompositeCandidate, public WeightedObject
     {
     public:
         DiElectronCandidate();

@@ -2,13 +2,15 @@
 #define FLASHgg_DiMuonCandidate_h
 
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
+
 #include "flashgg/DataFormats/interface/Muon.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "TLorentzVector.h"
+
 //-----------J. Tao from IHEP-Beijing--------------
 
 namespace flashgg {
-    class DiMuonCandidate : public reco::CompositeCandidate
+    class DiMuonCandidate : public reco::CompositeCandidate, public WeightedObject
     {
     public:
         DiMuonCandidate();

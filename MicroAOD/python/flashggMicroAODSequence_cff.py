@@ -9,13 +9,13 @@ from flashgg.MicroAOD.flashggJets_cfi import flashggFinalJets,flashggFinalPuppiJ
 from flashgg.MicroAOD.flashggElectrons_cfi import flashggElectrons
 from flashgg.MicroAOD.flashggMuons_cfi import flashggMuons
 
+# for zgamma 
 from flashgg.MicroAOD.flashggRandomizedElectronProducer_cff import flashggRandomizedElectrons
-
-# zgamma producers
-from flashgg.MicroAOD.flashggDiElectrons_cfi import flashggDiElectrons
-from flashgg.MicroAOD.flashggEleEleGamma_cfi import flashggEleEleGamma
-from flashgg.MicroAOD.flashggDiMuons_cfi import flashggDiMuons
-from flashgg.MicroAOD.flashggMuMuGamma_cfi import flashggMuMuGamma
+#from flashgg.MicroAOD.flashggDiElectrons_cfi import flashggDiElectrons
+#from flashgg.MicroAOD.flashggEleEleGamma_cfi import flashggEleEleGamma
+from flashgg.MicroAOD.flashggRandomizedMuonProducer_cff import flashggRandomizedMuons
+#from flashgg.MicroAOD.flashggDiMuons_cfi import flashggDiMuons
+#from flashgg.MicroAOD.flashggMuMuGamma_cfi import flashggMuMuGamma
 
 from flashgg.MicroAOD.flashggLeptonSelectors_cff import flashggSelectedMuons,flashggSelectedElectrons
 from flashgg.MicroAOD.flashggMicroAODGenSequence_cff import *
@@ -53,11 +53,11 @@ flashggMicroAODSequence = cms.Sequence( eventCount+weightsCount
                                        +flashggMicroAODGenSequence
                                        +flashggPrePhotonSequence80X * flashggPhotons * flashggRandomizedPhotons * flashggDiPhotons
                                        +flashggDiPhotonFilterSequence
-                                       +electronMVAValueMapProducer*egmGsfElectronIDs*flashggElectrons*flashggSelectedElectrons
-                                       +flashggMuons*flashggSelectedMuons
+                                       +electronMVAValueMapProducer*egmGsfElectronIDs*flashggElectrons*flashggRandomizedElectrons*flashggSelectedElectrons
+                                       +flashggMuons*flashggRandomizedMuons*flashggSelectedMuons
                                        +flashggMuonFilterSequence
                                        +flashggVertexMapForCHS*flashggFinalJets
                                        +flashggVertexMapForPUPPI*flashggFinalPuppiJets
-                                       +flashggRandomizedElectrons+flashggDiElectrons+flashggEleEleGamma
-                                       +flashggDiMuons+flashggMuMuGamma
+                                       #+flashggDiElectrons+flashggEleEleGamma
+                                       #+flashggDiMuons+flashggMuMuGamma
 )
