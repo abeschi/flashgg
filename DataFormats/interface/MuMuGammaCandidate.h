@@ -16,12 +16,20 @@ namespace flashgg {
     public:
         MuMuGammaCandidate();
         MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate>, edm::Ptr<flashgg::Photon>, edm::Ptr<reco::Vertex> );
-        //MuMuGammaCandidate( const flashgg::DiMuonCandidate &, const flashgg::Photon &, edm::Ptr<reco::Vertex>, edm::Ptr<flashgg::DiMuonCandidate>);
         MuMuGammaCandidate( edm::Ptr<flashgg::DiMuonCandidate>, const flashgg::Photon &, edm::Ptr<reco::Vertex> ); //mixed
+        MuMuGammaCandidate( flashgg::DiMuonCandidate, const flashgg::Photon &, edm::Ptr<reco::Vertex> );
         ~MuMuGammaCandidate();
 
         const flashgg::DiMuonCandidate *MMG_DiMu() const;
         const flashgg::Photon *MMG_Photon() const;
+
+        const flashgg::Muon* leadingMuon() const;
+        const flashgg::Muon* subleadingMuon() const;
+
+        double getMass() const;
+        double getPt() const;
+        double getDiMuonMass() const;
+        double getDiMuonPt() const;
 
         edm::Ptr<flashgg::DiMuonCandidate> DiMuPtr() const { return dimuptr_; }
         void setDiMuPtr( edm::Ptr<flashgg::DiMuonCandidate> val ) { dimuptr_ = val; }

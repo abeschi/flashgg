@@ -421,5 +421,18 @@
 <class name="edm::Wrapper<std::vector<edm::Ptr<flashgg::EleEleGammaCandidate> > >"/>            
 
 
+<class name="flashgg::ZGammaToEEUntaggedTag" ClassVersion="0">
+  <version ClassVersion="10" checksum="27685197"/>
+</class>
+<class name="std::vector<flashgg::ZGammaToEEUntaggedTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::ZGammaToEEUntaggedTag> >"/>
+
+
+<class name="flashgg::ZGammaToMuMuUntaggedTag" ClassVersion="0">
+</class>
+<class name="std::vector<flashgg::ZGammaToMuMuUntaggedTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::ZGammaToMuMuUntaggedTag> >"/>
+
+
 
 </lcgdict>

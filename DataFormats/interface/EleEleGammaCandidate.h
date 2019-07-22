@@ -15,10 +15,15 @@ namespace flashgg {
         EleEleGammaCandidate();
         EleEleGammaCandidate( edm::Ptr<flashgg::DiElectronCandidate>, edm::Ptr<flashgg::Photon>, edm::Ptr<reco::Vertex> );
         EleEleGammaCandidate( edm::Ptr<flashgg::DiElectronCandidate>, const flashgg::Photon &, edm::Ptr<reco::Vertex> ); //mixed
+        EleEleGammaCandidate( flashgg::DiElectronCandidate, const flashgg::Photon &, edm::Ptr<reco::Vertex> );
+
         ~EleEleGammaCandidate();
 
         const flashgg::DiElectronCandidate *EEG_DiEle() const;
         const flashgg::Photon *EEG_Photon() const;
+
+        const flashgg::Electron* leadingElectron() const;
+        const flashgg::Electron* subleadingElectron() const;
 
         edm::Ptr<flashgg::DiElectronCandidate> DiElePtr() const { return dieleptr_; }
         void setDiElePtr( edm::Ptr<flashgg::DiElectronCandidate> val ) { dieleptr_ = val; }
@@ -26,12 +31,15 @@ namespace flashgg {
         edm::Ptr<reco::Vertex> Vertex() const { return vertex_; }
         void setVertex( edm::Ptr<reco::Vertex> val ) { vertex_ = val; }
 
+        double getMass() const;
+        double getPt() const;
+        double getDiEleMass() const;
+        double getDiElePt() const;
 
     private:
 
         edm::Ptr<flashgg::DiElectronCandidate> dieleptr_;
         edm::Ptr<reco::Vertex> vertex_;
-
     };
 
 

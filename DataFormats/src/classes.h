@@ -46,7 +46,8 @@
 #include "flashgg/DataFormats/interface/DoubleHTag.h"
 #include "flashgg/DataFormats/interface/DiElectronCandidate.h" // martina
 #include "flashgg/DataFormats/interface/EleEleGammaCandidate.h" // martina
-
+#include "flashgg/DataFormats/interface/ZGammaToEEUntaggedTag.h"
+#include "flashgg/DataFormats/interface/ZGammaToMuMuUntaggedTag.h"
 #include <vector>
 #include <map>
 
@@ -347,6 +348,18 @@ namespace  {
         std::vector<edm::Ptr<flashgg::EleEleGammaCandidate> >        vec_ptr_fgg_eeg;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::EleEleGammaCandidate> > >   wrp_vec_ptr_fgg_eeg;
         //-------------------------
+
+
+        //ZGamma Taggers
+
+        flashgg::ZGammaToEEUntaggedTag ZGToEE;
+        std::vector<flashgg::ZGammaToEEUntaggedTag> vec_ZGToEE;
+        edm::Wrapper<std::vector<flashgg::ZGammaToEEUntaggedTag> > wrp_vec_ZGToEE;
+
+        flashgg::ZGammaToMuMuUntaggedTag ZGToMuMu;
+        std::vector<flashgg::ZGammaToMuMuUntaggedTag> vec_ZGToMuMu;
+        edm::Wrapper<std::vector<flashgg::ZGammaToMuMuUntaggedTag> > wrp_vec_ZGToMuMu;
+
     };
 }
 // Local Variables:

@@ -8,7 +8,7 @@
 #include "FWCore/Utilities/interface/EDMException.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "flashgg/DataFormats/interface/DiElectronCandidate.h"
-
+#include "flashgg/DataFormats/interface/Electron.h"
 using namespace edm;
 using namespace std;
 
@@ -21,7 +21,7 @@ namespace flashgg {
         DiElectronProducer( const ParameterSet & );
     private:
         void produce( Event &, const EventSetup & ) override;
-        EDGetTokenT<View<pat::Electron> > electronToken_;
+        EDGetTokenT<View<flashgg::Electron> > electronToken_;
 
         double minElectronPt_;
         double maxElectronEta_;
@@ -29,7 +29,7 @@ namespace flashgg {
     };
     
     DiElectronProducer::DiElectronProducer( const ParameterSet &iConfig ) :
-        electronToken_( consumes<View<pat::Electron> >( iConfig.getParameter<InputTag> ( "ElectronTag" ) ) )
+        electronToken_( consumes<View<flashgg::Electron> >( iConfig.getParameter<InputTag> ( "ElectronTag" ) ) )
     {
         minElectronPt_ = iConfig.getParameter<double>( "minElectronPt" );
         maxElectronEta_ = iConfig.getParameter<double>( "maxElectronEta" );
@@ -38,25 +38,25 @@ namespace flashgg {
 
     void DiElectronProducer::produce( Event &evt, const EventSetup & )
     {
-        Handle<View<pat::Electron> > electrons;
+        Handle<View<flashgg::Electron> > electrons;
         evt.getByToken( electronToken_, electrons );
-        const std::vector<edm::Ptr<pat::Electron> > &electronPointers = electrons->ptrs();
+        const std::vector<edm::Ptr<flashgg::Electron> > &electronPointers = electrons->ptrs();
 
         unique_ptr<vector<flashgg::DiElectronCandidate> > diElectronColl( new vector<flashgg::DiElectronCandidate> );
 
         for( unsigned int i = 0 ; i < electronPointers.size() ; i++ ) {
-            Ptr<pat::Electron> electron1 = electronPointers[i];
+            Ptr<flashgg::Electron> electron1 = electronPointers[i];
             double pt1 = electron1->pt();
             double eta1 = electron1->eta();
             if( pt1 < minElectronPt_ || fabs( eta1 ) > maxElectronEta_ ) { continue; }
             for( unsigned int j = i + 1 ; j < electronPointers.size() ; j++ ) {
-                Ptr<pat::Electron> electron2 = electronPointers[j];
+                Ptr<flashgg::Electron> electron2 = electronPointers[j];
                 double pt2 = electron2->pt();
                 double eta2 = electron2->eta();
                 if( pt2 < minElectronPt_ || fabs( eta2 ) > maxElectronEta_ ) { continue; }
 
-                Ptr<pat::Electron> leadElectron = electronPointers[i];
-                Ptr<pat::Electron> subLeadElectron = electronPointers[j];
+                Ptr<flashgg::Electron> leadElectron = electronPointers[i];
+                Ptr<flashgg::Electron> subLeadElectron = electronPointers[j];
                 if( pt2 > pt1 ) {
                     leadElectron = electronPointers[j];
                     subLeadElectron = electronPointers[i];

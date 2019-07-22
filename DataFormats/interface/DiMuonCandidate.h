@@ -2,9 +2,9 @@
 #define FLASHgg_DiMuonCandidate_h
 
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
-#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "flashgg/DataFormats/interface/Muon.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-
+#include "TLorentzVector.h"
 //-----------J. Tao from IHEP-Beijing--------------
 
 namespace flashgg {
@@ -12,12 +12,12 @@ namespace flashgg {
     {
     public:
         DiMuonCandidate();
-        DiMuonCandidate( edm::Ptr<pat::Muon>, edm::Ptr<pat::Muon> );
-        DiMuonCandidate( const pat::Muon &, const pat::Muon & );
+        DiMuonCandidate( edm::Ptr<flashgg::Muon>, edm::Ptr<flashgg::Muon> );
+        DiMuonCandidate( const flashgg::Muon &, const flashgg::Muon & );
         ~DiMuonCandidate();
 
-        const pat::Muon *leadingMuon() const;
-        const pat::Muon *subleadingMuon() const;
+        const flashgg::Muon *leadingMuon() const;
+        const flashgg::Muon *subleadingMuon() const;
 
         bool IsOSDiMuPair() const { return IsOSDiMuPair_; }
         void setIsOSDiMuPair( bool val ) { IsOSDiMuPair_ = val;}
@@ -27,6 +27,9 @@ namespace flashgg {
 
         bool IfBothGlobalAndPF() const { return IfBothGlobalAndPF_; }
         void setIfBothGlobalAndPF( bool val ) { IfBothGlobalAndPF_  = val;}
+
+        double getMass() const;
+        double getPt() const;
 
     private:
 
