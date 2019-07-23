@@ -10,7 +10,8 @@ from flashgg.MetaData.MetaConditionsReader import *
 import os
 
 # maxEvents is the max number of events processed of each file, not globally
-inputFiles = "file:/afs/cern.ch/user/m/malberti/public/xABeschi/Zgamma/myMicroAODOutputFile_ggh.root"
+#inputFiles = "file:/afs/cern.ch/user/m/malberti/public/xABeschi/Zgamma/myMicroAODOutputFile_ggh.root"
+inputFiles = "file:/afs/cern.ch/user/m/malberti/public/xABeschi/Zgamma/myMicroAODOutputFile_DoubleEG2016.root"
 outputFile = "output.root" 
 
 
@@ -24,7 +25,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(inputFiles))
@@ -135,7 +136,7 @@ process.load("flashgg/Taggers/flashggZGammaTagSequence_cfi")
 
 #process.flashggZGammaToMuMuUntaggedTag.debug = cms.bool(True)
 
-customize.setDefault("maxEvents" , 1000)    # max-number of events
+customize.setDefault("maxEvents" , -1)    # max-number of events
 customize.setDefault("targetLumi",1e+3) # define integrated lumi
 customize(process)
 
